@@ -16,7 +16,7 @@ function upgradeTypes() {
 
 
 function init() {
-	ln -s ~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/ sources
+	ln -s ~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/ src
 }
 
 
