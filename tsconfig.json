@@ -9,8 +9,8 @@
 		"forceConsistentCasingInFileNames": true,
 		"noImplicitAny": true,
 		"removeComments": false,
-		"rootDir": "./dist",
-		"outDir": "./src"
+		"rootDir": "src",
+		"outDir": "./dist"
 	},
-	"include": ["dist/*.ts"]
+	"include": ["src/*.ts"]
 }

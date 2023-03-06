@@ -1,6 +1,6 @@
 {
 	"files.exclude": {
-		"source/.Trash": true,
-		"source/cache": true
+		"build/.Trash": true,
+		"build/cache": true
 	}
 }
