@@ -20,7 +20,7 @@ How to start to develop scriptable apps with VSCode:
   git clone https://github.com/gebeto/scriptables
   ```
 
-5. Run command to initialize your `src` folder link
+5. Run command to initialize your `source` folder link
 
   ```sh
   ./scriptable.sh init
@@ -28,7 +28,7 @@ How to start to develop scriptable apps with VSCode:
 
 6. Done! Open VSCode in the repo(`code .`) and start to build your apps fast and easy!
 
- > Folder `src` is your scriptable folder link, you can edit files there and it will be updated in scriptable app.
+ > Folder `source` is your scriptable folder link, you can edit files there and it will be updated in scriptable app.
 
 ## Initialize your local env
 
