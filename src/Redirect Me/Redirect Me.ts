@@ -2,7 +2,7 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: deep-purple; icon-glyph: reply-all;
 // share-sheet-inputs: url;
-///<reference path="../index.d.ts" />
+///<reference path="../../index.d.ts" />
 
 interface redirections {
 	origin: Array<String>;
