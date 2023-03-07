@@ -24,8 +24,10 @@ const redirections: Array<redirections> = [
 	},
 ];
 
-const url = await getUrl();
-runScript(parseUrl(url, redirections));
+(async () => {
+	const url = await getUrl();
+	runScript(parseUrl(url, redirections));
+})();
 
 async function getUrl() {
 	let url = args.urls[0];
@@ -102,4 +104,3 @@ function logAlert(message: string) {
 	alert.message = message;
 	alert.present();
 }
-export {};
