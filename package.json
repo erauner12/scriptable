@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Scriptable Development Environment for VSCode",
 	"scripts": {
-		"build": "source ./build.sh; build ${fileBasenameNoExtension}",
+		"build": "source ./build.sh; build",
 		"build-watch": "source ./build.sh; build_and_watch"
 	},
 	"repository": {
