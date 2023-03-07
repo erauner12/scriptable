@@ -18,6 +18,7 @@
 	},
 	"homepage": "https://github.com/Elliott-Liu/scriptable#readme",
 	"devDependencies": {
+		"@types/scriptable-ios": "^1.7.0",
 		"typescript": "^4.9.5"
 	}
 }
