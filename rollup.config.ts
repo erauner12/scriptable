@@ -1,7 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
-import addFileIconSettings from "./rollup-plugin-add-file-icon-settings";
+import { addFileIconSettings } from "./scripts";
 
 // https://github.com/rollup/rollup/issues/703#issuecomment-224984436 <-- passing args into config file
 const ENTRY_FILE_PATH = process.env.file_path;
