@@ -7,11 +7,17 @@ const COMMENT_ATOMS = {
 	runInApp: "always-run-in-app: true;",
 };
 
-const getScriptableSettingsCommentLines = ({
+const fallbackIconSettings: ScriptSettings = {
+	iconColor: "yellow",
+	iconGlyph: "exclamation-triangle",
+	alwaysRunInApp: false,
+};
+
+function getScriptableSettingsCommentLines({
 	iconColor,
 	iconGlyph,
 	alwaysRunInApp,
-}: ScriptSettings) => {
+}: ScriptSettings) {
 	const colorAtom = `icon-color: ${iconColor};`;
 	const iconAtom = `icon-glyph: ${iconGlyph};`;
 	const line3 = alwaysRunInApp
@@ -22,13 +28,7 @@ const getScriptableSettingsCommentLines = ({
 		.filter(Boolean)
 		.map((text) => `// ${text}`)
 		.join("\n");
-};
-
-const fallbackIconSettings: ScriptSettings = {
-	alwaysRunInApp: true,
-	iconColor: "yellow",
-	iconGlyph: "exclamation-triangle",
-};
+}
 
 function getBannerForFilePath(filePath: string) {
 	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\. ]+)\.ts/i);
