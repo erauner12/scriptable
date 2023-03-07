@@ -30,8 +30,8 @@ const fallbackIconSettings: ScriptSettings = {
 	iconGlyph: "exclamation-triangle",
 };
 
-const getBannerForFilePath = (filePath: string) => {
-	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\.]+)\.ts/i);
+function getBannerForFilePath(filePath: string) {
+	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\. ]+)\.ts/i);
 	if (!matchForTsFiles?.[1]) return null;
 	const filename = matchForTsFiles[1];
 
@@ -45,9 +45,7 @@ const getBannerForFilePath = (filePath: string) => {
 		["", DIVIDER, `Missing settings for ${filename}!`, DIVIDER, ""].join("\n")
 	);
 	return getScriptableSettingsCommentLines(fallbackIconSettings);
-};
-
-//
+}
 
 const addFileIconSettings = (filePath: string): Plugin => ({
 	name: "rollup-plugin-scriptable-icon-settings",
