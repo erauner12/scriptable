@@ -1,26 +1,35 @@
 type IconColor =
 	| "blue"
+	| "deep-blue"
 	| "red"
 	| "gray"
+	| "light-gray"
 	| "deep-gray"
 	| "yellow"
-	| "light-gray"
 	| "cyan"
-	| "deep-green"
 	| "green"
-	| "deep-blue"
+	| "deep-green"
 	| "purple"
+	| "deep-purple"
 	| "pink";
+
+type NonEmptyArray<T> = [T, ...T[]];
+type ShareSheetInput = "file-url" | "url" | "image" | "plain-text";
 
 export type ScriptSettings = {
 	iconColor: IconColor;
 	iconGlyph: string;
-	alwaysRunInApp?: true;
+	alwaysRunInApp?: boolean;
+	shareSheetInputs?: NonEmptyArray<ShareSheetInput>;
 };
 
 type SettingsGroup = Record<string, ScriptSettings>;
 
 export const SETTINGS: SettingsGroup = {
-	helloWorld: { iconColor: "blue", iconGlyph: "eye" },
-	storybook: { iconColor: "pink", iconGlyph: "palette" },
+	"Redirect Me": {
+		iconColor: "deep-purple",
+		iconGlyph: "reply-all",
+		alwaysRunInApp: false,
+		shareSheetInputs: ["url"],
+	},
 };

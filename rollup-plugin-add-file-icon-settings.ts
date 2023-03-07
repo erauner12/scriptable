@@ -17,14 +17,42 @@ function getScriptableSettingsCommentLines({
 	iconColor,
 	iconGlyph,
 	alwaysRunInApp,
+	shareSheetInputs,
 }: ScriptSettings) {
 	const colorAtom = `icon-color: ${iconColor};`;
 	const iconAtom = `icon-glyph: ${iconGlyph};`;
-	const line3 = alwaysRunInApp
-		? [COMMENT_ATOMS.runInApp, colorAtom]
-		: [colorAtom, iconAtom];
-	const line4 = alwaysRunInApp ? iconAtom : null;
-	return [COMMENT_ATOMS.line1, COMMENT_ATOMS.line2, line3.join(" "), line4]
+	const shareSheetInputAtom = shareSheetInputs
+		? `share-sheet-inputs: ${shareSheetInputs.join(", ")};`
+		: null;
+
+	let line3;
+	let line4;
+
+	if (alwaysRunInApp && !shareSheetInputAtom) {
+		line3 = [COMMENT_ATOMS.runInApp, colorAtom];
+		line4 = [iconAtom];
+	} else if (!alwaysRunInApp && shareSheetInputAtom) {
+		line3 = [colorAtom, iconAtom];
+		line4 = [shareSheetInputAtom];
+	} else if (alwaysRunInApp && shareSheetInputAtom) {
+		line3 = [COMMENT_ATOMS.runInApp, colorAtom];
+		line4 = [iconAtom, shareSheetInputAtom];
+	} else {
+		line3 = [colorAtom, iconAtom];
+		line4 = null;
+	}
+
+	const commentLines = [
+		COMMENT_ATOMS.line1,
+		COMMENT_ATOMS.line2,
+		line3.join(" "),
+	];
+
+	if (line4) {
+		commentLines.push(line4.join(" "));
+	}
+
+	return commentLines
 		.filter(Boolean)
 		.map((text) => `// ${text}`)
 		.join("\n");
