@@ -13,6 +13,31 @@ const fallbackIconSettings: ScriptSettings = {
 	alwaysRunInApp: false,
 };
 
+const addFileIconSettings = (filePath: string): Plugin => ({
+	name: "rollup-plugin-scriptable-icon-settings",
+	renderChunk: (code) => {
+		const commentLines = getBannerForFilePath(filePath);
+		return commentLines ? [commentLines, code].join("\n") : code;
+	},
+});
+
+function getBannerForFilePath(filePath: string) {
+	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\. ]+)\.ts/i);
+	if (!matchForTsFiles?.[1]) return null;
+	const filename = matchForTsFiles[1];
+
+	const settingsForFile = SETTINGS[filename];
+	if (settingsForFile) {
+		return getScriptableSettingsCommentLines(settingsForFile);
+	}
+	const DIVIDER = "-".repeat(50);
+	// eslint-disable-next-line no-console
+	console.log(
+		["", DIVIDER, `Missing settings for ${filename}!`, DIVIDER, ""].join("\n")
+	);
+	return getScriptableSettingsCommentLines(fallbackIconSettings);
+}
+
 function getScriptableSettingsCommentLines({
 	iconColor,
 	iconGlyph,
@@ -57,30 +82,5 @@ function getScriptableSettingsCommentLines({
 		.map((text) => `// ${text}`)
 		.join("\n");
 }
-
-function getBannerForFilePath(filePath: string) {
-	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\. ]+)\.ts/i);
-	if (!matchForTsFiles?.[1]) return null;
-	const filename = matchForTsFiles[1];
-
-	const settingsForFile = SETTINGS[filename];
-	if (settingsForFile) {
-		return getScriptableSettingsCommentLines(settingsForFile);
-	}
-	const DIVIDER = "-".repeat(50);
-	// eslint-disable-next-line no-console
-	console.log(
-		["", DIVIDER, `Missing settings for ${filename}!`, DIVIDER, ""].join("\n")
-	);
-	return getScriptableSettingsCommentLines(fallbackIconSettings);
-}
-
-const addFileIconSettings = (filePath: string): Plugin => ({
-	name: "rollup-plugin-scriptable-icon-settings",
-	renderChunk: (code) => {
-		const commentLines = getBannerForFilePath(filePath);
-		return commentLines ? [commentLines, code].join("\n") : code;
-	},
-});
 
 export default addFileIconSettings;
