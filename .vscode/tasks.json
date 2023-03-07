@@ -15,6 +15,32 @@
 				"reveal": "never",
 				"focus": false
 			}
+		},
+		{
+			"label": "Build current script",
+			"type": "shell",
+			"command": "npm run build ./\"${relativeFile}\"",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "never",
+				"focus": false
+			}
+		},
+		{
+			"label": "Build and watch current script",
+			"type": "shell",
+			"command": "npm run build-watch ./\"${relativeFile}\"",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "never",
+				"focus": false
+			}
 		}
 	]
 }
