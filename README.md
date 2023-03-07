@@ -1,13 +1,30 @@
-# Scriptable Development Environment
+# Scriptable
 
-This project includes
+## Summary
 
-- Scriptable types generated from documentation page
-- **RUN SCRIPT** hotkey: <kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>, it will run current script in Scriptable
-    > Script file name should not contain spaces
-- Folder with all your Scriptable apps
+This repository constains the scripts I've written for [Scriptable](https://scriptable.app), and a development environment for writing Scriptable scripts in TypeScript. It includes:
 
-## Getting started
+- [Scripts to install](src/README.md)
+- Scriptable type definitions generated from documentation page
+- **Run script** hotkey (<kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>), which will run the current script open in VSCode in Scriptable
+- Symlink folder with all your Scriptable files
+
+## Contents
+
+- [Scriptable](#scriptable)
+  - [Summary](#summary)
+  - [Contents](#contents)
+  - [Development Environment](#development-environment)
+    - [Getting started](#getting-started)
+    - [Initialize your local env](#initialize-your-local-env)
+    - [Import your script for git integration](#import-your-script-for-git-integration)
+    - [Relative projects](#relative-projects)
+    - [ERRORS](#errors)
+  - [Thanks](#thanks)
+
+## Development Environment
+
+### Getting started
 
 How to start to develop scriptable apps with VSCode:
 
@@ -30,7 +47,7 @@ How to start to develop scriptable apps with VSCode:
 
  > Folder `build` is your scriptable folder link, you can edit files there and it will be updated in scriptable app.
 
-## Initialize your local env
+### Initialize your local env
 
 Tou can use BASH script or [VSCode extension](https://marketplace.visualstudio.com/items?itemName=gebeto.vscode-scriptable) for it
 
@@ -38,7 +55,7 @@ Tou can use BASH script or [VSCode extension](https://marketplace.visualstudio.c
 ./scriptable.sh init
 ```
 
-## Import your script for git integration
+### Import your script for git integration
 
  > IMPORTANT: Script name should not contain any **spaces**, because RUN hotkey will now working
 
@@ -50,14 +67,14 @@ $ ./scriptable.sh import Script-Name
 $ ./scriptable.sh import Script_Name
 ```
 
-## Relative projects
+### Relative projects
 
 - [https://github.com/gebeto/scriptable-vscode](https://github.com/gebeto/scriptable-vscode)
     > plugin will replace `scriptable.sh` when it will done(work in progress).
 - [https://github.com/schl3ck/ios-scriptable-types](https://github.com/schl3ck/ios-scriptable-types)
     > Scriptable Typescript typings
 
-## ERRORS
+### ERRORS
 
 If scriptable typing are not loaded for you, need to add `///<reference path="../index.d.ts" />` on top of the your script (like shown below).
 Where **path** is a relative path to the `index.d.ts` file.
