@@ -9,11 +9,11 @@ const ENTRY_FILE_PATH = process.env.file_path;
 const config = {
 	input: ENTRY_FILE_PATH,
 	output: {
-		dir: "..",
+		dir: "dist",
 		format: "es",
-		plugins: [terser()],
+		plugins: [terser(), addFileIconSettings(ENTRY_FILE_PATH!)],
 	},
-	plugins: [typescript(), nodeResolve(), addFileIconSettings(ENTRY_FILE_PATH!)],
+	plugins: [typescript(), nodeResolve()],
 	watch: {
 		include: "src/**",
 	},
