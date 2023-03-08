@@ -88,7 +88,7 @@ How to start developing scriptable apps with VSCode:
 
 ### Import your script for git integration
 
- > IMPORTANT: Script name should not contain any **spaces**, because RUN hotkey will now working
+ > IMPORTANT: Script name should not contain any **spaces**, because RUN hotkey will not work
 
 ```sh
 $ ./scriptable.sh import ScriptName
