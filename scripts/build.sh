@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+src=src
+dist=dist
+
 has_param() {
   local term="$1"
   shift
@@ -14,13 +17,11 @@ has_param() {
 # Supported flags:
 #  --watch: Rebuild automatically when changes are detected
 build() {
-  local entry_file_path=$1
+  local entry_file_path="$1"
   local parsed_path
 
-  if [[ $entry_file_path == ./src/* ]]; then
+  if [[ $entry_file_path == ./$src/* ]]; then
     parsed_path=$entry_file_path
-  else
-    parsed_path=$(find . -name "$1.ts")
   fi
 
   if [[ $entry_file_path != "./"* ]]; then
