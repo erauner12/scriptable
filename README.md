@@ -96,5 +96,6 @@ $ ./scriptable.sh import Script_Name
 
 ## Thanks
 
-- [schl3ck](https://github.com/schl3ck) for Scriptable types definition: [ios-scriptable-types](https://github.com/schl3ck/ios-scriptable-types)
+- [gebeto](https://github.com/gebeto) for the starting environment: [scriptables (scriptable development environment)](https://github.com/gebeto/scriptables)
 - [jsloat](https://github.com/jsloat) for TypeScript development enviroment: [scriptable-utils](https://sloat.life/#/scriptable-utils)
+- [schl3ck](https://github.com/schl3ck) for Scriptable types definition: [ios-scriptable-types](https://github.com/schl3ck/ios-scriptable-types)
