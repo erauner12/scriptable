@@ -35,6 +35,11 @@ build_and_watch() {
   build "$1" --watch
 }
 
+
+uri_encode() {
+  echo $_ | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"'
+}
+
 function parse_path() {
   local separator="/"
   local encoded_array=()
@@ -43,7 +48,7 @@ function parse_path() {
   read -Ar strarr <<<$1
 
   for value in "${strarr[@]}"; do
-    current_val=$(echo $value | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"')
+    current_val=$(uri_encode $value)
     encoded_array+=($current_val)
   done
 
