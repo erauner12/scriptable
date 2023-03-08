@@ -49,6 +49,11 @@ build_and_watch() {
   build "$1" --watch
 }
 
+open_in_scriptable() {
+  local entry_file_path="$1"
+  local cmd="open scriptable:///run/$(uri_encode "$entry_file_path")"
+  $cmd
+}
 
 uri_encode() {
   echo $_ | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"'
