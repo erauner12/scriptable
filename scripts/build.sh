@@ -32,12 +32,16 @@ build() {
     fi
     echo "😇 We found the script at: $parsed_path"
   fi
+
+  exit_if_not_extension "$parsed_path" ts TypeScript
+
   local escape_spaces=$(parse_path "$parsed_path")
 
   local cmd
   cmd="rollup --config rollup.config.ts --environment file_path:"$escape_spaces" --configPlugin @rollup/plugin-typescript"
   if has_param '--watch' "$@"; then cmd+=' --watch'; fi
   $cmd
+  echo -e "\n🚀 Done!"
 }
 
 build_and_watch() {
@@ -82,4 +86,12 @@ function join_array() {
     result="${result}${separator}${elements[i]}"
   done
   echo -n "$result"
+}
+
+function exit_if_not_extension() {
+  if [[ $1 != *.$2 ]]; then
+    echo "🤨 The file \"${entry_file_path}\" is not $3."
+    echo "❌ Exiting!"
+    exit 1
+  fi
 }
