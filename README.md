@@ -8,7 +8,7 @@ This repository constains the scripts I've written for Scriptable, and developme
 - Type definitions generated from Scriptable documentation page
 - TypeScript compiler and minifier for Scriptable
 - Symlink folder with all your Scriptable files
-- **Run taks** (<kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>) with predefined scripts to:
+- Run taks with predefined scripts to:
   1. Open the current file in Scriptable
   2. Compile the current TypeScript file to JavaScript
   3. Watch the current TypeScript file and compile it to JavaScript when modified
@@ -24,6 +24,11 @@ This repository constains the scripts I've written for Scriptable, and developme
   - [Development environment](#development-environment)
     - [Getting started](#getting-started)
     - [Import your script for git integration](#import-your-script-for-git-integration)
+    - [npm](#npm)
+      - [Build](#build)
+      - [Build and watch](#build-and-watch)
+      - [Open](#open)
+    - [VSCode tasks](#vscode-tasks)
     - [Notes](#notes)
   - [Related projects](#related-projects)
   - [Thanks](#thanks)
@@ -93,9 +98,46 @@ $ ./scriptable.sh import Script-Name
 $ ./scriptable.sh import Script_Name
 ```
 
+### npm
+
+The following commands should be followed by an argument, either:
+
+- the name of the script (surrounded in quotation marks *if* it contains spaces): e.g. `"Hello World"` or `Hello_World`
+- the relative path of the script with file extension (surrounded in quotation marks *if* it contains spaces): e.g. `"./src/Hello World/Hello World.ts"` or `./src/Hello_World/Hello_World.ts`
+
+#### Build
+
+```node
+npm run build
+```
+
+#### Build and watch
+
+```node
+npm run build-watch
+```
+
+#### Open
+
+```node
+npm run open
+```
+
+### VSCode tasks
+
+These are defined in the `.vscode/tasks.json`, they allow you to run a command directly from the current script you're working on.
+
+The default shortcut to run tasks is <kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>.
+
+The tasks are relatively self-explanitory and simply pass in the required arguments for the `npm` commands:
+
+- `Open current script in Scriptable`
+- `Build current script`
+- `Build and watch current script`
+
 ### Notes
 
-When developing in this environment, there are a few things to keep in mind
+When developing in this environment, there are a few things to keep in mind:
 
 - When compiling from TypeScript using the `npm run build ${script_name_or_relative_path}` or `npm run build-watch ${script_name_or_relative_path}`, the resulting JavaScript file will be placed in the `dist` folder with the same name (with `.js` as the file extension).
   > Ensure that you actually intend to overwrite any existing files in here before running, or ensure that files are already backed up to `git` before running this command.
