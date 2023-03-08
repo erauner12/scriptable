@@ -139,7 +139,7 @@ The tasks are relatively self-explanitory and simply pass in the required argume
 
 When developing in this environment, there are a few things to keep in mind:
 
-- When compiling from TypeScript using the `npm run build ${script_name_or_relative_path}` or `npm run build-watch ${script_name_or_relative_path}`, the resulting JavaScript file will be placed in the `dist` folder with the same name (with `.js` as the file extension).
+- When compiling from TypeScript using the `npm run build` or `npm run build-watch`, the resulting JavaScript file will be placed in the `dist` folder with the same name (with `.js` as the file extension).
   > Ensure that you actually intend to overwrite any existing files in here before running, or ensure that files are already backed up to `git` before running this command.
 
 ## Related projects
