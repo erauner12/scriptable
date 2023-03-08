@@ -23,6 +23,7 @@ build() {
     parsed_path=$(find . -name "$1.ts")
   fi
 
+    parsed_path=$(find_file "$entry_file_path.ts")
   local escape_spaces=$(parse_path "$parsed_path")
 
   local cmd
@@ -38,6 +39,14 @@ build_and_watch() {
 
 uri_encode() {
   echo $_ | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"'
+}
+
+function find_file() {
+  result=$(find . -name "$1" | exec -l grep .)
+  if [ $? -eq 1 ]; then
+    return 1
+  fi
+  echo "$result"
 }
 
 function parse_path() {
