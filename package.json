@@ -4,7 +4,8 @@
 	"description": "Scriptable Development Environment for VSCode",
 	"scripts": {
 		"build": "source ./scripts/build.sh; build",
-		"build-watch": "source ./scripts/build.sh; build_and_watch"
+		"build-watch": "source ./scripts/build.sh; build_and_watch",
+		"open": "source ./scripts/build.sh; open_in_scriptable"
 	},
 	"repository": {
 		"type": "git",

@@ -4,9 +4,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Run current script in Scriptable",
+			"label": "Open current script in Scriptable",
 			"type": "shell",
-			"command": "echo ${fileBasenameNoExtension} | perl -MURI::Escape -ne 'chomp;print uri_escape($_),\"\\n\"' | { read uriEncoded; open scriptable:///run/${uriEncoded} }",
+			"command": "npm run open \"${fileBasenameNoExtension}\"",
 			"group": {
 				"kind": "build",
 				"isDefault": true
