@@ -23,7 +23,15 @@ build() {
     parsed_path=$(find . -name "$1.ts")
   fi
 
+  if [[ $entry_file_path != "./"* ]]; then
     parsed_path=$(find_file "$entry_file_path.ts")
+    if [ $? -eq 1 ]; then
+      echo "😭 \"$entry_file_path.ts\" could not be found!"
+      echo "❌ Exiting!"
+      exit 1
+    fi
+    echo "😇 We found the script at: $parsed_path"
+  fi
   local escape_spaces=$(parse_path "$parsed_path")
 
   local cmd
