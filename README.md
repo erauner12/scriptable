@@ -61,7 +61,7 @@ How to start to develop scriptable apps with VSCode:
 
   > You can edit files here and changes will show in the Scriptable app.
 
-1. Open VSCode in the repo
+6. Open VSCode in the repo
 
   ```sh
   code .
