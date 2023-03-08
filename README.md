@@ -4,25 +4,41 @@
 
 This repository constains the scripts I've written for [Scriptable](https://scriptable.app), and a development environment for writing Scriptable scripts in TypeScript. It includes:
 
-- [Scripts to install](src/README.md)
-- Scriptable type definitions generated from documentation page
-- **Run script** hotkey (<kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>), which will run the current script open in VSCode in Scriptable
+- My custom Scriptable [scripts and source code](src/README.md)
+- Type definitions generated from Scriptable documentation page
+- TypeScript compiler and minifier for Scriptable
 - Symlink folder with all your Scriptable files
+- **Run taks** (<kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>B</kbd>) with predefined scripts to:
+  1. Open the current file in Scriptable
+  2. Compile the current TypeScript file to JavaScript
+  3. Watch the current TypeScript file and compile it to JavaScript when modified
 
 ## Contents
 
 - [Scriptable](#scriptable)
   - [Summary](#summary)
   - [Contents](#contents)
-  - [Development Environment](#development-environment)
+  - [Installing scripts](#installing-scripts)
+  - [Repository navigation](#repository-navigation)
+  - [Development environment](#development-environment)
     - [Getting started](#getting-started)
-    - [Initialize your local env](#initialize-your-local-env)
     - [Import your script for git integration](#import-your-script-for-git-integration)
-    - [Relative projects](#relative-projects)
-    - [ERRORS](#errors)
+  - [Related projects](#related-projects)
   - [Thanks](#thanks)
 
-## Development Environment
+## Installing scripts
+
+To get started installing scripts in Scriptable go [here](src/README.md).
+
+## Repository navigation
+
+| path        | description                | example                     |
+| ----------- | -------------------------- | --------------------------- |
+| `./src`     | source code                | `.ts` and `readme.md` files |
+| `./dist`    | production code            | `.js` Scriptable files      |
+| `./scripts` | custom development scripts | compling `.ts` to `.js`     |
+
+## Development environment
 
 ### Getting started
 
@@ -37,23 +53,25 @@ How to start to develop scriptable apps with VSCode:
   git clone https://github.com/gebeto/scriptables
   ```
 
-5. Run command to initialize your `build` folder link
+5. Run command to initialize a `build` folder symlink to the iCloud Scriptables folder
 
   ```sh
   ./scriptable.sh init
   ```
 
-6. Done! Open VSCode in the repo(`code .`) and start to build your apps fast and easy!
+  > You can edit files here and changes will show in the Scriptable app.
 
- > Folder `build` is your scriptable folder link, you can edit files there and it will be updated in scriptable app.
+1. Open VSCode in the repo
 
-### Initialize your local env
+  ```sh
+  code .
+  ```
 
-Tou can use BASH script or [VSCode extension](https://marketplace.visualstudio.com/items?itemName=gebeto.vscode-scriptable) for it
+7. Install npm dependencies
 
-```sh
-./scriptable.sh init
-```
+  ```sh
+  npm install --include=dev
+  ```
 
 ### Import your script for git integration
 
@@ -67,27 +85,16 @@ $ ./scriptable.sh import Script-Name
 $ ./scriptable.sh import Script_Name
 ```
 
-### Relative projects
+## Related projects
 
 - [https://github.com/gebeto/scriptable-vscode](https://github.com/gebeto/scriptable-vscode)
-    > plugin will replace `scriptable.sh` when it will done(work in progress).
+  > plugin will replace `scriptable.sh` when it will done(work in progress).
 - [https://github.com/schl3ck/ios-scriptable-types](https://github.com/schl3ck/ios-scriptable-types)
-    > Scriptable Typescript typings
-
-### ERRORS
-
-If scriptable typing are not loaded for you, need to add `///<reference path="../index.d.ts" />` on top of the your script (like shown below).
-Where **path** is a relative path to the `index.d.ts` file.
-
-```diff
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: green; icon-glyph: magic;
-+ ///<reference path="../index.d.ts" />
-
-...
-```
+  > Scriptable Typescript typings
+- [https://github.com/jsloat/scriptable-utils](https://github.com/jsloat/scriptable-utils)
+  > Scriptable utilites to make building interactive elements easier
 
 ## Thanks
 
 - [schl3ck](https://github.com/schl3ck) for Scriptable types definition: [ios-scriptable-types](https://github.com/schl3ck/ios-scriptable-types)
+- [jsloat](https://github.com/jsloat) for TypeScript development enviroment: [scriptable-utils](https://sloat.life/#/scriptable-utils)
