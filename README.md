@@ -2,7 +2,7 @@
 
 ## Summary
 
-This repository constains the scripts I've written for [Scriptable](https://scriptable.app), and a development environment for writing Scriptable scripts in TypeScript. It includes:
+This repository constains the scripts I've written for Scriptable, and development environment for writing Scriptable scripts in TypeScript. It includes:
 
 - My custom Scriptable [scripts and source code](src/README.md)
 - Type definitions generated from Scriptable documentation page
@@ -18,6 +18,7 @@ This repository constains the scripts I've written for [Scriptable](https://scri
 - [Scriptable](#scriptable)
   - [Summary](#summary)
   - [Contents](#contents)
+  - [About](#about)
   - [Installing scripts](#installing-scripts)
   - [Repository navigation](#repository-navigation)
   - [Development environment](#development-environment)
@@ -25,6 +26,12 @@ This repository constains the scripts I've written for [Scriptable](https://scri
     - [Import your script for git integration](#import-your-script-for-git-integration)
   - [Related projects](#related-projects)
   - [Thanks](#thanks)
+
+## About
+
+[Scriptable](https://scriptable.app) is an app for iOS and MacOS, that allows you to create widgets and run automations created in JavaScript.
+
+Most of the scripts that can be found in this repo were born out of limitations I've encountered with applications or/and the iOS platform itself; the aim for these scripts is to solve these limitations with elegant solutions.
 
 ## Installing scripts
 
