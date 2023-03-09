@@ -1,10 +1,10 @@
 #!/bin/bash
 
-COMMANDS=(init list import import_module)
+COMMANDS=(init list list_modules import import_module)
 
 DIST_PATH="$(pwd)/dist/"
-MODULE_PATH="$(pwd)/modules/"
 BUILD_PATH="$(pwd)/build/"
+MODULE_PATH="$(pwd)/modules/"
 ICLOUD_PATH="$HOME/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/"
 
 function init() {
@@ -24,7 +24,13 @@ function import_module() {
 }
 
 function list() {
-	ls ~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/
+	echo -e "📝 Scripts in \"$(get_user_friendly_path "$DIST_PATH")\":\n"
+	ls "$DIST_PATH"*.js | tr '\n' '\0' | xargs -0 -n 1 basename | sed -e 's/\.js$//' | column
+}
+
+function list_modules() {
+	echo -e "📝 Module scripts in \"$(get_user_friendly_path "$MODULE_PATH")\":\n"
+	ls "$MODULE_PATH"*.js | tr '\n' '\0' | xargs -0 -n 1 basename | sed -e 's/\.js$//' | column
 }
 
 function create_link() {
@@ -164,7 +170,7 @@ function check_file_exists() {
 				echo -e "\n✋ Invalid input. Please enter 'y' or 'n'"
 			fi
 		done
-	els	e
+		els e
 		echo "🔍 File not found at \"$path_user_friendly\""
 		return 1
 	fi
