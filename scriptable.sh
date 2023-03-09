@@ -19,8 +19,8 @@ function import() {
 	select_and_link "$DIST_PATH" "$BUILD_PATH" ".js"
 }
 
-function importModule() {
-	ln ~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/modules/"$1.js" "modules/$1.js"
+function import_module() {
+	select_and_link "$MODULE_PATH" "${BUILD_PATH}modules/" ".js"
 }
 
 function list() {
