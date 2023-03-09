@@ -217,19 +217,19 @@ function get_user_friendly_path() {
 function log() {
 	local message="$1"
 	local exit_code=$2
-	echo "✨ $message"
+	echo -e "✨ $message"
 	return $exit_code
 }
 
 function log_success() {
 	local message="$1"
-	echo "✅ $message"
+	echo -e "✅ $message"
 	return 0
 }
 
 function log_error() {
 	local message="$1"
-	echo "❌ $message"
+	echo -e "❌ $message"
 	return 1
 }
 
@@ -237,10 +237,10 @@ function log_complete() {
 	local exit_code=$1
 
 	if [[ $exit_code -ne 0 ]]; then
-		echo "🚪 Exiting script..."
+		echo -e "🚪 Exiting script..."
 		exit $exit_code
 	else
-		echo "🚀 Done!"
+		echo -e "🚀 Done!"
 		exit 0
 	fi
 }
