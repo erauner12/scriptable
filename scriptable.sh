@@ -36,7 +36,7 @@ function get_list() {
 	local friendly_path="$(get_user_friendly_path "$path")"
 	local extension="$2"
 
-	echo -e "📝 Module scripts in \"$friendly_path\":\n"
+	echo -e "📝 Scripts in \"$friendly_path\":\n"
 
 	# Find matching files and print them using column
 	if files="$(find "$path" -maxdepth 1 -type f -name "*$extension" -exec sh -c 'basename "$0" | sed -e "s/\.js$//" ' {} \; | sort -bgf)" && [ -n "$files" ]; then
@@ -115,14 +115,21 @@ function select_and_link() {
 	local soft_link="$4"
 
 	local script_path=$(select_script "$source_path" "$search_extension")
+
 	if [[ $script_path == "exit" ]]; then
 		log_complete 1
 	fi
 
-	local filename="$(find "${script_path}" -maxdepth 0 -type f -exec basename {} \;)"
+	if [[ $script_path == "empty" ]]; then
+		log_error $"No script files found in \"$source_path\"..."
+		log_complete 1
+	fi
+
+	local filename="$(basename "$script_path")"
 
 	if [ -z "$filename" ]; then
-		log_error "No script file found: \"$script_path\""
+		log_error "No script file found: \"$source_path\""
+		log_complete 1
 	else
 		local link_path="$destination_path$filename"
 	fi
@@ -142,10 +149,15 @@ function select_script() {
 	local script_dir="$1"
 	local file_extension="$2"
 	local extension_icon="📝"
-	local file_list="$(find "$script_dir" -maxdepth 1 -type f -name "*$file_extension" -exec basename {} \; | sort -f)"
+	local file_list=()
+	local selected_file
 
-	if [[ -z "$file_list" ]]; then
-		echo "🚫 No script files found in \"$script_dir\"..."
+	while IFS= read -r file; do
+		file_list+=("$file")
+	done < <(find "$script_dir" -maxdepth 1 -type f -name "*$file_extension" -exec sh -c 'basename "$0" | sed -e "s/\.js$//" ' {} \; | sort -bgf)
+
+	if [[ ${#file_list[@]} -eq 0 ]]; then
+		echo "empty"
 		return 1
 	fi
 
@@ -166,7 +178,7 @@ function select_script() {
 		fi
 
 		if [[ -n "$file_name" ]]; then
-			local selected_file="$script_dir${file_name:2}$file_extension"
+			selected_file="$script_dir${file_name:2}$file_extension"
 			echo "$selected_file"
 			return 0
 		fi
@@ -188,7 +200,7 @@ function check_file_exists() {
 				echo -e "\n✋ Invalid input. Please enter 'y' or 'n'"
 			fi
 		done
-		els e
+	else
 		echo "🔍 File not found at \"$path_user_friendly\""
 		return 1
 	fi
@@ -250,7 +262,7 @@ function select_command() {
 	PS3=$'\n👉 Please select a command (enter a number): '
 	select command in "${COMMANDS[@]}"; do
 		if [[ -n "$command" ]]; then
-			echo -e "🚀 Running selected command $command...\n"
+			echo -e "🚀 Running selected command \"$command\"...\n"
 			$command
 			break
 		else
