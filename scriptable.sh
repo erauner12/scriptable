@@ -56,7 +56,7 @@ function create_link() {
 
 	check_link "$destination_path"
 	if [ "$?" == 1 ]; then
-		log_complete 
+		log_complete
 	fi
 
 	eval $ln_command 2>/dev/null
@@ -134,7 +134,7 @@ function select_script() {
 	# Add option to exit
 	file_array+=("🚪 Exit")
 
-	PS3=$'\n🤔 Select a script from the list (or enter 0 to exit): '
+	PS3=$'\n👉 Select a script from the list (or enter 0 to exit): '
 	select file_name in "${file_array[@]}"; do
 		if [[ "$REPLY" == 0 ]] || [[ "$REPLY" == ${#file_array[@]} ]]; then
 			echo "exit"
@@ -158,13 +158,13 @@ function check_file_exists() {
 		check_link "$path"
 		while [[ "$remove_file" != "y" && "$remove_file" != "n" ]]; do
 			echo "😱 \"$path_user_friendly\" already exists..."
-			read -p "🤔 Do you want to remove it? [y/n]: " remove_file
+			read -p "👉 Do you want to remove it? [y/n]: " remove_file
 
 			if [[ "$remove_file" != "y" && "$remove_file" != "n" ]]; then
 				echo -e "\n✋ Invalid input. Please enter 'y' or 'n'"
 			fi
 		done
-	else
+	els	e
 		echo "🔍 File not found at \"$path_user_friendly\""
 		return 1
 	fi
