@@ -1,17 +1,11 @@
 #!/bin/bash
 
+COMMANDS=(init list import import_module)
+
 DIST_PATH="$(pwd)/dist/"
 MODULE_PATH="$(pwd)/modules/"
 BUILD_PATH="$(pwd)/build/"
 ICLOUD_PATH="$HOME/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/"
-
-function show_commands() {
-	echo "Available commands: '$1'"
-	printf '\r\n'
-	printf '    '
-	printf '%s\n    ' "${commands[@]}"
-	printf '\r\n'
-}
 
 function init() {
 	local dir_name=$(basename "$BUILD_PATH")
@@ -222,10 +216,16 @@ function log_complete() {
 	fi
 }
 
-commands=(init list import importModule)
+function show_commands() {
+	echo "Available commands: '$1'"
+	printf '\r\n'
+	printf '    '
+	printf '%s\n    ' "${COMMANDS[@]}"
+	printf '\r\n'
+}
 
-if [[ $# -gt 0 ]] && [[ "${commands[@]}" =~ "$1" ]]; then
+if [[ $# -gt 0 ]] && [[ "${COMMANDS[@]}" =~ "$1" ]]; then
 	$1 "${@:2}"
 else
-	show_commands "$commands"
+	show_commands "$COMMANDS"
 fi
