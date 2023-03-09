@@ -24,13 +24,31 @@ function import_module() {
 }
 
 function list() {
-	echo -e "📝 Scripts in \"$(get_user_friendly_path "$DIST_PATH")\":\n"
-	ls "$DIST_PATH"*.js | tr '\n' '\0' | xargs -0 -n 1 basename | sed -e 's/\.js$//' | column
+	get_list "$DIST_PATH" ".js"
 }
 
 function list_modules() {
-	echo -e "📝 Module scripts in \"$(get_user_friendly_path "$MODULE_PATH")\":\n"
-	ls "$MODULE_PATH"*.js | tr '\n' '\0' | xargs -0 -n 1 basename | sed -e 's/\.js$//' | column
+	get_list "$MODULE_PATH" ".js"
+}
+
+function get_list() {
+	local path="$1"
+	local friendly_path="$(get_user_friendly_path "$path")"
+	local extension="$2"
+
+	echo -e "📝 Module scripts in \"$friendly_path\":\n"
+
+	# Find matching files and print them using column
+	if files="$(find "$path" -maxdepth 1 -type f -name "*$extension" -exec sh -c 'basename "$0" | sed -e "s/\.js$//" ' {} \; | sort -bgf)" && [ -n "$files" ]; then
+		echo "$files" | column
+	else
+		echo "🚫 No script files found in \"$friendly_path\"..."
+		log_complete 1
+	fi
+
+	if [ "$?" == 1 ]; then
+		return 1
+	fi
 }
 
 function create_link() {
