@@ -216,16 +216,22 @@ function log_complete() {
 	fi
 }
 
-function show_commands() {
-	echo "Available commands: '$1'"
-	printf '\r\n'
-	printf '    '
-	printf '%s\n    ' "${COMMANDS[@]}"
-	printf '\r\n'
+function select_command() {
+	echo -e "📝 Available commands:\n"
+	PS3=$'\n👉 Please select a command (enter a number): '
+	select command in "${COMMANDS[@]}"; do
+		if [[ -n "$command" ]]; then
+			echo -e "🚀 Running selected command $command...\n"
+			$command
+			break
+		else
+			echo "🚫 Invalid selection. Please try again."
+		fi
+	done
 }
 
 if [[ $# -gt 0 ]] && [[ "${COMMANDS[@]}" =~ "$1" ]]; then
 	$1 "${@:2}"
 else
-	show_commands "$COMMANDS"
+	select_command "$COMMANDS"
 fi
