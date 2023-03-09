@@ -55,6 +55,10 @@ function create_link() {
 	fi
 
 	check_link "$destination_path"
+	if [ "$?" == 1 ]; then
+		log_complete 
+	fi
+
 	eval $ln_command 2>/dev/null
 
 	if [ "$?" == 0 ]; then
@@ -71,7 +75,7 @@ function check_link() {
 
 	if [ -e "${path}" ]; then
 		if [[ -L "${path}" ]]; then
-			log_error "\"$path_user_friendly\" is already a symbolic link..."
+			log "\"$path_user_friendly\" is already a symbolic link..." 1
 		else
 			log_error "\"$path_user_friendly\" is not a symbolic link..."
 		fi
@@ -86,7 +90,6 @@ function select_and_link() {
 	local search_extension="$3"
 	local soft_link="$4"
 
-	echo
 	local script_path=$(select_script "$source_path" "$search_extension")
 	if [[ $script_path == "exit" ]]; then
 		log_complete 1
@@ -114,6 +117,7 @@ function select_and_link() {
 function select_script() {
 	local script_dir="$1"
 	local file_extension="$2"
+	local extension_icon="📝"
 	local file_list="$(find "$script_dir" -maxdepth 1 -type f -name "*$file_extension" -exec basename {} \; | sort -f)"
 
 	if [[ -z "$file_list" ]]; then
@@ -124,7 +128,7 @@ function select_script() {
 	local file_array=()
 	while read -r file; do
 		local filename="${file%$file_extension}"
-		file_array+=("📝 ${filename}")
+		file_array+=("$extension_icon ${filename}")
 	done <<<"$file_list"
 
 	# Add option to exit
@@ -179,7 +183,6 @@ function check_file_exists() {
 		log "Leaving \"$path_user_friendly\" in place..."
 		return 1
 	fi
-
 }
 
 function get_user_friendly_path() {
@@ -189,7 +192,9 @@ function get_user_friendly_path() {
 
 function log() {
 	local message="$1"
+	local exit_code=$2
 	echo "✨ $message"
+	return $exit_code
 }
 
 function log_success() {
