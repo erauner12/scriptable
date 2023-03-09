@@ -103,7 +103,6 @@ function check_link() {
 	local path_user_friendly=$(get_user_friendly_path "$path")
 
 	if [ -e "${path}" ]; then
-		echo $path
 		if [[ "$(readlink -f "${path}")" != "${path}" ]]; then
 			log "\"$path_user_friendly\" is already a symbolic link..." 1
 		else
