@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMMANDS=(init list list_modules import import_module)
+COMMANDS=(init list list_modules export export_module)
 
 DIST_PATH="$(pwd)/dist/"
 BUILD_PATH="$(pwd)/build/"
@@ -15,11 +15,16 @@ function init() {
 	log_complete $?
 }
 
-function import() {
-	select_and_link "$DIST_PATH" "$BUILD_PATH" ".js"
+function export() {
+	if [[ $1 ]]; then
+		create_link "${DIST_PATH}${1}.js" "${BUILD_PATH}${1}.js"
+		log_complete $?
+	else
+		select_and_link "$DIST_PATH" "$BUILD_PATH" ".js"
+	fi
 }
 
-function import_module() {
+function export_module() {
 	select_and_link "$MODULE_PATH" "${BUILD_PATH}modules/" ".js"
 }
 
@@ -98,7 +103,8 @@ function check_link() {
 	local path_user_friendly=$(get_user_friendly_path "$path")
 
 	if [ -e "${path}" ]; then
-		if [[ -L "${path}" ]]; then
+		echo $path
+		if [[ "$(readlink -f "${path}")" != "${path}" ]]; then
 			log "\"$path_user_friendly\" is already a symbolic link..." 1
 		else
 			log_error "\"$path_user_friendly\" is not a symbolic link..."
@@ -194,7 +200,7 @@ function check_file_exists() {
 		check_link "$path"
 		while [[ "$remove_file" != "y" && "$remove_file" != "n" ]]; do
 			echo "😱 \"$path_user_friendly\" already exists..."
-			read -p "👉 Do you want to remove it? [y/n]: " remove_file
+			read -p "👉 Do you want to replace it? [y/n]: " remove_file
 
 			if [[ "$remove_file" != "y" && "$remove_file" != "n" ]]; then
 				echo -e "\n✋ Invalid input. Please enter 'y' or 'n'"

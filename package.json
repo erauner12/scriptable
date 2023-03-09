@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "Scriptable Development Environment for VSCode",
 	"scripts": {
+		"init": "./scripts/scriptable.sh init",
+		"export": "./scripts/scriptable.sh export",
+		"export_module": "./scripts/scriptable.sh export_module",
 		"build": "source ./scripts/build.sh; build",
 		"build-watch": "source ./scripts/build.sh; build_and_watch",
 		"open": "source ./scripts/build.sh; open_in_scriptable"

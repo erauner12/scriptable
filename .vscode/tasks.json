@@ -53,6 +53,23 @@
 				"showReuseMessage": true,
 				"clear": true
 			}
+		},
+		{
+			"label": "Build, link, and open current script",
+			"type": "shell",
+			"command": "npm run build ./\"${relativeFile}\"; npm run export \"${fileBasenameNoExtension}\"; npm run open \"${fileBasenameNoExtension}\"",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": false,
+				"reveal": "never",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
 		}
 	]
 }
