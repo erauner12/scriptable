@@ -23,8 +23,12 @@ This repository constains the scripts I've written for Scriptable, and developme
   - [Repository navigation](#repository-navigation)
   - [Development environment](#development-environment)
     - [Getting started](#getting-started)
-    - [Import your script for git integration](#import-your-script-for-git-integration)
+    - [Compiling from TypeScript to JavaScript](#compiling-from-typescript-to-javascript)
+    - [Export script to Scriptable (iCloud directory)](#export-script-to-scriptable-icloud-directory)
     - [npm](#npm)
+      - [Init](#init)
+      - [Export](#export)
+      - [Export module](#export-module)
       - [Build](#build)
       - [Build and watch](#build-and-watch)
       - [Open](#open)
@@ -74,11 +78,9 @@ How to start developing scriptable apps with VSCode:
 
 6. Run command to initialize a `build` folder symlink to the iCloud Scriptables folder
 
-  ```sh
-  ./scriptable.sh init
+  ```node
+  npm run init
   ```
-
-  > You can edit files here and changes will show in the Scriptable app.
 
 7. Install npm dependencies
 
@@ -86,21 +88,50 @@ How to start developing scriptable apps with VSCode:
   npm install --include=dev
   ```
 
-### Import your script for git integration
+### Compiling from TypeScript to JavaScript
+
+1. Open a TypeScript file in VSCode.
+2. Run a [task](#vscode-tasks) - I'd reccomend: `Build, link, and open current script` (this will build the file to the `dist` folder, syslink it to the `build` folder and open it in Scriptables)
+
+### Export script to Scriptable (iCloud directory)
 
  > IMPORTANT: Script name should not contain any **spaces**, because RUN hotkey will not work
 
-```sh
-$ ./scriptable.sh import ScriptName
-# or
-$ ./scriptable.sh import Script-Name
-# or
-$ ./scriptable.sh import Script_Name
+For scripts use:
+
+```node
+npm run export
+```
+
+For modules use:
+
+```node
+npm run export_module
 ```
 
 ### npm
 
-The following commands should be followed by an argument, either:
+The following commands are for the symbolic linking of files:
+
+#### Init
+
+```node
+npm run init
+```
+
+#### Export
+
+```node
+npm run export
+```
+
+#### Export module
+
+```node
+npm run export_module
+```
+
+These commands are for compiling from TypeScript to JavaScript and running the script in Scriptable. Each should be followed by an argument, either:
 
 - the name of the script (surrounded in quotation marks *if* it contains spaces): e.g. `"Hello World"` or `Hello_World`
 - the relative path of the script with file extension (surrounded in quotation marks *if* it contains spaces): e.g. `"./src/Hello World/Hello World.ts"` or `./src/Hello_World/Hello_World.ts`
@@ -134,13 +165,15 @@ The tasks are relatively self-explanitory and simply pass in the required argume
 - `Open current script in Scriptable`
 - `Build current script`
 - `Build and watch current script`
+- `Build, export, and open current script`
 
 ### Notes
 
 When developing in this environment, there are a few things to keep in mind:
 
 - When compiling from TypeScript using the `npm run build` or `npm run build-watch`, the resulting JavaScript file will be placed in the `dist` folder with the same name (with `.js` as the file extension).
-  > Ensure that you actually intend to overwrite any existing files in here before running, or ensure that files are already backed up to `git` before running this command.
+  > Ensure that you actually intend to overwrite any existing files in here before running, or/and ensure that files are already backed up to `git` before running this command.
+- 
 
 ## Related projects
 
