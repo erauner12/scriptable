@@ -102,7 +102,9 @@ function check_link() {
 	local dir_name=$(basename "$directory_path")
 	local path_user_friendly=$(get_user_friendly_path "$path")
 
+	# Check if path already exists
 	if [ -e "${path}" ]; then
+		# If path exists, check if it's already a symbolic link
 		if [[ "$(readlink -f "${path}")" != "${path}" ]]; then
 			log "\"$path_user_friendly\" is already a symbolic link..." 1
 		else
