@@ -79,39 +79,48 @@ function open_in_scriptable() {
 
   # Check if directory exists in ./dist
   if test -e "$dist_file_path"; then
-    log "Found \"$dist_relative_path$(basename "$dist_file_path")\""
+    log_success "Found \"$dist_relative_path$(basename "$dist_file_path")\""
     dist_absolute_path="$(absolute_path "${dist_file_path}")"
   else
     echo "$dist_file_path"
-    log_complete 1
-    return 1
   fi
 
   local build_file_path="$(find_file "$build_relative_path" "$entry_file")"
 
   # Check if directory exists in ./build
   if test -e "$build_file_path"; then
-    log "Found \"$build_relative_path$(basename "$build_file_path")\""
+    log_success "Found \"$build_relative_path$(basename "$build_file_path")\""
     build_absolute_path="$(absolute_path "${build_file_path}")"
   else
     echo "$build_file_path"
-    log_complete 1
-    return 1
   fi
 
-  # Check if paths symbolic link to the same file
-  if [ "$dist_absolute_path" -ef "$build_absolute_path" ]; then
-    uri_basename="$(basename "$build_absolute_path")"
-    uri_basename="${uri_basename%.*}"
-    uri_basename="$(uri_encode "$uri_basename")"
-  else
-    log_error "No symbolic link between \"${dist_relative_path}${entry_file}\" and \"${build_relative_path}${entry_file}\""
+  if [[ -e "$dist_file_path" && -e "$build_file_path" ]]; then
+    # Check if paths symbolic link to the same file
+    if [ ! "$dist_absolute_path" -ef "$build_absolute_path" ]; then
+      log_error "No symbolic link between \"${dist_relative_path}${entry_file}\" and \"${build_relative_path}${entry_file}\""
+      log "Remove \"${build_relative_path}${entry_file}\" and export \"$dist_file_path\" to \"$build_relative_path\""
+      log "Run \`npm run export\`"
+      log_complete 1
+      return 1
+    fi
+  elif [[ ! -e "$dist_file_path" && -e "$build_file_path" ]]; then
+    log "The file \"${build_relative_path}${entry_file}\" will not be backed up to git"
+    log "Move it to \"${dist_relative_path}\" then run \`npm run export\`"
+  elif [[ -e "$dist_file_path" && ! -e "$build_file_path" ]]; then
+    log "You should export \"$dist_file_path\" to \"$build_relative_path\""
+    log "Run \`npm run export\`"
     log_complete 1
-    return 1
+  else
+    log_complete 1
   fi
+
+  uri_basename="$(basename "$build_absolute_path")"
+  uri_basename="${uri_basename%.*}"
+  uri_basename="$(uri_encode "$uri_basename")"
 
   local cmd="open scriptable:///run/${uri_basename}"
-  log "Running command: \"${cmd}\""
+  log_success "Running command: \"${cmd}\""
   $cmd
   log_complete $?
 }
@@ -133,7 +142,7 @@ function find_file() {
   local result=$(find "$location" -name "$name" | exec -l grep . | sed 's#//*#/#g')
 
   if [ -z "$result" ]; then
-    log_error "Could not find \"${location}${name}\""
+    log_error "File \"${location}${name}\" does not exist"
     return 1
   else
     echo "$result"
