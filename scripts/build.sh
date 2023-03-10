@@ -35,11 +35,10 @@ build() {
   fi
 
   exit_if_not_extension "$parsed_path" ts TypeScript
-
-  local escape_spaces=$(parse_path "$parsed_path")
+  local base64_string=$(base64_encode "$parsed_path")
 
   local cmd
-  cmd="rollup --config rollup.config.ts --environment file_path:"$escape_spaces" --configPlugin @rollup/plugin-typescript"
+  cmd="rollup --config rollup.config.ts --environment file_path:"$base64_string" --configPlugin @rollup/plugin-typescript"
   if has_param '--watch' "$@"; then cmd+=' --watch'; fi
   $cmd
   echo -e "\n🚀 Done!"
@@ -67,31 +66,10 @@ function find_file() {
   echo "$result"
 }
 
-function parse_path() {
-  local separator="/"
-  local encoded_array=()
-
-  IFS=$separator
-  read -Ar strarr <<<$1
-
-  for value in "${strarr[@]}"; do
-    current_val=$(uri_encode $value)
-    encoded_array+=($current_val)
-  done
-
-  echo -n "$(join_array "/" "${encoded_array[@]}")"
-}
-
-# Join an array of elements into a string with a separator
-function join_array() {
-  local separator="$1"
-  shift
-  local -a elements=("$@")
-  local result="${elements[0]}"
-  for ((i = 1; i < ${#elements[@]}; i++)); do
-    result="${result}${separator}${elements[i]}"
-  done
-  echo -n "$result"
+function base64_encode() {
+  local string="$1"
+  local base64_string=$(echo -n "$string" | base64)
+  echo "$base64_string"
 }
 
 function exit_if_not_extension() {
