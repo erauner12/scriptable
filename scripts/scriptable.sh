@@ -172,7 +172,7 @@ function select_script() {
 	while read -r file; do
 		local filename="${file%$file_extension}"
 		file_array+=("$extension_icon ${filename}")
-	done <<<"$file_list"
+	done <<<"$(printf '%s\n' "${file_list[@]}")"
 
 	# Add option to exit
 	file_array+=("🚪 Exit")
