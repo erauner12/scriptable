@@ -57,7 +57,7 @@ open_in_scriptable() {
 }
 
 uri_encode() {
-  echo $_ | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"'
+  echo $1 | perl -MURI::Escape -ne 'chomp;print uri_escape($_),"\n"'
 }
 
 function find_file() {
