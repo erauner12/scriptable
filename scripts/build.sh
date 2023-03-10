@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+COMMANDS=(build build_and_watch open_in_scriptable)
+
 src=src
 dist=dist
 
@@ -79,3 +81,23 @@ function exit_if_not_extension() {
     exit 1
   fi
 }
+
+function select_command() {
+  echo -e "📝 Available commands:\n"
+  PS3=$'\n👉 Please select a command (enter a number): '
+  select command in "${COMMANDS[@]}"; do
+    if [[ -n "$command" ]]; then
+      echo -e "🚀 Running selected command \"$command\"...\n"
+      $command
+      break
+    else
+      echo "🚫 Invalid selection. Please try again."
+    fi
+  done
+}
+
+if [[ $# -gt 0 ]] && [[ "${COMMANDS[@]}" =~ "$1" ]]; then
+  $1 "${@:2}"
+else
+  select_command "$COMMANDS"
+fi
