@@ -49,11 +49,12 @@ To get started installing scripts in Scriptable go [here](src/README.md).
 
 ## Repository navigation
 
-| path        | description                | example                     |
-| ----------- | -------------------------- | --------------------------- |
-| `./src`     | source code                | `.ts` and `readme.md` files |
-| `./dist`    | production code            | `.js` Scriptable files      |
-| `./scripts` | custom development scripts | compling `.ts` to `.js`     |
+| path        | description                               | comments                                              |
+| ----------- | ----------------------------------------- | ----------------------------------------------------- |
+| `./src`     | source code                               | `.ts` and `readme.md` files                           |
+| `./dist`    | production code                           | `.js` Scriptable files                                |
+| `./scripts` | development scripts                       | additional scripts for compling `.ts` to `.js`        |
+| `./build`   | symbolic link to iCloud Scriptable folder | initialised with npm run init, excluded from git comm |
 
 ## Development environment
 
@@ -94,8 +95,6 @@ How to start developing scriptable apps with VSCode:
 2. Run a [task](#vscode-tasks) - I'd reccomend: `Build, link, and open current script` (this will build the file to the `dist` folder, syslink it to the `build` folder and open it in Scriptables)
 
 ### Export script to Scriptable (iCloud directory)
-
- > IMPORTANT: Script name should not contain any **spaces**, because RUN hotkey will not work
 
 For scripts use:
 
@@ -173,7 +172,6 @@ When developing in this environment, there are a few things to keep in mind:
 
 - When compiling from TypeScript using the `npm run build` or `npm run build-watch`, the resulting JavaScript file will be placed in the `dist` folder with the same name (with `.js` as the file extension).
   > Ensure that you actually intend to overwrite any existing files in here before running, or/and ensure that files are already backed up to `git` before running this command.
-- 
 
 ## Related projects
 
