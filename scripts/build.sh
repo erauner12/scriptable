@@ -4,6 +4,7 @@ COMMANDS=(build build_and_watch open_in_scriptable)
 
 src=src
 dist=dist
+build=build
 
 has_param() {
   local term="$1"
@@ -27,7 +28,7 @@ build() {
   fi
 
   if [[ $entry_file_path != "./"* ]]; then
-    parsed_path=$(find_file "$entry_file_path.ts")
+    parsed_path=$(find_file "." "$entry_file_path.ts")
     if [ $? -eq 1 ]; then
       echo "😭 \"$entry_file_path.ts\" could not be found!"
       echo "❌ Exiting!"
@@ -50,10 +51,69 @@ build_and_watch() {
   build "$1" --watch
 }
 
-open_in_scriptable() {
-  local entry_file_path="$1"
-  local cmd="open scriptable:///run/$(uri_encode "$entry_file_path")"
+function open_in_scriptable() {
+  local entry_file="$1"
+  local dist_relative_path="./$dist/"
+  local build_relative_path="./$build/"
+  local dist_absolute_path
+  local build_absolute_path
+  local uri_basename
+
+  # Check if `entry_file` has an extension at the end
+  if [[ ! "$entry_file" =~ \.[^.]+$ ]]; then
+    # If it doesn't have an extension, append `.js` to the end of `entry_file`
+    entry_file="${entry_file}.js"
+  fi
+
+  # Checks if the file is .ts or .js and replaces .ts with .js
+  if [[ "$entry_file" == *.js ]] || [[ "$entry_file" == *.ts ]]; then
+    if [[ "$entry_file" == *.ts ]]; then
+      entry_file="${entry_file%.ts}.js"
+    fi
+  else
+    log_error "The file is not JavaScript or TypeScript"
+    log_complete 1
+  fi
+
+  local dist_file_path="$(find_file "$dist_relative_path" "$entry_file")"
+
+  # Check if directory exists in ./dist
+  if test -e "$dist_file_path"; then
+    log "Found \"$dist_relative_path$(basename "$dist_file_path")\""
+    dist_absolute_path="$(absolute_path "${dist_file_path}")"
+  else
+    echo "$dist_file_path"
+    log_complete 1
+    return 1
+  fi
+
+  local build_file_path="$(find_file "$build_relative_path" "$entry_file")"
+
+  # Check if directory exists in ./build
+  if test -e "$build_file_path"; then
+    log "Found \"$build_relative_path$(basename "$build_file_path")\""
+    build_absolute_path="$(absolute_path "${build_file_path}")"
+  else
+    echo "$build_file_path"
+    log_complete 1
+    return 1
+  fi
+
+  # Check if paths symbolic link to the same file
+  if [ "$dist_absolute_path" -ef "$build_absolute_path" ]; then
+    uri_basename="$(basename "$build_absolute_path")"
+    uri_basename="${uri_basename%.*}"
+    uri_basename="$(uri_encode "$uri_basename")"
+  else
+    log_error "No symbolic link between \"${dist_relative_path}${entry_file}\" and \"${build_relative_path}${entry_file}\""
+    log_complete 1
+    return 1
+  fi
+
+  local cmd="open scriptable:///run/${uri_basename}"
+  log "Running command: \"${cmd}\""
   $cmd
+  log_complete $?
 }
 
 uri_encode() {
@@ -61,17 +121,58 @@ uri_encode() {
 }
 
 function find_file() {
-  result=$(find . -name "$1" | exec -l grep .)
-  if [ $? -eq 1 ]; then
-    return 1
+  local location="$1"
+  local name="$2"
+
+  # Add a slash at the end of the location parameter if it is not already present
+  if [[ "$location" != */ ]]; then
+    location="$location/"
   fi
-  echo "$result"
+
+  # Remove any double slashes that might exist with sed
+  local result=$(find "$location" -name "$name" | exec -l grep . | sed 's#//*#/#g')
+
+  if [ -z "$result" ]; then
+    log_error "Could not find \"${location}${name}\""
+    return 1
+  else
+    echo "$result"
+  fi
 }
 
 function base64_encode() {
   local string="$1"
   local base64_string=$(echo -n "$string" | base64)
   echo "$base64_string"
+}
+
+function absolute_path() {
+  local path="$1"
+
+  # Check that the path argument is not empty
+  if [ -z "$path" ]; then
+    log_error "Path argument is empty"
+    return 1
+  fi
+
+  # Check if the path is already an absolute path
+  if [[ "$path" = /* ]]; then
+    # Path is already absolute, so return it as is
+    echo "$path"
+    return 0
+  fi
+
+  # Resolve the path to its canonical absolute path
+  local absolute_path=$(realpath "$path")
+
+  # Check that the resolved path exists
+  if [ ! -e "$absolute_path" ]; then
+    log_error "Resolved path does not exist: \"$absolute_path\""
+    return 1
+  fi
+
+  # Print the absolute path of the resolved path
+  echo "$absolute_path"
 }
 
 function exit_if_not_extension() {
