@@ -6,7 +6,7 @@
 		{
 			"label": "Open current script in Scriptable",
 			"type": "shell",
-			"command": "npm run open \"${fileBasenameNoExtension}\"",
+			"command": "npm run open \"${fileBasename}\"",
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -57,7 +57,7 @@
 		{
 			"label": "Build, link, and open current script",
 			"type": "shell",
-			"command": "npm run build ./\"${relativeFile}\"; npm run export \"${fileBasenameNoExtension}\"; npm run open \"${fileBasenameNoExtension}\"",
+			"command": "npm run build ./\"${relativeFile}\"; npm run export \"${fileBasenameNoExtension}\"; npm run open \"${fileBasename}\"",
 			"group": {
 				"kind": "build",
 				"isDefault": true
