@@ -7,11 +7,8 @@ This repository constains the scripts I've written for Scriptable, and developme
 - My custom Scriptable [scripts and source code](src/README.md)
 - Type definitions generated from Scriptable documentation page
 - TypeScript compiler and minifier for Scriptable
-- Symlink folder with all your Scriptable files
-- Run taks with predefined scripts to:
-  1. Open the current file in Scriptable
-  2. Compile the current TypeScript file to JavaScript
-  3. Watch the current TypeScript file and compile it to JavaScript when modified
+- [Symlink folder](#export) with all your Scriptable files
+- Run taks with predefined [VSCode tasks](#vscode-tasks)
 
 ## Contents
 
@@ -20,9 +17,9 @@ This repository constains the scripts I've written for Scriptable, and developme
   - [Contents](#contents)
   - [About](#about)
   - [Installing scripts](#installing-scripts)
-  - [Repository navigation](#repository-navigation)
   - [Development environment](#development-environment)
     - [Getting started](#getting-started)
+    - [Repository navigation](#repository-navigation)
     - [Compiling from TypeScript to JavaScript](#compiling-from-typescript-to-javascript)
     - [Export script to Scriptable (iCloud directory)](#export-script-to-scriptable-icloud-directory)
     - [npm](#npm)
@@ -46,15 +43,6 @@ Most of the scripts that can be found in this repo were born out of limitations 
 ## Installing scripts
 
 To get started installing scripts in Scriptable go [here](src/README.md).
-
-## Repository navigation
-
-| path        | description                               | comments                                              |
-| ----------- | ----------------------------------------- | ----------------------------------------------------- |
-| `./src`     | source code                               | `.ts` and `readme.md` files                           |
-| `./dist`    | production code                           | `.js` Scriptable files                                |
-| `./scripts` | development scripts                       | additional scripts for compling `.ts` to `.js`        |
-| `./build`   | symbolic link to iCloud Scriptable folder | initialised with npm run init, excluded from git comm |
 
 ## Development environment
 
@@ -88,6 +76,15 @@ How to start developing scriptable apps with VSCode:
   ```sh
   npm install --include=dev
   ```
+
+### Repository navigation
+
+| path        | description                               | comments                                              |
+| ----------- | ----------------------------------------- | ----------------------------------------------------- |
+| `./src`     | source code                               | `.ts` and `readme.md` files                           |
+| `./dist`    | production code                           | `.js` Scriptable files                                |
+| `./scripts` | development scripts                       | additional scripts for compling `.ts` to `.js`        |
+| `./build`   | symbolic link to iCloud Scriptable folder | initialised with npm run init, excluded from git comm |
 
 ### Compiling from TypeScript to JavaScript
 
