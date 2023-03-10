@@ -23,7 +23,7 @@
 		{
 			"label": "Build current script",
 			"type": "shell",
-			"command": "npm run build ./\"${relativeFile}\"",
+			"command": "npm run build \"./${relativeFile}\"",
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
