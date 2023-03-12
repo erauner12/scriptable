@@ -25,7 +25,8 @@ const PREFERENCES: Preferences = {
 
 async function runScript() {
 	const data = await getNewData(PREFERENCES);
-	saveNewData(PREFERENCES, data);
+	await saveNewData(PREFERENCES, data);
+	console.log(data);
 }
 
 function removeDuplicateData(array: Array<APIData>): Array<APIData> {
@@ -38,9 +39,9 @@ function removeDuplicateData(array: Array<APIData>): Array<APIData> {
 	return newArray;
 }
 
-function saveNewData(preferences: Preferences, data: Array<APIData>) {
+async function saveNewData(preferences: Preferences, data: Array<APIData>) {
 	const newData: Array<APIData> = data;
-	const offlineData: Array<APIData> = loadData(preferences);
+	const offlineData: Array<APIData> = await loadData(preferences);
 	const mergedData: Array<APIData> = [];
 
 	removeDuplicateData(offlineData).filter(
@@ -178,11 +179,12 @@ function getFilePath(preferences: Preferences) {
 }
 
 // Loads data stored in the .json file
-function loadData(preferences: Preferences) {
+async function loadData(preferences: Preferences) {
 	let fm = FileManager.iCloud();
 	let path = getFilePath(preferences);
 
 	if (fm.fileExists(path)) {
+		if (!fm.isFileDownloaded(path)) await fm.downloadFileFromiCloud(path);
 		const raw = fm.readString(path);
 		const data: Array<APIData> = JSON.parse(raw);
 		return data;
