@@ -9,7 +9,7 @@
 			"command": "npm run open \"${fileBasename}\"",
 			"group": {
 				"kind": "build",
-				"isDefault": true
+				"isDefault": false
 			},
 			"presentation": {
 				"echo": false,
@@ -27,7 +27,7 @@
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
-				"isDefault": true
+				"isDefault": false
 			},
 			"presentation": {
 				"echo": false,
@@ -43,7 +43,7 @@
 			"command": "npm run build-watch ./\"${relativeFile}\"",
 			"group": {
 				"kind": "build",
-				"isDefault": true
+				"isDefault": false
 			},
 			"presentation": {
 				"echo": false,
