@@ -29,7 +29,10 @@ export const SETTINGS: SettingsGroup = {
 	"Redirect Me": {
 		iconColor: "deep-purple",
 		iconGlyph: "reply-all",
-		alwaysRunInApp: false,
 		shareSheetInputs: ["url"],
+	},
+	"Prayer Time": {
+		iconColor: "deep-green",
+		iconGlyph: "mosque",
 	},
 };
