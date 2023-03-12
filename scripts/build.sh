@@ -42,7 +42,11 @@ build() {
 
   local cmd
   cmd="rollup --config rollup.config.ts --environment file_path:"$base64_string" --configPlugin @rollup/plugin-typescript"
-  if has_param '--watch' "$@"; then cmd+=' --watch'; fi
+
+  if has_param '--watch' "$@"; then
+    cmd+=' --watch'
+  fi
+
   $cmd
   echo -e "\n🚀 Done!"
 }
@@ -103,6 +107,8 @@ function open_in_scriptable() {
       log "Run \`npm run export\`"
       log_complete 1
       return 1
+    else
+      log "\"${dist_relative_path}${entry_file}\" is symbolic linked to \"${build_relative_path}${entry_file}\""
     fi
   elif [[ ! -e "$dist_file_path" && -e "$build_file_path" ]]; then
     log "The file \"${build_relative_path}${entry_file}\" will not be backed up to git"
