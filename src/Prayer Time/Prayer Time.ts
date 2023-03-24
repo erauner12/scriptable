@@ -215,6 +215,13 @@ function dateToString(dateString?: Date) {
 		.replace(/\//g, "-");
 }
 
+function capitaliseWord(word: string) {
+	const firstLetter = word.charAt(0).toUpperCase();
+	const rest = word.slice(1).toLowerCase();
+	const capitalisedWord = firstLetter + rest;
+	return capitalisedWord.trim();
+}
+
 // Overwrite the default values when running as widget
 function getWidgetArguments(preferences: Preferences) {
 	if (args.widgetParameter) {
