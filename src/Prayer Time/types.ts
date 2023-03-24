@@ -6,6 +6,9 @@ export interface Preferences {
 			size: string;
 			offline: number;
 		};
+		display: {
+			prayerTimes: Object;
+		};
 	};
 	api: {
 		endpoint: string;

@@ -8,6 +8,17 @@ const PREFERENCES: Preferences = {
 			size: "small",
 			offline: 3,
 		},
+		display: {
+			prayerTimes: {
+				fajr: { emoji: "🌄" },
+				sunrise: { emoji: "🌅" },
+				dhuhr: { emoji: "🏞" },
+				asr: { emoji: "🏙" },
+				maghrib: { emoji: "🌇" },
+				isha: { emoji: "🌃" },
+				sunset: { emoji: "🌅" },
+			},
+		},
 	},
 	api: {
 		endpoint: "http://api.aladhan.com/v1/timings/",
