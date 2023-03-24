@@ -39,6 +39,27 @@ async function runScript() {
 }
 
 
+function getDay(data: Array<APIData>, dayDate?: Date) {
+	const dayArray: Array<APIData> = data.filter(
+		({
+			date: {
+				gregorian: { date },
+			},
+		}) => {
+			const day = dayDate ? dayDate : new Date();
+			day.setHours(0, 0, 0, 0);
+			const parsedDate = stringToDate(date);
+			const isDay = day.toDateString() === parsedDate.toDateString();
+			return isDay;
+		}
+	);
+
+	if (dayArray[0]) {
+		const today: APIData = dayArray[0];
+		return today;
+	}
+}
+
 async function isOnline() {
 	try {
 		const waitTimeMs = 15;
