@@ -135,6 +135,7 @@ function getUrl(preferences: Preferences, date: Date) {
 function stringToDate(dateString: string) {
 	const [day, month, year] = dateString.split("-");
 	const date = new Date(Number(year), Number(month) - 1, Number(day));
+	date.setHours(0, 0, 0, 0);
 	return date;
 }
 
