@@ -38,6 +38,21 @@ async function runScript() {
 	}
 }
 
+
+async function isOnline() {
+	try {
+		const waitTimeMs = 15;
+		const url = "https://www.google.com";
+		const request = new Request(url);
+		request.method = "HEAD";
+		request.timeoutInterval = waitTimeMs / 60;
+		const response = await request.load();
+		return true;
+	} catch (error) {
+		return false;
+	}
+}
+
 function removeDuplicateData(array: Array<APIData>): Array<APIData> {
 	const newArray: Array<APIData> = [];
 	array.forEach((object) => {
