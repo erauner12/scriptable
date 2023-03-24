@@ -39,6 +39,26 @@ async function runScript() {
 }
 
 
+function presentData(days: APIData[], preferences: Preferences) {
+	const today = getDay(days);
+
+	if (!today) return;
+
+	const timings = today.timings;
+	const displayKeys = Object.keys(preferences.widget.display.prayerTimes).map(
+		(timings) => {
+			return capitaliseWord(timings);
+		}
+	);
+
+	for (const [key, value] of Object.entries(timings)) {
+		const displayTiming = displayKeys.includes(key);
+		if (displayTiming) {
+			console.log(value);
+		}
+	}
+}
+
 function getDay(data: Array<APIData>, dayDate?: Date) {
 	const dayArray: Array<APIData> = data.filter(
 		({
