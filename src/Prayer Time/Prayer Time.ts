@@ -24,9 +24,18 @@ const PREFERENCES: Preferences = {
 })();
 
 async function runScript() {
-	const data = await getNewData(PREFERENCES);
-	await saveNewData(PREFERENCES, data);
-	console.log(data);
+	const deviceOnline = await isOnline();
+
+	if (deviceOnline) {
+		const response = await getNewData(PREFERENCES);
+		await saveNewData(PREFERENCES, response);
+	}
+
+	const data = await loadData(PREFERENCES);
+
+	if (data) {
+		presentData(data, PREFERENCES);
+	}
 }
 
 function removeDuplicateData(array: Array<APIData>): Array<APIData> {
