@@ -23,7 +23,7 @@ type IconColor =
 	| "deep-gray";
 
 type IconGlyph =
-	| "ad"
+	| "add"
 	| "address-book"
 	| "address-card"
 	| "adjust"
