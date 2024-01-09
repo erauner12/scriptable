@@ -10,6 +10,10 @@ export const SETTINGS: ScriptSettings = {
 		iconColor: "deep-green",
 		iconGlyph: "mosque",
 	},
+	Countdown: {
+		iconColor: "orange",
+		iconGlyph: "add",
+	},
 	"Scriptable-Utils HelloWorld": {
 		iconColor: "pink",
 		iconGlyph: "book-open",
