@@ -12,7 +12,7 @@ const config = {
 	output: {
 		dir: "dist",
 		format: "es",
-		plugins: [terser(), addFileIconSettings(DECODED_FILE_PATH!)],
+		plugins: [terser(), addFileIconSettings(DECODED_FILE_PATH)],
 	},
 	plugins: [typescript(), nodeResolve()],
 	watch: {

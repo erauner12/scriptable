@@ -1,5 +1,6 @@
 import { Plugin } from "rollup";
-import { ScriptSettings, SETTINGS } from "./scriptIconSettings";
+import { ScriptSetting } from "./types";
+import { SETTINGS } from "../scripts.config";
 
 const COMMENT_ATOMS = {
 	line1: "Variables used by Scriptable.",
@@ -7,13 +8,13 @@ const COMMENT_ATOMS = {
 	runInApp: "always-run-in-app: true;",
 };
 
-const fallbackIconSettings: ScriptSettings = {
+const fallbackIconSettings: ScriptSetting = {
 	iconColor: "yellow",
 	iconGlyph: "exclamation-triangle",
 	alwaysRunInApp: false,
 };
 
-const addFileIconSettings = (filePath: string): Plugin => ({
+const addFileIconSettings = (filePath: string | null): Plugin => ({
 	name: "rollup-plugin-scriptable-icon-settings",
 	renderChunk: (code) => {
 		const commentLines = getBannerForFilePath(filePath);
@@ -21,34 +22,34 @@ const addFileIconSettings = (filePath: string): Plugin => ({
 	},
 });
 
-function getBannerForFilePath(filePath: string) {
-	const matchForTsFiles = filePath.match(/.*\/([a-z0-9\. ]+)\.ts/i);
-	if (!matchForTsFiles?.[1]) return null;
-	const filename = matchForTsFiles[1];
+function getBannerForFilePath(filePath: string | null) {
+	if (!filePath) return null;
 
-	const settingsForFile = SETTINGS[filename];
+	const matchForTsFiles = filePath.match(/.*\/(.*)\.ts/i);
+
+	if (!matchForTsFiles) return null;
+
+	const fileName = matchForTsFiles[1];
+
+	if (!fileName) return null;
+
+	const settingsForFile = SETTINGS[fileName];
+
 	if (settingsForFile) {
 		return getScriptableSettingsCommentLines(settingsForFile);
 	}
+
 	const DIVIDER = "-".repeat(50);
 	// eslint-disable-next-line no-console
-	console.log(
-		["", DIVIDER, `Missing settings for ${filename}!`, DIVIDER, ""].join("\n")
-	);
+	console.log(["", DIVIDER, `Missing settings for ${fileName}!`, DIVIDER, ""].join("\n"));
+
 	return getScriptableSettingsCommentLines(fallbackIconSettings);
 }
 
-function getScriptableSettingsCommentLines({
-	iconColor,
-	iconGlyph,
-	alwaysRunInApp,
-	shareSheetInputs,
-}: ScriptSettings) {
+function getScriptableSettingsCommentLines({ iconColor, iconGlyph, alwaysRunInApp, shareSheetInputs }: ScriptSetting) {
 	const colorAtom = `icon-color: ${iconColor};`;
 	const iconAtom = `icon-glyph: ${iconGlyph};`;
-	const shareSheetInputAtom = shareSheetInputs
-		? `share-sheet-inputs: ${shareSheetInputs.join(", ")};`
-		: null;
+	const shareSheetInputAtom = shareSheetInputs ? `share-sheet-inputs: ${shareSheetInputs.join(", ")};` : null;
 
 	let line3;
 	let line4;
@@ -67,11 +68,7 @@ function getScriptableSettingsCommentLines({
 		line4 = null;
 	}
 
-	const commentLines = [
-		COMMENT_ATOMS.line1,
-		COMMENT_ATOMS.line2,
-		line3.join(" "),
-	];
+	const commentLines = [COMMENT_ATOMS.line1, COMMENT_ATOMS.line2, line3.join(" ")];
 
 	if (line4) {
 		commentLines.push(line4.join(" "));
