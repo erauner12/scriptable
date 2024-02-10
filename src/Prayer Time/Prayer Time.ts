@@ -97,6 +97,7 @@ async function isOnline() {
 	const request = new Request(url);
 	request.method = "HEAD";
 	request.timeoutInterval = waitTimeMs / 60;
+
 	try {
 		const response = await request.load();
 		if (response) return true;
