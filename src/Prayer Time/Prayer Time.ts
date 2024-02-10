@@ -92,14 +92,15 @@ function getDay(data: Array<APIData>, dayDate?: Date) {
 }
 
 async function isOnline() {
+	const waitTimeMs = 15;
+	const url = "https://www.google.com";
+	const request = new Request(url);
+	request.method = "HEAD";
+	request.timeoutInterval = waitTimeMs / 60;
 	try {
-		const waitTimeMs = 15;
-		const url = "https://www.google.com";
-		const request = new Request(url);
-		request.method = "HEAD";
-		request.timeoutInterval = waitTimeMs / 60;
 		const response = await request.load();
-		return true;
+		if (response) return true;
+		return false;
 	} catch (error) {
 		return false;
 	}
