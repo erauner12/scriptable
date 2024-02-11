@@ -1,20 +1,20 @@
-interface redirections {
+interface Redirections {
 	origin: Array<String>;
-	alt: string;
+	redirect: string;
 }
 
-const redirections: Array<redirections> = [
+const redirections: Array<Redirections> = [
 	{
 		origin: ["reddit.com"],
-		alt: "teddit.net",
+		redirect: "teddit.net",
 	},
 	{
 		origin: ["twitter.com"],
-		alt: "nitter.it",
+		redirect: "nitter.it",
 	},
 	{
 		origin: ["instagram.com"],
-		alt: "imginn.com",
+		redirect: "imginn.com",
 	},
 ];
 
@@ -46,7 +46,7 @@ async function getUrl() {
 	return String(url);
 }
 
-function parseUrl(url: string, redirections: Array<redirections>) {
+function parseUrl(url: string, redirections: Array<Redirections>) {
 	let parsedUrl;
 
 	if (url) {
@@ -64,8 +64,8 @@ function parseUrl(url: string, redirections: Array<redirections>) {
 	}
 }
 
-function convertToPrivateUrl(url: string, site: redirections) {
-	const { origin: origins, alt } = site;
+function convertToPrivateUrl(url: string, site: Redirections) {
+	const { origin: origins, redirect: alt } = site;
 
 	let isOriginSite;
 	let originSite;
