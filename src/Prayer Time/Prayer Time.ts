@@ -184,17 +184,35 @@ async function saveNewData(preferences: Preferences, data: Array<APIData>) {
 }
 
 async function getNewData(preferences: Preferences) {
-	const offlineDays = preferences.widget.settings.offline;
-	const offlineData: Array<APIData> = [];
+	const {
+		api: {
+			endpoint,
+			method,
+			location: { latitude, longitude },
+		},
+		widget: {
+			settings: { offline: offlineDays },
+		},
+	} = preferences;
+
+	const newData: Array<APIData> = [];
+
 	for (let day = 0; day < offlineDays; day++) {
 		const date = new Date();
 		date.setDate(date.getDate() + day);
-		const url = getUrl(preferences, date);
+
+		const url = getUrl(endpoint, date, {
+			latitude: latitude,
+			longitude: longitude,
+			method: method,
+		});
+
 		const response = await getData(url);
 		const data = response.data;
-		offlineData.push(data);
+		newData.push(data);
 	}
-	return offlineData;
+
+	return newData;
 }
 
 async function getData(url: string) {
@@ -203,11 +221,15 @@ async function getData(url: string) {
 	return response;
 }
 
-function getUrl(preferences: Preferences, date: Date) {
-	const api = preferences.api;
-	const currentDate = dateToString(date);
-	const urlString = `${api.endpoint}${currentDate}?latitude=${api.location.latitude}&longitude=${api.location.longitude}&method=${api.method}`;
-	return urlString;
+function getUrl(
+	endpoint: string,
+	date: Date,
+	parameters: Record<string, string | number | boolean | null | undefined>
+): string {
+	const dateString = dateToString(date);
+	const baseUrl = `${endpoint}${dateString}`;
+	const urlWithParameters = appendQueryParameter(baseUrl, parameters);
+	return encodeURI(urlWithParameters);
 }
 
 function stringToDate(dateString: string) {
@@ -286,4 +308,25 @@ function saveData(preferences: Preferences, data: object) {
 	let path = getFilePath(preferences);
 	let raw = JSON.stringify(data, null, 2);
 	fm.writeString(path, raw);
+}
+
+function appendQueryParameter(
+	url: string,
+	parameters: Record<string, string | number | boolean | null | undefined>
+): string {
+	let hasQuery: boolean = url.includes("?");
+
+	for (const key in parameters) {
+		// Check if the property/key is defined in the object itself, not in parent prototypes
+		if (parameters.hasOwnProperty(key)) {
+			const value = parameters[key];
+
+			if (value !== null && value !== undefined) {
+				url += (hasQuery ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(value.toString());
+				hasQuery = true; // Subsequent parameters should use '&' instead of '?'
+			}
+		}
+	}
+
+	return url;
 }
