@@ -1,6 +1,4 @@
-type Prettify<T> = {
-	[K in keyof T]: T[K];
-} & {};
+import { Prettify, NonEmptyArray } from "../_utils/types-helpers";
 
 type IconColor =
 	| "yellow"
@@ -834,8 +832,6 @@ type IconGlyph =
 	| "yin-yang";
 
 type ShareSheetInput = "file-url" | "url" | "image" | "plain-text";
-
-type NonEmptyArray<T> = [T, ...T[]];
 
 export type ScriptSetting = {
 	iconColor: IconColor;
