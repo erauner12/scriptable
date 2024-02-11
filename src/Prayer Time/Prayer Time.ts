@@ -9,15 +9,15 @@ const PREFERENCES: Preferences = {
 			offline: 3,
 		},
 		display: {
-			prayerTimes: {
-				fajr: { emoji: "🌄" },
-				sunrise: { emoji: "🌅" },
-				dhuhr: { emoji: "🏞" },
-				asr: { emoji: "🏙" },
-				maghrib: { emoji: "🌇" },
-				isha: { emoji: "🌃" },
-				sunset: { emoji: "🌅" },
-			},
+			prayerTimes: [
+				{ name: "fajr", display: "🌄" },
+				{ name: "sunrise", display: "🌅" },
+				{ name: "dhuhr", display: "🏞" },
+				{ name: "asr", display: "🏙" },
+				{ name: "maghrib", display: "🌇" },
+				{ name: "isha", display: "🌃" },
+				{ name: "sunset", display: "🌅" },
+			],
 		},
 	},
 	api: {
@@ -51,23 +51,34 @@ async function runScript() {
 
 
 function presentData(days: APIData[], preferences: Preferences) {
-	const today = getDay(days);
+	const {
+		widget: {
+			display: { prayerTimes },
+		},
+	} = preferences;
 
-	if (!today) return;
+	const today = new Date();
+	// const timings = getTimings(days);
 
-	const timings = today.timings;
-	const displayKeys = Object.keys(preferences.widget.display.prayerTimes).map(
-		(timings) => {
-			return capitaliseWord(timings);
-		}
-	);
+	const todayData = getDay(days, today);
 
-	for (const [key, value] of Object.entries(timings)) {
-		const displayTiming = displayKeys.includes(key);
-		if (displayTiming) {
-			console.log(value);
-		}
-	}
+	if (!todayData) return;
+
+	const timings = todayData.timings;
+
+	const displayKeys = prayerTimes.map((prayerTime) => {
+		return capitaliseWord(prayerTime.name);
+	});
+
+	const displayTimings = Object.entries(timings)
+		.filter((timing) => displayKeys.includes(timing[0]))
+		.sort((a, b) => {
+			if (a[1] < b[1]) return -1;
+			if (a[1] > b[1]) return 1;
+			return 0;
+		});
+
+	console.log(displayTimings);
 }
 
 function getDay(data: Array<APIData>, dayDate?: Date) {

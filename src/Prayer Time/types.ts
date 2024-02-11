@@ -7,18 +7,23 @@ export interface Preferences {
 			offline: number;
 		};
 		display: {
-			prayerTimes: Object;
+			prayerTimes: PrayerTime[];
 		};
 	};
 	api: {
 		endpoint: string;
-		method: number;
+		method?: number;
 		location: {
 			latitude: number;
 			longitude: number;
 		};
 	};
 }
+
+type PrayerTime = {
+	name: string;
+	display: string;
+};
 
 export interface APIData extends Object {
 	timings: Timings;
