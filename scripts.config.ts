@@ -12,7 +12,7 @@ export const SETTINGS: ScriptSettings = {
 	},
 	Countdown: {
 		iconColor: "orange",
-		iconGlyph: "add",
+		iconGlyph: "calendar-alt",
 	},
 	"Scriptable-Utils HelloWorld": {
 		iconColor: "pink",
