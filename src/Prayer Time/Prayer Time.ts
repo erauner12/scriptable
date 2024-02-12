@@ -271,13 +271,15 @@ function capitaliseWord(word: string) {
 function getWidgetArguments(preferences: Preferences) {
 	if (args.widgetParameter) {
 		if (args.widgetParameter.includes("method")) {
-			preferences.api.method = 2;
+			preferences.api.method = args.widgetParameter["method"];
 		}
+
 		if (args.widgetParameter.includes("latitude")) {
-			preferences.api.location.latitude = 10;
+			preferences.api.location.latitude = args.widgetParameter["latitude"];
 		}
-		if (args.widgetParameter.includes("latitude")) {
-			preferences.api.location.longitude = 0;
+
+		if (args.widgetParameter.includes("longitude")) {
+			preferences.api.location.longitude = args.widgetParameter["longitude"];
 		}
 	}
 }
