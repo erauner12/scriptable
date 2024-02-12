@@ -22,7 +22,6 @@ const PREFERENCES: Preferences = {
 	},
 	api: {
 		endpoint: "http://api.aladhan.com/v1/timings/",
-		method: 2,
 		location: {
 			latitude: 38.70977051985349,
 			longitude: -9.135920391030602,
@@ -49,6 +48,10 @@ async function runScript() {
 	}
 }
 
+function createWidget() {
+	const widget = new ListWidget();
+	widget.presentMedium();
+}
 
 function presentData(days: APIData[], preferences: Preferences) {
 	const {
@@ -268,20 +271,12 @@ function capitaliseWord(word: string) {
 }
 
 // Overwrite the default values when running as widget
-function getWidgetArguments(preferences: Preferences) {
-	if (args.widgetParameter) {
-		if (args.widgetParameter.includes("method")) {
-			preferences.api.method = args.widgetParameter["method"];
+function getWidgetArguments(userPreferences: Record<string, any>, argumentNames: string[]) {
+	argumentNames.forEach((argumentName) => {
+		if (userPreferences[argumentName] && args.widgetParameter.includes(argumentName)) {
+			userPreferences[argumentName] = args.widgetParameter[argumentName];
 		}
-
-		if (args.widgetParameter.includes("latitude")) {
-			preferences.api.location.latitude = args.widgetParameter["latitude"];
-		}
-
-		if (args.widgetParameter.includes("longitude")) {
-			preferences.api.location.longitude = args.widgetParameter["longitude"];
-		}
-	}
+	});
 }
 
 // Gets the path of the file containing the stored "Prayer Time" data. Creates the file if it doesn't exist.
