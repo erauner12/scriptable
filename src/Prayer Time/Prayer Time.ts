@@ -48,9 +48,71 @@ async function runScript() {
 	}
 }
 
-function createWidget() {
-	const widget = new ListWidget();
-	widget.presentMedium();
+function createWidget(timings: [string, string][]) {
+	const globalSpacing = 8;
+
+	const listWidget = new ListWidget();
+	listWidget.setPadding(14, 12, 4, 12);
+
+	const mainStack = listWidget.addStack();
+	mainStack.layoutVertically();
+	mainStack.centerAlignContent();
+	mainStack.spacing = globalSpacing;
+
+	let rowStack = addRowStack(mainStack, globalSpacing / 2);
+
+	timings.forEach((timing, index) => {
+		const [text, time] = timing;
+
+		const display = PREFERENCES.widget.display.prayerTimes.find(
+			(prayerTime) => prayerTime.name.toLowerCase() === text.toLowerCase()
+		);
+
+		if (display) {
+			addTimeStack(rowStack, display.display, time);
+		}
+
+		if (index % 2) {
+			rowStack = addRowStack(mainStack, globalSpacing);
+		}
+	});
+
+	listWidget.presentSmall();
+}
+
+function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): WidgetStack {
+	const rowStack = mainStack.addStack();
+	rowStack.spacing = horizontalSpacing;
+	rowStack.centerAlignContent();
+	return rowStack;
+}
+
+function addTimeStack(stack: WidgetStack, text: string, date: string): WidgetStack {
+	const timeStack = stack.addStack();
+
+	timeStack.spacing = 2;
+	timeStack.layoutVertically();
+	timeStack.centerAlignContent();
+
+	const title = addCenteredTextElementToStack(timeStack, text);
+	title.font = new Font("AvenirNext-Bold", 16);
+
+	const time = addCenteredTextElementToStack(timeStack, date);
+	time.font = new Font("AvenirNext-Bold", 16);
+
+	return timeStack;
+}
+
+function addCenteredTextElementToStack(stack: WidgetStack, text: string): WidgetText {
+	const horizontalStack = stack.addStack();
+
+	horizontalStack.addSpacer();
+
+	const textElement = horizontalStack.addText(text);
+	textElement.lineLimit = 1;
+
+	horizontalStack.addSpacer();
+	return textElement;
 }
 
 function presentData(days: APIData[], preferences: Preferences) {
@@ -78,9 +140,10 @@ function presentData(days: APIData[], preferences: Preferences) {
 			if (a[1] < b[1]) return -1;
 			if (a[1] > b[1]) return 1;
 			return 0;
-		});
+		})
+		.slice(0, 4); // This needs to return only the next 4 times
 
-	console.log(displayTimings);
+	createWidget(displayTimings);
 }
 
 function getDay(data: Array<APIData>, dayDate?: Date) {
