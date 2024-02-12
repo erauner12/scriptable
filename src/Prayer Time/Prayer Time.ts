@@ -58,7 +58,6 @@ function presentData(days: APIData[], preferences: Preferences) {
 	} = preferences;
 
 	const today = new Date();
-	// const timings = getTimings(days);
 
 	const todayData = getDay(days, today);
 
