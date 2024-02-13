@@ -113,6 +113,7 @@ interface Params {
 }
 
 interface Timings {
+	[key: string]: string;
 	Asr: string;
 	Sunset: string;
 	Maghrib: string;

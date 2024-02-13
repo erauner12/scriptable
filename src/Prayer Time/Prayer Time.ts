@@ -120,29 +120,40 @@ function presentData(days: APIData[], preferences: Preferences) {
 			display: { prayerTimes },
 		},
 	} = preferences;
-
-	const today = new Date();
-
-	const todayData = getDay(days, today);
-
-	if (!todayData) return;
-
-	const timings = todayData.timings;
+	const itemsToShow = 2;
+	const currentDateTime = new Date();
 
 	const displayKeys = prayerTimes.map((prayerTime) => {
-		return capitaliseWord(prayerTime.name);
+		return prayerTime.name.toUpperCase();
 	});
 
-	const displayTimings = Object.entries(timings)
-		.filter((timing) => displayKeys.includes(timing[0]))
-		.sort((a, b) => {
-			if (a[1] < b[1]) return -1;
-			if (a[1] > b[1]) return 1;
-			return 0;
-		})
-		.slice(0, 2); // This needs to return only the next 4 times
+	const prayerTimesArray = days
+		.map((day) => convertTimingsToDateArray(day))
+		.flat()
+		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
+		.filter((prayerTime) => prayerTime.time > currentDateTime)
+		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime())
+		.slice(0, itemsToShow);
 
-	createWidget(displayTimings);
+	// createWidget(displayTimings);
+}
+
+type Timing = { prayer: string; time: Date };
+
+function convertTimingsToDateArray(day: APIData): Timing[] {
+	const {
+		timings,
+		date: { gregorian },
+	} = day;
+	const baseDateStr = gregorian.date; // "DD-MM-YYYY"
+	const baseDateComponents = baseDateStr.split("-"); // Split into [DD, MM, YYYY]
+	const dateFormatted = `${baseDateComponents[2]}-${baseDateComponents[1]}-${baseDateComponents[0]}`; // YYYY-MM-DD
+
+	return Object.entries(timings).map(([prayerName, prayerTime]) => {
+		const timeComponents = prayerTime.split(":"); // Split into [HH, MM]
+		const dateTime = new Date(`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`);
+		return { prayer: prayerName, time: dateTime };
+	});
 }
 
 function getDay(data: APIData[], dayDate?: Date) {
