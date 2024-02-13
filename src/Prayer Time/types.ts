@@ -1,3 +1,5 @@
+export type Timing = { prayer: string; time: Date };
+
 export interface Preferences {
 	widget: {
 		settings: {
@@ -20,7 +22,7 @@ export interface Preferences {
 	};
 }
 
-type PrayerTime = {
+export type PrayerTime = {
 	name: string;
 	display: string;
 };
