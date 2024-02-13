@@ -35,11 +35,37 @@ const PREFERENCES: Preferences = {
 })();
 
 async function runScript() {
+	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
+
 	const deviceOnline = await isOnline();
 
 	if (deviceOnline) {
-		const response = await getNewData(PREFERENCES);
-		await saveNewData(PREFERENCES, response);
+		await getLocation(PREFERENCES);
+		const location = PREFERENCES.api.location;
+
+		const today = new Date();
+		const offlineData: APIData[] = await loadData(PREFERENCES);
+		const todayData = getDay(offlineData, today);
+
+		let distanceSinceOfflineData: number = 0;
+
+		if (todayData) {
+			const {
+				meta: { latitude, longitude },
+			} = todayData;
+
+			const distance = calculateDistance(location, {
+				latitude,
+				longitude,
+			});
+
+			distanceSinceOfflineData = Math.round(distance);
+		}
+
+		if (location && (!todayData || distanceSinceOfflineData > DISTANCE_TOLERANCE_METRES)) {
+			const updatedData = await getNewData(PREFERENCES);
+			await saveNewData(PREFERENCES, updatedData);
+		}
 	}
 
 	const data = await loadData(PREFERENCES);
@@ -429,4 +455,29 @@ function appendQueryParameter(
 	}
 
 	return url;
+}
+
+function calculateDistance(
+	point1: { latitude: number; longitude: number },
+	point2: { latitude: number; longitude: number }
+) {
+	const R = 6371; // Radius of the Earth in km
+	const radians = (degrees: number) => degrees * (Math.PI / 180); // Convert degrees to radians
+
+	// Difference in coordinates
+	const deltaLat = radians(point2.latitude - point1.latitude);
+	const deltaLon = radians(point2.longitude - point1.longitude);
+
+	// Apply Haversine formula
+	const a =
+		Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+		Math.cos(radians(point1.latitude)) *
+			Math.cos(radians(point2.latitude)) *
+			Math.sin(deltaLon / 2) *
+			Math.sin(deltaLon / 2);
+
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	const distance = R * c; // Distance in km
+	return distance * 1000; // Distance in metres
 }
