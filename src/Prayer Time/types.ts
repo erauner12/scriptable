@@ -1,4 +1,4 @@
-export type Timing = { prayer: string; time: Date; status?: RelativeDateTimeState };
+export type Timing = { prayer: string; time: Date; status: { state: RelativeDateTimeState; next: boolean } };
 
 export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 

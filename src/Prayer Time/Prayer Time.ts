@@ -14,13 +14,17 @@ const PREFERENCES: Preferences = {
 		},
 		display: {
 			prayerTimes: [
-				{ name: "fajr", display: "🌄", abbreviation: "FR" },
-				{ name: "sunrise", display: "🌅", abbreviation: "SR" },
-				{ name: "dhuhr", display: "🏞", abbreviation: "DR" },
-				{ name: "asr", display: "🏙", abbreviation: "AR" },
-				{ name: "maghrib", display: "🌇", abbreviation: "MB" },
-				{ name: "isha", display: "🌃", abbreviation: "IA" },
-				{ name: "sunset", display: "🌅", abbreviation: "SS" },
+				{ name: "fajr", display: "🌄", abbreviation: "FAJ" }, // Dawn
+				// { name: "sunrise", display: "🌅", abbreviation: "SUR" }, // Sunrise
+				{ name: "dhuhr", display: "🕛", abbreviation: "DHU" }, // Midday
+				{ name: "asr", display: "🌞", abbreviation: "ASR" }, // Afternoon
+				// { name: "sunset", display: "🌇", abbreviation: "SUS" }, // Sunset
+				{ name: "maghrib", display: "🌆", abbreviation: "MAG" }, // Dusk
+				{ name: "isha", display: "🌙", abbreviation: "ISH" }, // Night
+				{ name: "imsak", display: "⭐", abbreviation: "IMS" }, // Pre-dawn
+				// { name: "midnight", display: "🕛", abbreviation: "MID" }, // Midnight
+				// { name: "firstthird", display: "🌌", abbreviation: "FTH" }, // Late Night
+				// { name: "lastthird", display: "🌒", abbreviation: "LTH" }, // Pre-fajr
 			],
 		},
 	},
@@ -55,6 +59,8 @@ async function runScript() {
 
 	const deviceOnline = await isOnline();
 
+	let offlineDataDistanceMetres: number = 0;
+
 	if (deviceOnline) {
 		const { latitude: deviceLatitude, longitude: deviceLongitude } = await getLocation(PREFERENCES);
 
@@ -64,8 +70,6 @@ async function runScript() {
 		const today = new Date();
 		const offlineData: APIData[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
-
-		let distanceSinceOfflineData: number = 0;
 
 		if (todayData) {
 			const {
@@ -77,10 +81,10 @@ async function runScript() {
 				longitude,
 			});
 
-			distanceSinceOfflineData = Math.round(distance);
+			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
 
-		if (location && (!todayData || distanceSinceOfflineData > DISTANCE_TOLERANCE_METRES)) {
+		if (location && (!todayData || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)) {
 			const updatedData = await getNewData(PREFERENCES);
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
@@ -89,11 +93,11 @@ async function runScript() {
 	const dayData = await loadData(filePath);
 
 	if (dayData) {
-		presentData(dayData, userPrayerTimes, ITEMS_TO_SHOW);
+		presentData(dayData, userPrayerTimes, offlineDataDistanceMetres, ITEMS_TO_SHOW);
 	}
 }
 
-function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow: number) {
+function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], distance: number, itemsToShow: number) {
 	const now = new Date();
 	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
 	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
@@ -113,28 +117,27 @@ function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToS
 	const nextPrayerIndex = sortedTimes.findIndex((prayerTime) => prayerTime.time > now);
 
 	const timings = sortedTimes.map((prayerTime, index) => {
-		let status: RelativeDateTimeState;
+		let state: RelativeDateTimeState = "unknown";
+		let next = false;
 
 		if (prayerTime.time < now) {
-			status = "past";
+			state = "past";
 		} else if (prayerTime.time > now && prayerTime.time <= todayEnd) {
-			status = "today";
+			state = "today";
 		} else {
-			status = "future";
+			state = "future";
 		}
 
 		if (index === nextPrayerIndex) {
-			status = "next"; // The closest future prayer
+			next = true;
 		}
-
-		console.log([prayerTime.time, status, now, todayEnd]);
 
 		return {
 			prayer: prayerTime.prayer,
 			time: prayerTime.time,
-			status: status,
+			status: { state, next },
 		};
 	});
 
-	createWidget(timings, userPrayerTimes);
+	createWidget(timings, userPrayerTimes, distance);
 }
