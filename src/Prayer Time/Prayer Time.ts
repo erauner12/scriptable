@@ -48,7 +48,7 @@ async function runScript() {
 	}
 }
 
-function createWidget(timings: [string, string][]) {
+function createWidget(timings: Timing[]) {
 	const horizontalSpacing = 6;
 
 	const listWidget = new ListWidget();
@@ -60,17 +60,19 @@ function createWidget(timings: [string, string][]) {
 	let rowStack = addRowStack(mainStack, horizontalSpacing);
 
 	timings.forEach((timing, index) => {
-		const [text, time] = timing;
+		const { prayer, time } = timing;
 
 		const display = PREFERENCES.widget.display.prayerTimes.find(
-			(prayerTime) => prayerTime.name.toLowerCase() === text.toLowerCase()
+			(prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase()
 		);
 
 		if (display) {
-			addTimeStack(rowStack, text, display.display, time);
-		}
+			const timeString = convertToLocaleAmPm(time);
 
-		rowStack = addRowStack(mainStack, horizontalSpacing);
+			addTimeStack(rowStack, prayer, display.display, timeString);
+
+			rowStack = addRowStack(mainStack, horizontalSpacing);
+		}
 	});
 
 	listWidget.presentSmall();
@@ -135,7 +137,7 @@ function presentData(days: APIData[], preferences: Preferences) {
 		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime())
 		.slice(0, itemsToShow);
 
-	// createWidget(displayTimings);
+	createWidget(prayerTimesArray);
 }
 
 type Timing = { prayer: string; time: Date };
@@ -334,6 +336,14 @@ function dateToString(dateString?: Date) {
 			year: "numeric",
 		})
 		.replace(/\//g, "-");
+}
+
+function convertToLocaleAmPm(
+	date: Date,
+	options: Intl.DateTimeFormatOptions | undefined = { hour: "numeric", minute: "numeric", hour12: true }
+): string {
+	const localAmPmTime = date.toLocaleTimeString(undefined, options).toUpperCase();
+	return localAmPmTime;
 }
 
 function capitaliseWord(word: string) {
