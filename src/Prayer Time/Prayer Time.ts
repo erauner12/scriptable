@@ -50,16 +50,12 @@ async function runScript() {
 }
 
 async function getLocation(PREFERENCES: Preferences) {
-	try {
-		const currentLocation = await Location.current();
+	Location.setAccuracyToTenMeters();
+	const currentLocation = await Location.current();
 
-		PREFERENCES.api.location.latitude = currentLocation.latitude;
-		PREFERENCES.api.location.longitude = currentLocation.longitude;
-
-		console.log([currentLocation, PREFERENCES.api.location]);
-	} catch (error) {
-		console.error(error);
-	}
+	const { latitude, longitude } = currentLocation;
+	if (currentLocation.latitude) PREFERENCES.api.location.latitude = latitude;
+	if (currentLocation.longitude) PREFERENCES.api.location.longitude = longitude;
 }
 
 function createWidget(timings: Timing[]) {
