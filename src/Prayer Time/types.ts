@@ -1,4 +1,6 @@
-export type Timing = { prayer: string; time: Date };
+export type Timing = { prayer: string; time: Date; status?: RelativeDateTimeState };
+
+export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
 export interface Preferences {
 	widget: {
@@ -25,6 +27,7 @@ export interface Preferences {
 export type PrayerTime = {
 	name: string;
 	display: string;
+	abbreviation: string;
 };
 
 export interface APIData extends Object {

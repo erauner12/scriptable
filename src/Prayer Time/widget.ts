@@ -1,28 +1,29 @@
-import { PrayerTime, Timing } from "Prayer Time/types";
+import { PrayerTime, RelativeDateTimeState, Timing } from "Prayer Time/types";
 import { convertToLocaleAmPm } from "Prayer Time/utilities";
 
 export function createWidget(timings: Timing[], userTimings: PrayerTime[]) {
-	const horizontalSpacing = 6;
+	const horizontalSpacing = 12;
+	const verticalSpacing = 4;
 
 	const listWidget = new ListWidget();
 
 	const mainStack = listWidget.addStack();
 	mainStack.layoutVertically();
 	mainStack.centerAlignContent();
+	mainStack.spacing = verticalSpacing;
 
-	let rowStack = addRowStack(mainStack, horizontalSpacing);
+	timings.forEach((timing) => {
+		let rowStack = addRowStack(mainStack, horizontalSpacing);
 
-	timings.forEach((timing, index) => {
-		const { prayer, time } = timing;
+		const { prayer, time, status } = timing;
 
-		const display = userTimings.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
+		const userTiming = userTimings.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
 
-		if (display) {
+		if (userTiming) {
+			const { display, abbreviation } = userTiming;
 			const timeString = convertToLocaleAmPm(time);
 
-			addTimeStack(rowStack, prayer, display.display, timeString);
-
-			rowStack = addRowStack(mainStack, horizontalSpacing);
+			addTimeStack(rowStack, display, abbreviation, timeString, status ? status : "unknown");
 		}
 	});
 
@@ -36,33 +37,51 @@ export function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): 
 	return rowStack;
 }
 
-export function addTimeStack(stack: WidgetStack, text: string, display: string, date: string): WidgetStack {
-	const timeStack = stack.addStack();
+export function addTimeStack(
+	stack: WidgetStack,
+	icon: string,
+	text: string,
+	time: string,
+	relativeDateTimeState: RelativeDateTimeState
+): WidgetStack {
+	const fontSize = 14;
 
-	timeStack.spacing = 2;
-	timeStack.layoutVertically();
+	let textFont = new Font("AvenirNext-Regular", fontSize);
+	let textColour;
+
+	if (relativeDateTimeState === "next") textFont = new Font("AvenirNext-Bold", fontSize);
+	if (relativeDateTimeState === "future") textColour = new Color("#555555");
+
+	const timeStack = stack.addStack();
+	timeStack.spacing = 6;
 	timeStack.centerAlignContent();
 
-	const title = addCenteredTextElementToStack(timeStack, text);
-	title.font = new Font("AvenirNext-Bold", 16);
+	const _icon = timeStack.addText(icon);
+	_icon.font = textFont;
 
-	const icon = addCenteredTextElementToStack(timeStack, display);
-	icon.font = new Font("AvenirNext-Regular", 16);
+	const _text = timeStack.addText(text);
+	_text.font = textFont;
 
-	const time = addCenteredTextElementToStack(timeStack, date);
-	time.font = new Font("AvenirNext-Medium", 16);
+	const _time = timeStack.addText(time);
+	_time.font = textFont;
+
+	if (textColour) {
+		_icon.textColor = textColour;
+		_text.textColor = textColour;
+		_time.textColor = textColour;
+	}
 
 	return timeStack;
 }
 
-function addCenteredTextElementToStack(stack: WidgetStack, text: string): WidgetText {
-	const horizontalStack = stack.addStack();
+// function addCenteredTextElementToStack(stack: WidgetStack, text: string): WidgetText {
+// 	const horizontalStack = stack.addStack();
 
-	horizontalStack.addSpacer();
+// 	horizontalStack.addSpacer();
 
-	const textElement = horizontalStack.addText(text);
-	textElement.lineLimit = 1;
+// 	const textElement = horizontalStack.addText(text);
+// 	textElement.lineLimit = 1;
 
-	horizontalStack.addSpacer();
-	return textElement;
-}
+// 	horizontalStack.addSpacer();
+// 	return textElement;
+// }
