@@ -145,8 +145,8 @@ function presentData(days: APIData[], preferences: Preferences) {
 	createWidget(displayTimings);
 }
 
-function getDay(data: Array<APIData>, dayDate?: Date) {
-	const dayArray: Array<APIData> = data.filter(
+function getDay(data: APIData[], dayDate?: Date) {
+	const dayArray: APIData[] = data.filter(
 		({
 			date: {
 				gregorian: { date },
@@ -182,8 +182,8 @@ async function isOnline() {
 	}
 }
 
-function removeDuplicateData(array: Array<APIData>): Array<APIData> {
-	const newArray: Array<APIData> = [];
+function removeDuplicateData(array: APIData[]): APIData[] {
+	const newArray: APIData[] = [];
 	array.forEach((object) => {
 		if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
 			newArray.push(object);
@@ -192,10 +192,10 @@ function removeDuplicateData(array: Array<APIData>): Array<APIData> {
 	return newArray;
 }
 
-async function saveNewData(preferences: Preferences, data: Array<APIData>) {
-	const newData: Array<APIData> = data;
-	const offlineData: Array<APIData> = await loadData(preferences);
-	const mergedData: Array<APIData> = [];
+async function saveNewData(preferences: Preferences, data: APIData[]) {
+	const newData: APIData[] = data;
+	const offlineData: APIData[] = await loadData(preferences);
+	const mergedData: APIData[] = [];
 
 	removeDuplicateData(offlineData).filter(
 		({
@@ -270,7 +270,7 @@ async function getNewData(preferences: Preferences) {
 		},
 	} = preferences;
 
-	const newData: Array<APIData> = [];
+	const newData: APIData[] = [];
 
 	for (let day = 0; day < offlineDays; day++) {
 		const date = new Date();
@@ -363,10 +363,10 @@ async function loadData(preferences: Preferences) {
 	if (fm.fileExists(path)) {
 		if (!fm.isFileDownloaded(path)) await fm.downloadFileFromiCloud(path);
 		const raw = fm.readString(path);
-		const data: Array<APIData> = JSON.parse(raw);
+		const data: APIData[] = JSON.parse(raw);
 		return data;
 	} else {
-		const data: Array<APIData> = [];
+		const data: APIData[] = [];
 		return data;
 	}
 }
