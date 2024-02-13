@@ -49,17 +49,15 @@ async function runScript() {
 }
 
 function createWidget(timings: [string, string][]) {
-	const globalSpacing = 8;
+	const horizontalSpacing = 6;
 
 	const listWidget = new ListWidget();
-	listWidget.setPadding(14, 12, 4, 12);
 
 	const mainStack = listWidget.addStack();
 	mainStack.layoutVertically();
 	mainStack.centerAlignContent();
-	mainStack.spacing = globalSpacing;
 
-	let rowStack = addRowStack(mainStack, globalSpacing / 2);
+	let rowStack = addRowStack(mainStack, horizontalSpacing);
 
 	timings.forEach((timing, index) => {
 		const [text, time] = timing;
@@ -69,12 +67,10 @@ function createWidget(timings: [string, string][]) {
 		);
 
 		if (display) {
-			addTimeStack(rowStack, display.display, time);
+			addTimeStack(rowStack, text, display.display, time);
 		}
 
-		if (index % 2) {
-			rowStack = addRowStack(mainStack, globalSpacing);
-		}
+		rowStack = addRowStack(mainStack, horizontalSpacing);
 	});
 
 	listWidget.presentSmall();
@@ -87,7 +83,7 @@ function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): WidgetS
 	return rowStack;
 }
 
-function addTimeStack(stack: WidgetStack, text: string, date: string): WidgetStack {
+function addTimeStack(stack: WidgetStack, text: string, display: string, date: string): WidgetStack {
 	const timeStack = stack.addStack();
 
 	timeStack.spacing = 2;
@@ -97,8 +93,11 @@ function addTimeStack(stack: WidgetStack, text: string, date: string): WidgetSta
 	const title = addCenteredTextElementToStack(timeStack, text);
 	title.font = new Font("AvenirNext-Bold", 16);
 
+	const icon = addCenteredTextElementToStack(timeStack, display);
+	icon.font = new Font("AvenirNext-Regular", 16);
+
 	const time = addCenteredTextElementToStack(timeStack, date);
-	time.font = new Font("AvenirNext-Bold", 16);
+	time.font = new Font("AvenirNext-Medium", 16);
 
 	return timeStack;
 }
@@ -141,7 +140,7 @@ function presentData(days: APIData[], preferences: Preferences) {
 			if (a[1] > b[1]) return 1;
 			return 0;
 		})
-		.slice(0, 4); // This needs to return only the next 4 times
+		.slice(0, 2); // This needs to return only the next 4 times
 
 	createWidget(displayTimings);
 }
