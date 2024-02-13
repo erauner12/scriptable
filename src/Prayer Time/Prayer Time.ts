@@ -30,8 +30,11 @@ const PREFERENCES: Preferences = {
 };
 
 (async () => {
-	await getLocation(PREFERENCES);
-	await runScript();
+	try {
+		await runScript();
+	} catch (error) {
+		console.error(error);
+	}
 })();
 
 async function runScript() {
