@@ -11,10 +11,16 @@ const config = {
 	input: DECODED_FILE_PATH,
 	output: {
 		dir: "dist",
-		format: "es",
+		format: "es", // Ensure output format is ES module
 		plugins: [terser(), addFileIconSettings(DECODED_FILE_PATH)],
 	},
-	plugins: [typescript(), nodeResolve()],
+	plugins: [
+		typescript({
+			tsconfig: "./tsconfig.json", // Make sure to point to your tsconfig file
+			target: "ES6", // Target ES6 explicitly for TypeScript compilation
+		}),
+		nodeResolve(),
+	],
 	watch: {
 		include: "src/**",
 	},

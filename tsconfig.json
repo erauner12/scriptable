@@ -1,11 +1,14 @@
 {
 	"compilerOptions": {
-    "module": "esnext",
-		"target": "ESNext",
-		"lib": ["ESNext"],
+		"target": "ES6",
+		"module": "ES6",
+		"lib": ["ES6"],
 		"moduleResolution": "node",
 		"noEmit": true,
 		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
 		"noImplicitAny": true,
 		"allowSyntheticDefaultImports": true,
 		"noUnusedLocals": true,
@@ -14,8 +17,6 @@
 		"noImplicitReturns": false,
 		"strictFunctionTypes": true,
 		"noErrorTruncation": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
 		"removeComments": false,
 		"baseUrl": "src",
 		"outDir": "./dist"
