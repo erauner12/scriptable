@@ -23,13 +23,14 @@ const PREFERENCES: Preferences = {
 	api: {
 		endpoint: "http://api.aladhan.com/v1/timings/",
 		location: {
-			latitude: 38.70977051985349,
-			longitude: -9.135920391030602,
+			latitude: 0,
+			longitude: 0,
 		},
 	},
 };
 
 (async () => {
+	await getLocation(PREFERENCES);
 	await runScript();
 })();
 
@@ -45,6 +46,19 @@ async function runScript() {
 
 	if (data) {
 		presentData(data, PREFERENCES);
+	}
+}
+
+async function getLocation(PREFERENCES: Preferences) {
+	try {
+		const currentLocation = await Location.current();
+
+		PREFERENCES.api.location.latitude = currentLocation.latitude;
+		PREFERENCES.api.location.longitude = currentLocation.longitude;
+
+		console.log([currentLocation, PREFERENCES.api.location]);
+	} catch (error) {
+		console.error(error);
 	}
 }
 
