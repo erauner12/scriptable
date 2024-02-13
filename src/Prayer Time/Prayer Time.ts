@@ -21,7 +21,7 @@ const PREFERENCES: Preferences = {
 		},
 	},
 	api: {
-		endpoint: "http://api.aladhan.com/v1/timings/",
+		endpoint: "https://api.aladhan.com/v1/timings/",
 		location: {
 			latitude: 0,
 			longitude: 0,
