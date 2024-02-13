@@ -2,7 +2,7 @@
 
 ## Summary
 
-This repository constains the scripts I've build for [Scriptable](https://scriptable.app).
+This repository contains the scripts I've build for [Scriptable](https://scriptable.app).
 
 ## Contents
 
@@ -24,6 +24,7 @@ This repository constains the scripts I've build for [Scriptable](https://script
 | Script        | Description                                                            | Install                        |
 | ------------- | :--------------------------------------------------------------------- | :----------------------------: |
 | [Redirect Me](../src/Redirect%20Me/README.md) | Redirect a URL from the Share Sheet to another location. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Redirect%20Me&source=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fdist%2FRedirect%2520Me.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FRedirect%2520Me%2FREADME.md) |
+| [Prayer Time](../src/Prayer%20Time/README.md) | See the upcoming Islamic prayer times for the day. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Prayer+Time&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FPrayer%2520Time.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FPrayer%2520Time%2FREADME.md) |
 
 ## Notes
 
