@@ -53,38 +53,30 @@ async function runScript() {
 		},
 		api: { location },
 	} = PREFERENCES;
+
 	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
 	const ITEMS_TO_SHOW = 5;
-	const filePath = getFilePath(fileName, directoryName);
 
+	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
 
 	let offlineDataDistanceMetres: number = 0;
 
 	if (deviceOnline) {
-		const { latitude: deviceLatitude, longitude: deviceLongitude } = await getLocation(PREFERENCES);
-
-		PREFERENCES.api.location.latitude = deviceLatitude;
-		PREFERENCES.api.location.longitude = deviceLongitude;
-
 		const today = new Date();
 		const offlineData: APIData[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
+		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
+
+		const { latitude: deviceLatitude, longitude: deviceLongitude } = await getLocation(PREFERENCES);
+		PREFERENCES.api.location.latitude = deviceLatitude;
+		PREFERENCES.api.location.longitude = deviceLongitude;
 
 		if (todayData) {
-			const {
-				meta: { latitude, longitude },
-			} = todayData;
-
-			const distance = calculateDistance(location, {
-				latitude,
-				longitude,
-			});
-
+			const { meta } = todayData;
+			const distance = calculateDistance(location, meta);
 			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
-
-		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
 		if (location && (numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)) {
 			const updatedData = await getNewData(PREFERENCES);
@@ -94,9 +86,7 @@ async function runScript() {
 
 	const dayData = await loadData(filePath);
 
-	if (dayData) {
-		presentData(dayData, userPrayerTimes, offlineDataDistanceMetres, ITEMS_TO_SHOW);
-	}
+	if (dayData) presentData(dayData, userPrayerTimes, offlineDataDistanceMetres, ITEMS_TO_SHOW);
 }
 
 function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], distance: number, itemsToShow: number) {
