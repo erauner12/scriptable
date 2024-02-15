@@ -86,11 +86,5 @@ async function runScript() {
 
 	const dayData = await loadData(filePath);
 
-	if (dayData) presentData(dayData, userPrayerTimes, offlineDataDistanceMetres, ITEMS_TO_SHOW);
-}
-
-function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], distance: number, itemsToShow: number) {
-	const sortedTimes = getPrayerTimes(dayData, userPrayerTimes, itemsToShow);
-	const timings = addStatusToPrayerTimes(sortedTimes);
-	createWidget(timings, userPrayerTimes, distance);
+	if (dayData) createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, offlineDataDistanceMetres);
 }
