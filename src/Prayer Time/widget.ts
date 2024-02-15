@@ -67,9 +67,9 @@ export function addTimeStack(
 	let textFont = new Font("AvenirNext-Regular", fontSizeDefault);
 
 	let textColour;
-	if (relativeDateTimeState.state === "future") textColour = new Color("#888888");
+	if (relativeDateTimeState && relativeDateTimeState.state === "future") textColour = new Color("#888888");
 
-	if (relativeDateTimeState.next) {
+	if (relativeDateTimeState && relativeDateTimeState.next) {
 		textFont = new Font("AvenirNext-Bold", fontSizeNext);
 	}
 
@@ -91,8 +91,6 @@ export function addTimeStack(
 		_text.textColor = textColour;
 		_time.textColor = textColour;
 	}
-
-	// timeStack.addSpacer(undefined);
 
 	return timeStack;
 }
