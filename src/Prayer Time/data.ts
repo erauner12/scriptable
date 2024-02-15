@@ -148,20 +148,21 @@ export async function saveNewData(path: string, offlineDays: number, data: APIDa
 	saveData(path, mergedData);
 }
 
-export function getPrayerTimes(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow: number) {
+export function getPrayerTimes(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow?: number) {
 	const now = new Date();
 
 	const displayKeys = userPrayerTimes.map((prayerTime) => {
 		return prayerTime.name.toUpperCase();
 	});
 
-	const sortedTimes = dayData
+	let sortedTimes = dayData
 		.map((day) => convertTimingsToDateArray(day))
 		.flat()
 		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
 		.filter((prayerTime) => prayerTime.time > now)
-		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime())
-		.slice(0, itemsToShow);
+		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime());
+
+	if (itemsToShow) sortedTimes = sortedTimes.slice(0, itemsToShow);
 
 	return sortedTimes;
 }
