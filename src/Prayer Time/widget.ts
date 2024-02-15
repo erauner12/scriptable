@@ -1,7 +1,7 @@
 import { PrayerTime, Timing } from "Prayer Time/types";
 import { convertToLocaleAmPm, dateToString } from "Prayer Time/utilities";
 
-export function createWidget(timings: Timing[], userTimings: PrayerTime[], distance: number) {
+export function createWidget(prayerTimings: Timing[], userTimings: PrayerTime[], distance: number) {
 	const now = new Date();
 
 	const subtleColour = new Color("#888888");
@@ -20,7 +20,7 @@ export function createWidget(timings: Timing[], userTimings: PrayerTime[], dista
 
 	timingsStack.spacing = timingsRowSpacing;
 
-	timings.forEach((timing) => {
+	prayerTimings.forEach((timing) => {
 		const { prayer, time, status } = timing;
 
 		const userTiming = userTimings.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
