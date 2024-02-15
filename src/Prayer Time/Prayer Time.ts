@@ -84,7 +84,9 @@ async function runScript() {
 			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
 
-		if (location && (!todayData || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)) {
+		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
+
+		if (location && (numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)) {
 			const updatedData = await getNewData(PREFERENCES);
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
