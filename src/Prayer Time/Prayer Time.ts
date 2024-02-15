@@ -1,7 +1,7 @@
 import { loadData } from "Prayer Time/generics/fileManager";
 import { calculateDistance, getFilePath, getLocation, isOnline } from "Prayer Time/utilities";
-import { APIData, PrayerTime, Preferences, RelativeDateTimeState } from "Prayer Time/types";
-import { getDay, getNewData, saveNewData, convertTimingsToDateArray } from "Prayer Time/data";
+import { APIData, PrayerTime, Preferences } from "Prayer Time/types";
+import { getDay, getNewData, saveNewData, getPrayerTimes, addStatusToPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
 
 const PREFERENCES: Preferences = {
@@ -98,46 +98,7 @@ async function runScript() {
 }
 
 function presentData(dayData: APIData[], userPrayerTimes: PrayerTime[], distance: number, itemsToShow: number) {
-	const now = new Date();
-	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
-	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
-
-	const displayKeys = userPrayerTimes.map((prayerTime) => {
-		return prayerTime.name.toUpperCase();
-	});
-
-	const sortedTimes = dayData
-		.map((day) => convertTimingsToDateArray(day))
-		.flat()
-		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
-		.filter((prayerTime) => prayerTime.time > now)
-		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime())
-		.slice(0, itemsToShow);
-
-	const nextPrayerIndex = sortedTimes.findIndex((prayerTime) => prayerTime.time > now);
-
-	const timings = sortedTimes.map((prayerTime, index) => {
-		let state: RelativeDateTimeState = "unknown";
-		let next = false;
-
-		if (prayerTime.time < now) {
-			state = "past";
-		} else if (prayerTime.time > now && prayerTime.time <= todayEnd) {
-			state = "today";
-		} else {
-			state = "future";
-		}
-
-		if (index === nextPrayerIndex) {
-			next = true;
-		}
-
-		return {
-			prayer: prayerTime.prayer,
-			time: prayerTime.time,
-			status: { state, next },
-		};
-	});
-
+	const sortedTimes = getPrayerTimes(dayData, userPrayerTimes, itemsToShow);
+	const timings = addStatusToPrayerTimes(sortedTimes);
 	createWidget(timings, userPrayerTimes, distance);
 }

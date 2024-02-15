@@ -1,6 +1,6 @@
 import { loadData, saveData } from "Prayer Time/generics/fileManager";
 import { getData } from "Prayer Time/generics/getData";
-import { APIData, Preferences, Timing } from "Prayer Time/types";
+import { APIData, PrayerTime, Preferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
 import { stringToDate, getUrl } from "Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: APIData): Timing[] {
@@ -146,4 +146,53 @@ export async function saveNewData(path: string, offlineDays: number, data: APIDa
 	});
 
 	saveData(path, mergedData);
+}
+
+export function getPrayerTimes(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow: number) {
+	const now = new Date();
+
+	const displayKeys = userPrayerTimes.map((prayerTime) => {
+		return prayerTime.name.toUpperCase();
+	});
+
+	const sortedTimes = dayData
+		.map((day) => convertTimingsToDateArray(day))
+		.flat()
+		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
+		.filter((prayerTime) => prayerTime.time > now)
+		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime())
+		.slice(0, itemsToShow);
+
+	return sortedTimes;
+}
+
+export function addStatusToPrayerTimes(prayerTimings: Timing[]) {
+	const now = new Date();
+	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
+	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
+
+	const nextPrayerIndex = prayerTimings.findIndex((prayerTime) => prayerTime.time > now);
+
+	return prayerTimings.map((prayerTime, index) => {
+		let state: RelativeDateTimeState = "unknown";
+		let next = false;
+
+		if (prayerTime.time < now) {
+			state = "past";
+		} else if (prayerTime.time > now && prayerTime.time <= todayEnd) {
+			state = "today";
+		} else {
+			state = "future";
+		}
+
+		if (index === nextPrayerIndex) {
+			next = true;
+		}
+
+		return {
+			prayer: prayerTime.prayer,
+			time: prayerTime.time,
+			status: { state, next },
+		};
+	});
 }
