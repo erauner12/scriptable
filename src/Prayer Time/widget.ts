@@ -1,14 +1,23 @@
 import { addStatusToPrayerTimes, getPrayerTimes } from "Prayer Time/data";
 import { APIData, PrayerTime, Timing } from "Prayer Time/types";
 import { convertToLocaleAmPm, dateToString } from "Prayer Time/utilities";
+import { WidgetSize } from "../../_utils/types-global";
+import { getDaysBetweenDates } from "Prayer Time/date";
 
-export function createWidget(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow: number, distance: number) {
+export function createWidget(
+	dayData: APIData[],
+	userPrayerTimes: PrayerTime[],
+	itemsToShow: number,
+	widgetSize: WidgetSize,
+	distance: number
+) {
 	const sortedTimes = getPrayerTimes(dayData, userPrayerTimes, itemsToShow);
 	const prayerTimings = addStatusToPrayerTimes(sortedTimes);
 
 	const now = new Date();
 
-	const subtleColour = new Color("#888888");
+	const textColour = "#FFFFFF";
+	const textOpacitySubtle = 0.8;
 
 	const listWidgetSpacing = 4;
 	const timingsRowSpacing = 4;
@@ -24,16 +33,20 @@ export function createWidget(dayData: APIData[], userPrayerTimes: PrayerTime[], 
 
 	timingsStack.spacing = timingsRowSpacing;
 
-	prayerTimings.forEach((timing) => {
-		const { prayer, time, status } = timing;
+	prayerTimings.forEach((prayerTiming) => {
+		const { prayer, dateTime } = prayerTiming;
+
+		const opacityScaling = getDaysBetweenDates(now, dateTime) + 1;
+		const textOpacity = textOpacitySubtle / opacityScaling;
+		const _textColour = new Color(textColour, textOpacity);
 
 		const userTiming = userPrayerTimes.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
 
 		if (userTiming) {
-			const { abbreviation } = userTiming;
-			const timeString = convertToLocaleAmPm(time);
+			const { name, abbreviation } = userTiming;
+			const prayerTitleString = widgetSize === "medium" || widgetSize === "large" ? name.toUpperCase() : abbreviation;
 
-			addTimeStack(timingsStack, abbreviation, timeString, status, timingsRowItemSpacing);
+			addTimeStack(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, widgetSize, _textColour);
 		}
 	});
 
@@ -42,13 +55,13 @@ export function createWidget(dayData: APIData[], userPrayerTimes: PrayerTime[], 
 
 	const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
 	updatedOn.font = new Font("AvenirNext-Regular", 10);
-	updatedOn.textColor = subtleColour;
+	updatedOn.textColor = new Color(textColour, textOpacitySubtle);
 
 	const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
 	updatedAt.font = new Font("AvenirNext-Regular", 10);
-	updatedAt.textColor = subtleColour;
+	updatedAt.textColor = new Color(textColour, textOpacitySubtle);
 
-	listWidget.presentSmall();
+	return listWidget;
 }
 
 export function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): WidgetStack {
@@ -60,20 +73,25 @@ export function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): 
 
 export function addTimeStack(
 	stack: WidgetStack,
-	text: string,
-	time: string,
-	relativeDateTimeState: Timing["status"],
-	itemSpacing: number
+	prayerTitleString: string,
+	prayerTiming: Timing,
+	itemSpacing: number,
+	widgetSize: WidgetSize,
+	textColour: Color
 ): WidgetStack {
+	const { dateTime, status } = prayerTiming;
+
+	const timeString = convertToLocaleAmPm(dateTime);
+
 	const fontSizeNext = 14;
 	const fontSizeDefault = 12;
 
 	let textFont = new Font("AvenirNext-Regular", fontSizeDefault);
 
-	let textColour;
-	if (relativeDateTimeState && relativeDateTimeState.state === "future") textColour = new Color("#888888");
+	let _textColour;
+	if (status && status.state === "future") _textColour = textColour;
 
-	if (relativeDateTimeState && relativeDateTimeState.next) {
+	if (status && status.next) {
 		textFont = new Font("AvenirNext-Bold", fontSizeNext);
 	}
 
@@ -81,19 +99,21 @@ export function addTimeStack(
 	timeStack.spacing = itemSpacing;
 	timeStack.centerAlignContent();
 
-	const _text = timeStack.addText(text);
+	const _text = timeStack.addText(prayerTitleString);
 	_text.font = textFont;
 	_text.lineLimit = 1;
 
 	timeStack.addSpacer(undefined);
 
-	const _time = timeStack.addText(time);
+	let dateTimeString = timeString;
+
+	const _time = timeStack.addText(dateTimeString);
 	_time.font = textFont;
 	_time.lineLimit = 1;
 
-	if (textColour) {
-		_text.textColor = textColour;
-		_time.textColor = textColour;
+	if (_textColour) {
+		_text.textColor = _textColour;
+		_time.textColor = _textColour;
 	}
 
 	return timeStack;

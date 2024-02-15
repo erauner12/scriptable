@@ -1,8 +1,9 @@
 import { loadData } from "Prayer Time/generics/fileManager";
 import { calculateDistance, getFilePath, getLocation, isOnline } from "Prayer Time/utilities";
-import { APIData, PrayerTime, Preferences } from "Prayer Time/types";
-import { getDay, getNewData, saveNewData, getPrayerTimes, addStatusToPrayerTimes } from "Prayer Time/data";
+import { APIData, Preferences } from "Prayer Time/types";
+import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
+import { WidgetSize } from "../../_utils/types-global";
 
 const PREFERENCES: Preferences = {
 	widget: {
@@ -10,7 +11,7 @@ const PREFERENCES: Preferences = {
 			file: "Prayer Time",
 			directory: "Prayer Time",
 			size: "small",
-			offline: 3,
+			offline: 5,
 		},
 		display: {
 			prayerTimes: [
@@ -55,7 +56,10 @@ async function runScript() {
 	} = PREFERENCES;
 
 	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
-	const ITEMS_TO_SHOW = 5;
+	const WIDGET_SIZE: WidgetSize = config.widgetFamily ? config.widgetFamily : "small";
+	let ITEMS_TO_SHOW = 5;
+
+	if (WIDGET_SIZE === "large") ITEMS_TO_SHOW = 14;
 
 	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
@@ -86,5 +90,8 @@ async function runScript() {
 
 	const dayData = await loadData(filePath);
 
-	if (dayData) createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, offlineDataDistanceMetres);
+	if (dayData) {
+		const widget = createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, WIDGET_SIZE, offlineDataDistanceMetres);
+		widget.presentLarge();
+	}
 }

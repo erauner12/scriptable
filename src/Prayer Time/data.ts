@@ -15,7 +15,7 @@ export function convertTimingsToDateArray(day: APIData): Timing[] {
 	return Object.entries(timings).map(([prayerName, prayerTime]) => {
 		const timeComponents = prayerTime.split(":"); // Split into [HH, MM]
 		const dateTime = new Date(`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`);
-		return { prayer: prayerName, time: dateTime };
+		return { prayer: prayerName, dateTime: dateTime };
 	});
 }
 
@@ -159,28 +159,28 @@ export function getPrayerTimes(dayData: APIData[], userPrayerTimes: PrayerTime[]
 		.map((day) => convertTimingsToDateArray(day))
 		.flat()
 		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
-		.filter((prayerTime) => prayerTime.time > now)
-		.sort((dateA, dateB) => dateA.time.getTime() - dateB.time.getTime());
+		.filter((prayerTime) => prayerTime.dateTime > now)
+		.sort((dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime());
 
 	if (itemsToShow) sortedTimes = sortedTimes.slice(0, itemsToShow);
 
 	return sortedTimes;
 }
 
-export function addStatusToPrayerTimes(prayerTimings: Timing[]) {
+export function addStatusToPrayerTimes(prayerTimings: Timing[]): Timing[] {
 	const now = new Date();
 	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
 	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
 
-	const nextPrayerIndex = prayerTimings.findIndex((prayerTime) => prayerTime.time > now);
+	const nextPrayerIndex = prayerTimings.findIndex((prayerTime) => prayerTime.dateTime > now);
 
 	return prayerTimings.map((prayerTime, index) => {
 		let state: RelativeDateTimeState = "unknown";
 		let next = false;
 
-		if (prayerTime.time < now) {
+		if (prayerTime.dateTime < now) {
 			state = "past";
-		} else if (prayerTime.time > now && prayerTime.time <= todayEnd) {
+		} else if (prayerTime.dateTime > now && prayerTime.dateTime <= todayEnd) {
 			state = "today";
 		} else {
 			state = "future";
@@ -192,7 +192,7 @@ export function addStatusToPrayerTimes(prayerTimings: Timing[]) {
 
 		return {
 			prayer: prayerTime.prayer,
-			time: prayerTime.time,
+			dateTime: prayerTime.dateTime,
 			status: { state, next },
 		};
 	});
