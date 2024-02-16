@@ -17,7 +17,6 @@ const config = {
 	plugins: [
 		typescript({
 			tsconfig: "./tsconfig.json", // Make sure to point to your tsconfig file
-			target: "ES6", // Target ES6 explicitly for TypeScript compilation
 		}),
 		nodeResolve(),
 	],
