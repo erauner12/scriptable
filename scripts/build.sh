@@ -21,24 +21,30 @@ has_param() {
 #  --watch: Rebuild automatically when changes are detected
 build() {
   local entry_file_path="$1"
-  local parsed_path
+  local expected_parsed_path
 
   if [[ $entry_file_path == ./$src/* ]]; then
-    parsed_path=$entry_file_path
-  fi
-
-  if [[ $entry_file_path != "./"* ]]; then
-    parsed_path=$(find_file "." "$entry_file_path.ts")
+    expected_parsed_path=$(findTSFile "$src" "$entry_file_path")
     if [ $? -eq 1 ]; then
-      echo "😭 \"$entry_file_path.ts\" could not be found!"
+      log_error "The expected TypeScript file \"$expected_parsed_path\" does not exist." "😭"
       echo "❌ Exiting!"
       exit 1
     fi
-    echo "😇 We found the script at: $parsed_path"
+    echo -e $result
   fi
 
-  exit_if_not_extension "$parsed_path" ts TypeScript
-  local base64_string=$(base64_encode "$parsed_path")
+  if [[ $entry_file_path != "./"* ]]; then
+    expected_parsed_path=$(find_file "." "$entry_file_path.ts")
+    if [ $? -eq 1 ]; then
+      log_error "\"$entry_file_path.ts\" could not be found!" "😭"
+      echo "❌ Exiting!"
+      exit 1
+    fi
+    echo "😇 We found the script at: $expected_parsed_path"
+  fi
+
+  exit_if_not_extension "$expected_parsed_path" ts TypeScript
+  local base64_string=$(base64_encode "$expected_parsed_path")
 
   local cmd
   cmd="rollup --config rollup.config.ts --environment file_path:"$base64_string" --configPlugin @rollup/plugin-typescript"
@@ -47,7 +53,7 @@ build() {
     cmd+=' --watch'
   fi
 
-  $cmd
+  # $cmd
   echo -e "\n🚀 Done!"
 }
 
@@ -230,9 +236,11 @@ function log_success() {
   return 0
 }
 
-function log_error() {
+log_error() {
   local message="$1"
-  echo "❌ $message"
+  local emoji="${2:-❌}"
+
+  echo "$emoji $message"
   return 1
 }
 
@@ -245,6 +253,21 @@ function log_complete() {
   else
     echo "🚀 Done!"
     exit 0
+  fi
+}
+
+function findTSFile() {
+  local srcDir="$1"
+  local inputPath="$2"
+  local relativePath="${inputPath#./$srcDir/}"
+  local rootFolder=$(echo "$relativePath" | cut -d'/' -f 1)
+  local targetFilePath="./$srcDir/$rootFolder/$rootFolder.ts"
+
+  if [ -f "$targetFilePath" ]; then
+    echo "$targetFilePath"
+  else
+    echo "$targetFilePath"
+    return 1
   fi
 }
 
