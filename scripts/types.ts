@@ -1,4 +1,4 @@
-import { Prettify, NonEmptyArray } from "../_utils/types-helpers";
+import { Prettify, NonEmptyArray } from "../modules/typeHelpers";
 
 type IconColor =
 	| "yellow"

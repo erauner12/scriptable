@@ -1,7 +1,7 @@
 import { addStatusToPrayerTimes, getPrayerTimes } from "Prayer Time/data";
 import { APIData, PrayerTime, Timing } from "Prayer Time/types";
 import { convertToLocaleAmPm, dateToString } from "Prayer Time/utilities";
-import { WidgetSize } from "../../_utils/types-global";
+import { WidgetSize } from "../../modules/scriptableTypes";
 import { getDaysBetweenDates } from "Prayer Time/date";
 
 export function createWidget(

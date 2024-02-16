@@ -3,7 +3,7 @@ import { calculateDistance, getFilePath, getLocation, isOnline } from "Prayer Ti
 import { APIData, Preferences } from "Prayer Time/types";
 import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
-import { WidgetSize } from "../../_utils/types-global";
+import { WidgetSize } from "../../modules/scriptableTypes";
 
 const PREFERENCES: Preferences = {
 	widget: {
