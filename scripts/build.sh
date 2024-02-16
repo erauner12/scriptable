@@ -25,22 +25,22 @@ build() {
 
   if [[ $entry_file_path == ./$src/* ]]; then
     expected_parsed_path=$(findTSFile "$src" "$entry_file_path")
+
     if [ $? -eq 1 ]; then
       log_error "The expected TypeScript file \"$expected_parsed_path\" does not exist." "😭"
-      echo "❌ Exiting!"
+      log_error "Exiting!"
       exit 1
     fi
-    echo -e $result
   fi
 
   if [[ $entry_file_path != "./"* ]]; then
     expected_parsed_path=$(find_file "." "$entry_file_path.ts")
     if [ $? -eq 1 ]; then
       log_error "\"$entry_file_path.ts\" could not be found!" "😭"
-      echo "❌ Exiting!"
+      log_error "Exiting!"
       exit 1
     fi
-    echo "😇 We found the script at: $expected_parsed_path"
+    log_success "We found the script at: \"$expected_parsed_path\"." "😇"
   fi
 
   exit_if_not_extension "$expected_parsed_path" ts TypeScript
@@ -53,8 +53,9 @@ build() {
     cmd+=' --watch'
   fi
 
-  # $cmd
-  echo -e "\n🚀 Done!"
+  $cmd
+
+  log_success "Done!" "🚀" true
 }
 
 build_and_watch() {
@@ -81,7 +82,7 @@ function open_in_scriptable() {
       entry_file="${entry_file%.ts}.js"
     fi
   else
-    log_error "The file is not JavaScript or TypeScript"
+    log_error "The file is not JavaScript or TypeScript."
     log_complete 1
   fi
 
@@ -89,7 +90,7 @@ function open_in_scriptable() {
 
   # Check if directory exists in ./dist
   if test -e "$dist_file_path"; then
-    log_success "Found \"$dist_relative_path$(basename "$dist_file_path")\""
+    log_success "Found \"$dist_relative_path$(basename "$dist_file_path")\"."
     dist_absolute_path="$(absolute_path "${dist_file_path}")"
   else
     echo "$dist_file_path"
@@ -99,7 +100,7 @@ function open_in_scriptable() {
 
   # Check if directory exists in ./build
   if test -e "$build_file_path"; then
-    log_success "Found \"$build_relative_path$(basename "$build_file_path")\""
+    log_success "Found \"$build_relative_path$(basename "$build_file_path")\"."
     build_absolute_path="$(absolute_path "${build_file_path}")"
   else
     echo "$build_file_path"
@@ -108,20 +109,20 @@ function open_in_scriptable() {
   if [[ -e "$dist_file_path" && -e "$build_file_path" ]]; then
     # Check if paths symbolic link to the same file
     if [ ! "$dist_absolute_path" -ef "$build_absolute_path" ]; then
-      log_error "No symbolic link between \"${dist_relative_path}${entry_file}\" and \"${build_relative_path}${entry_file}\""
-      log "Remove \"${build_relative_path}${entry_file}\" and export \"$dist_file_path\" to \"$build_relative_path\""
-      log "Run \`npm run export\`"
+      log_error "No symbolic link between \"${dist_relative_path}${entry_file}\" and \"${build_relative_path}${entry_file}\"."
+      log "Remove \"${build_relative_path}${entry_file}\" and export \"$dist_file_path\" to \"$build_relative_path\"."
+      log "Run \`npm run export\`."
       log_complete 1
       return 1
     else
-      log "\"${dist_relative_path}${entry_file}\" is symbolic linked to \"${build_relative_path}${entry_file}\""
+      log "\"${dist_relative_path}${entry_file}\" is symbolic linked to \"${build_relative_path}${entry_file}\"."
     fi
   elif [[ ! -e "$dist_file_path" && -e "$build_file_path" ]]; then
-    log "The file \"${build_relative_path}${entry_file}\" will not be backed up to git"
-    log "Move it to \"${dist_relative_path}\" then run \`npm run export\`"
+    log "The file \"${build_relative_path}${entry_file}\" will not be backed up to git."
+    log "Move it to \"${dist_relative_path}\" then run \`npm run export\`."
   elif [[ -e "$dist_file_path" && ! -e "$build_file_path" ]]; then
-    log "You should export \"$dist_file_path\" to \"$build_relative_path\""
-    log "Run \`npm run export\`"
+    log "You should export \"$dist_file_path\" to \"$build_relative_path\"."
+    log "Run \`npm run export\`."
     log_complete 1
   else
     log_complete 1
@@ -132,7 +133,7 @@ function open_in_scriptable() {
   uri_basename="$(uri_encode "$uri_basename")"
 
   local cmd="open scriptable:///run/${uri_basename}"
-  log_success "Running command: \"${cmd}\""
+  log_success "Running command: \"${cmd}\"."
   $cmd
   log_complete $?
 }
@@ -154,7 +155,7 @@ function find_file() {
   local result=$(find "$location" -name "$name" | exec -l grep . | sed 's#//*#/#g')
 
   if [ -z "$result" ]; then
-    log_error "File \"${location}${name}\" does not exist"
+    log_error "File \"${location}${name}\" does not exist."
     return 1
   else
     echo "$result"
@@ -172,7 +173,7 @@ function absolute_path() {
 
   # Check that the path argument is not empty
   if [ -z "$path" ]; then
-    log_error "Path argument is empty"
+    log_error "Path argument is empty."
     return 1
   fi
 
@@ -188,7 +189,7 @@ function absolute_path() {
 
   # Check that the resolved path exists
   if [ ! -e "$absolute_path" ]; then
-    log_error "Resolved path does not exist: \"$absolute_path\""
+    log_error "Resolved path does not exist: \"$absolute_path\"."
     return 1
   fi
 
@@ -198,8 +199,8 @@ function absolute_path() {
 
 function exit_if_not_extension() {
   if [[ $1 != *.$2 ]]; then
-    echo "🤨 The file \"${entry_file_path}\" is not $3."
-    echo "❌ Exiting!"
+    log_error "The file \"${entry_file_path}\" is not $3." "🤨"
+    log_error "Exiting!"
     exit 1
   fi
 }
@@ -209,11 +210,11 @@ function select_command() {
   PS3=$'\n👉 Please select a command (enter a number): '
   select command in "${COMMANDS[@]}"; do
     if [[ -n "$command" ]]; then
-      echo -e "🚀 Running selected command \"$command\"...\n"
+      log_success "Running selected command \"$command\"...\n" "🚀"
       $command
       break
     else
-      echo "🚫 Invalid selection. Please try again."
+      log_error "Invalid selection. Please try again." "🚫"
     fi
   done
 }
@@ -232,15 +233,29 @@ function log() {
 
 function log_success() {
   local message="$1"
-  echo "✅ $message"
+  local emoji="${2:-✅}"
+  local addNewLine=$3
+
+  if [[ $addNewLine == true ]]; then
+    echo -e "\n$emoji $message\n"
+  else
+    echo "$emoji $message"
+  fi
+
   return 0
 }
 
 log_error() {
   local message="$1"
   local emoji="${2:-❌}"
+  local addNewLine=$3
 
-  echo "$emoji $message"
+  if [[ $addNewLine == true ]]; then
+    echo -e "\n$emoji $message\n"
+  else
+    echo "$emoji $message"
+  fi
+
   return 1
 }
 
@@ -248,10 +263,10 @@ function log_complete() {
   local exit_code=$1
 
   if [[ $exit_code -ne 0 ]]; then
-    echo "🚪 Exiting script..."
+    log_success "Exiting script..." "🚪"
     exit $exit_code
   else
-    echo "🚀 Done!"
+    log_success "Done!" "🚀"
     exit 0
   fi
 }
