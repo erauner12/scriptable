@@ -64,6 +64,8 @@ export function createWidget(
 		const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
 		updatedAt.font = new Font("AvenirNext-Regular", 10);
 		updatedAt.textColor = new Color(textColour, textOpacitySubtle);
+	} else {
+		listWidget.backgroundColor = new Color("#000000");
 	}
 
 	return listWidget;
@@ -126,7 +128,6 @@ export function addTimeStack(
 		_text.centerAlignText();
 		_time.centerAlignText();
 		_time.minimumScaleFactor = 0.5;
-		timeStack.backgroundColor = new Color("#000000");
 	}
 
 	if (_textColour) {
