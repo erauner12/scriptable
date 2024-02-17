@@ -24,8 +24,11 @@ export function createWidget(
 	const timingsRowItemSpacing = 4;
 
 	const listWidget = new ListWidget();
-	listWidget.setPadding(16, 20, 16, 20);
-	listWidget.spacing = listWidgetSpacing;
+
+	if (widgetSize !== "accessoryCircular") {
+		listWidget.setPadding(16, 20, 16, 20);
+		listWidget.spacing = listWidgetSpacing;
+	}
 
 	const timingsStack = listWidget.addStack();
 	timingsStack.layoutVertically();
@@ -50,16 +53,18 @@ export function createWidget(
 		}
 	});
 
-	const updatedStack = listWidget.addStack();
-	updatedStack.layoutVertically();
+	if (widgetSize !== "accessoryCircular") {
+		const updatedStack = listWidget.addStack();
+		updatedStack.layoutVertically();
 
-	const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
-	updatedOn.font = new Font("AvenirNext-Regular", 10);
-	updatedOn.textColor = new Color(textColour, textOpacitySubtle);
+		const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
+		updatedOn.font = new Font("AvenirNext-Regular", 10);
+		updatedOn.textColor = new Color(textColour, textOpacitySubtle);
 
-	const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
-	updatedAt.font = new Font("AvenirNext-Regular", 10);
-	updatedAt.textColor = new Color(textColour, textOpacitySubtle);
+		const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
+		updatedAt.font = new Font("AvenirNext-Regular", 10);
+		updatedAt.textColor = new Color(textColour, textOpacitySubtle);
+	}
 
 	return listWidget;
 }
@@ -99,17 +104,30 @@ export function addTimeStack(
 	timeStack.spacing = itemSpacing;
 	timeStack.centerAlignContent();
 
+	if (widgetSize === "accessoryCircular") {
+		timeStack.layoutVertically();
+	}
+
 	const _text = timeStack.addText(prayerTitleString);
 	_text.font = textFont;
 	_text.lineLimit = 1;
 
-	timeStack.addSpacer(undefined);
+	if (widgetSize !== "accessoryCircular") {
+		timeStack.addSpacer(undefined);
+	}
 
 	let dateTimeString = timeString;
 
 	const _time = timeStack.addText(dateTimeString);
 	_time.font = textFont;
 	_time.lineLimit = 1;
+
+	if (widgetSize === "accessoryCircular") {
+		_text.centerAlignText();
+		_time.centerAlignText();
+		_time.minimumScaleFactor = 0.5;
+		timeStack.backgroundColor = new Color("#000000");
+	}
 
 	if (_textColour) {
 		_text.textColor = _textColour;

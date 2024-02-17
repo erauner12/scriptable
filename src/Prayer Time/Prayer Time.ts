@@ -60,6 +60,13 @@ async function runScript() {
 	let ITEMS_TO_SHOW = 5;
 
 	if (WIDGET_SIZE === "large") ITEMS_TO_SHOW = 14;
+	if (
+		WIDGET_SIZE === "accessoryCircular" ||
+		WIDGET_SIZE === "accessoryInline" ||
+		WIDGET_SIZE === "accessoryRectangular"
+	) {
+		ITEMS_TO_SHOW = 1;
+	}
 
 	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
@@ -92,6 +99,11 @@ async function runScript() {
 
 	if (dayData) {
 		const widget = createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, WIDGET_SIZE, offlineDataDistanceMetres);
-		widget.presentLarge();
+		if (config.runsInAccessoryWidget) {
+			Script.setWidget(widget);
+		} else {
+			widget.presentLarge();
+		}
 	}
+	Script.complete();
 }
