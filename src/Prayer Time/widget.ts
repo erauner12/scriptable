@@ -16,7 +16,7 @@ export function createWidget(
 
 	const now = new Date();
 
-	const textColour = "#FFFFFF";
+	const textColourHex = "#FFFFFF";
 	const textOpacitySubtle = 0.8;
 
 	const listWidgetSpacing = 4;
@@ -33,7 +33,6 @@ export function createWidget(
 	const timingsStack = listWidget.addStack();
 	timingsStack.layoutVertically();
 	timingsStack.centerAlignContent();
-
 	timingsStack.spacing = timingsRowSpacing;
 
 	prayerTimings.forEach((prayerTiming) => {
@@ -41,54 +40,68 @@ export function createWidget(
 
 		const opacityScaling = getDaysBetweenDates(now, dateTime) + 1;
 		const textOpacity = textOpacitySubtle / opacityScaling;
-		const _textColour = new Color(textColour, textOpacity);
+		const textColour = new Color(textColourHex, textOpacity);
 
 		const userTiming = userPrayerTimes.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
 
-		if (userTiming) {
-			const { name, abbreviation } = userTiming;
-			const prayerTitleString = widgetSize === "medium" || widgetSize === "large" ? name.toUpperCase() : abbreviation;
+		if (!userTiming) return;
 
-			addTimeStack(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, widgetSize, _textColour);
+		const { name, abbreviation } = userTiming;
+		const prayerTitleString = widgetSize === "medium" || widgetSize === "large" ? name.toUpperCase() : abbreviation;
+
+		switch (widgetSize) {
+			case "small":
+			case "medium":
+			case "large":
+			case "extraLarge":
+				addTimeStackInWidget(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
+				break;
+			case "accessoryCircular":
+				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
+				break;
+			case "accessoryInline":
+			case "accessoryRectangular":
+			default:
+				break;
 		}
 	});
 
-	if (widgetSize !== "accessoryCircular") {
-		const updatedStack = listWidget.addStack();
-		updatedStack.layoutVertically();
+	switch (widgetSize) {
+		case "small":
+		case "medium":
+		case "large":
+		case "extraLarge":
+			const updatedStack = listWidget.addStack();
+			updatedStack.layoutVertically();
 
-		const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
-		updatedOn.font = new Font("AvenirNext-Regular", 10);
-		updatedOn.textColor = new Color(textColour, textOpacitySubtle);
+			const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
+			updatedOn.font = new Font("AvenirNext-Regular", 10);
+			updatedOn.textColor = new Color(textColourHex, textOpacitySubtle);
 
-		const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
-		updatedAt.font = new Font("AvenirNext-Regular", 10);
-		updatedAt.textColor = new Color(textColour, textOpacitySubtle);
-	} else {
-		listWidget.backgroundColor = new Color("#000000");
+			const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
+			updatedAt.font = new Font("AvenirNext-Regular", 10);
+			updatedAt.textColor = new Color(textColourHex, textOpacitySubtle);
+			break;
+		case "accessoryCircular":
+		case "accessoryInline":
+		case "accessoryRectangular":
+			listWidget.addAccessoryWidgetBackground = true;
+			break;
+		default:
+			break;
 	}
 
 	return listWidget;
 }
 
-export function addRowStack(mainStack: WidgetStack, horizontalSpacing: number): WidgetStack {
-	const rowStack = mainStack.addStack();
-	rowStack.spacing = horizontalSpacing;
-	rowStack.centerAlignContent();
-	return rowStack;
-}
-
-export function addTimeStack(
+function addTimeStackInAccessory(
 	stack: WidgetStack,
 	prayerTitleString: string,
 	prayerTiming: Timing,
 	itemSpacing: number,
-	widgetSize: WidgetSize,
 	textColour: Color
 ): WidgetStack {
 	const { dateTime, status } = prayerTiming;
-
-	const timeString = convertToLocaleAmPm(dateTime);
 
 	const fontSizeNext = 14;
 	const fontSizeDefault = 12;
@@ -106,33 +119,72 @@ export function addTimeStack(
 	timeStack.spacing = itemSpacing;
 	timeStack.centerAlignContent();
 
-	if (widgetSize === "accessoryCircular") {
-		timeStack.layoutVertically();
+	timeStack.layoutVertically();
+
+	const textStack = timeStack.addStack();
+	textStack.addSpacer();
+	const _text = textStack.addText(prayerTitleString);
+	_text.font = textFont;
+	_text.lineLimit = 1;
+	_text.centerAlignText();
+	textStack.addSpacer();
+
+	const dateStack = timeStack.addStack();
+	dateStack.addSpacer();
+	const _date = dateStack.addDate(dateTime);
+	_date.font = textFont;
+	_date.lineLimit = 1;
+	_date.minimumScaleFactor = 0.5;
+	_date.applyTimeStyle();
+	dateStack.addSpacer();
+
+	if (_textColour) {
+		_text.textColor = _textColour;
+		_date.textColor = _textColour;
 	}
+
+	return timeStack;
+}
+
+function addTimeStackInWidget(
+	stack: WidgetStack,
+	prayerTitleString: string,
+	prayerTiming: Timing,
+	itemSpacing: number,
+	textColour: Color
+): WidgetStack {
+	const { dateTime, status } = prayerTiming;
+
+	const fontSizeNext = 14;
+	const fontSizeDefault = 12;
+
+	let textFont = new Font("AvenirNext-Regular", fontSizeDefault);
+
+	let _textColour;
+	if (status && status.state === "future") _textColour = textColour;
+
+	if (status && status.next) {
+		textFont = new Font("AvenirNext-Bold", fontSizeNext);
+	}
+
+	const timeStack = stack.addStack();
+	timeStack.spacing = itemSpacing;
+	timeStack.centerAlignContent();
 
 	const _text = timeStack.addText(prayerTitleString);
 	_text.font = textFont;
 	_text.lineLimit = 1;
 
-	if (widgetSize !== "accessoryCircular") {
-		timeStack.addSpacer(undefined);
-	}
+	timeStack.addSpacer();
 
-	let dateTimeString = timeString;
-
-	const _time = timeStack.addText(dateTimeString);
-	_time.font = textFont;
-	_time.lineLimit = 1;
-
-	if (widgetSize === "accessoryCircular") {
-		_text.centerAlignText();
-		_time.centerAlignText();
-		_time.minimumScaleFactor = 0.5;
-	}
+	const _date = timeStack.addDate(dateTime);
+	_date.font = textFont;
+	_date.lineLimit = 1;
+	_date.applyTimeStyle();
 
 	if (_textColour) {
 		_text.textColor = _textColour;
-		_time.textColor = _textColour;
+		_date.textColor = _textColour;
 	}
 
 	return timeStack;
