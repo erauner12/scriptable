@@ -61,9 +61,9 @@ async function runScript() {
 
 	switch (WIDGET_SIZE) {
 		case "small":
+		case "medium":
 			ITEMS_TO_SHOW = 5;
 			break;
-		case "medium":
 		case "large":
 		case "extraLarge":
 			ITEMS_TO_SHOW = 14;
