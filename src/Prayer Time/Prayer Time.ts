@@ -90,7 +90,7 @@ async function runScript() {
 		const todayData = getDay(offlineData, today);
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
-		const { latitude: deviceLatitude, longitude: deviceLongitude } = await getLocation(PREFERENCES);
+		const { latitude: deviceLatitude, longitude: deviceLongitude } = await Location.current();
 		PREFERENCES.api.location.latitude = deviceLatitude;
 		PREFERENCES.api.location.longitude = deviceLongitude;
 

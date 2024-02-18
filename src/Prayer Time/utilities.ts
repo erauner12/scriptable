@@ -104,11 +104,6 @@ export function getFilePath(fileName: string, directoryName: string) {
 	return fm.joinPath(dirPath, file);
 }
 
-export async function getLocation(PREFERENCES: Preferences) {
-	const currentLocation = await Location.current();
-	return currentLocation;
-}
-
 export function calculateDistance(
 	point1: { latitude: number; longitude: number },
 	point2: { latitude: number; longitude: number }
