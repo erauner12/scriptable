@@ -8,11 +8,13 @@ export type WidgetData = {
 	prayerTimes: PrayerTime[];
 };
 
+type EmptyObject = Record<string, never>;
+
 export interface WidgetPreferences {
-	user: WidgetPreferencesUser;
-	data: WidgetPreferencesData;
+	user: WidgetPreferencesUser | EmptyObject;
+	data: WidgetPreferencesData | EmptyObject;
 	api: WidgetPreferencesAPI;
-	developer: WidgetPreferencesDeveloper;
+	developer: WidgetPreferencesDeveloper | EmptyObject;
 }
 
 type WidgetPreferencesUser = {
@@ -27,10 +29,7 @@ type WidgetPreferencesUser = {
 };
 
 type WidgetPreferencesData = {
-	location: {
-		latitude: number;
-		longitude: number;
-	};
+	location: Location.CurrentLocation;
 };
 
 type WidgetPreferencesAPI = {
@@ -39,7 +38,7 @@ type WidgetPreferencesAPI = {
 };
 
 type WidgetPreferencesDeveloper = {
-	widgetSize: WidgetSize;
+	previewWidgetSize: WidgetSize;
 };
 
 export type PrayerTime = {

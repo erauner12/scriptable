@@ -28,17 +28,12 @@ const PREFERENCES: WidgetPreferences = {
 			],
 		},
 	},
-	data: {
-		location: {
-			latitude: 0,
-			longitude: 0,
-		},
-	},
+	data: {},
 	api: {
 		endpoint: "https://api.aladhan.com/v1/timings/",
 	},
 	developer: {
-		widgetSize: "small",
+		previewWidgetSize: "small",
 	},
 };
 
@@ -95,10 +90,13 @@ async function runScript() {
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
 		const { latitude: deviceLatitude, longitude: deviceLongitude } = await Location.current();
-		PREFERENCES.data.location.latitude = deviceLatitude;
-		PREFERENCES.data.location.longitude = deviceLongitude;
 
-		if (todayData) {
+		if (PREFERENCES.data && PREFERENCES.data.location) {
+			PREFERENCES.data.location.latitude = deviceLatitude;
+			PREFERENCES.data.location.longitude = deviceLongitude;
+		}
+
+		if (location && todayData) {
 			const { meta } = todayData;
 			const distance = calculateDistance(location, meta);
 			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
