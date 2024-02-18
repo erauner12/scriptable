@@ -1,16 +1,15 @@
 import { loadData } from "Prayer Time/generics/fileManager";
 import { calculateDistance, getFilePath, isOnline } from "Prayer Time/utilities";
-import { APIData, Preferences } from "Prayer Time/types";
+import { APIData, WidgetPreferences } from "Prayer Time/types";
 import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
 import { WidgetSize } from "../../modules/scriptableTypes";
 
-const PREFERENCES: Preferences = {
-	widget: {
+const PREFERENCES: WidgetPreferences = {
+	user: {
 		settings: {
 			file: "Prayer Time",
 			directory: "Prayer Time",
-			size: "small",
 			offline: 5,
 		},
 		display: {
@@ -29,12 +28,17 @@ const PREFERENCES: Preferences = {
 			],
 		},
 	},
-	api: {
-		endpoint: "https://api.aladhan.com/v1/timings/",
+	data: {
 		location: {
 			latitude: 0,
 			longitude: 0,
 		},
+	},
+	api: {
+		endpoint: "https://api.aladhan.com/v1/timings/",
+	},
+	developer: {
+		widgetSize: "small",
 	},
 };
 
@@ -49,11 +53,11 @@ const PREFERENCES: Preferences = {
 
 async function runScript() {
 	const {
-		widget: {
+		user: {
 			settings: { directory: directoryName, file: fileName, offline: offlineDays },
 			display: { prayerTimes: userPrayerTimes },
 		},
-		api: { location },
+		data: { location },
 	} = PREFERENCES;
 
 	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
@@ -91,8 +95,8 @@ async function runScript() {
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
 		const { latitude: deviceLatitude, longitude: deviceLongitude } = await Location.current();
-		PREFERENCES.api.location.latitude = deviceLatitude;
-		PREFERENCES.api.location.longitude = deviceLongitude;
+		PREFERENCES.data.location.latitude = deviceLatitude;
+		PREFERENCES.data.location.longitude = deviceLongitude;
 
 		if (todayData) {
 			const { meta } = todayData;

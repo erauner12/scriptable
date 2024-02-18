@@ -1,5 +1,3 @@
-import { Preferences } from "Prayer Time/types";
-
 export async function isOnline() {
 	const waitTimeMs = 15;
 	const url = "https://www.google.com";

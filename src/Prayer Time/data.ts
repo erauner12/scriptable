@@ -1,6 +1,6 @@
 import { loadData, saveData } from "Prayer Time/generics/fileManager";
-import { getData } from "Prayer Time/generics/getData";
-import { APIData, PrayerTime, Preferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
+import { requestData } from "Prayer Time/generics/getData";
+import { APIData, PrayerTime, WidgetPreferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
 import { stringToDate, getUrl } from "Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: APIData): Timing[] {
@@ -50,14 +50,13 @@ export function removeDuplicateData(array: APIData[]): APIData[] {
 	return newArray;
 }
 
-export async function getNewData(preferences: Preferences) {
+export async function getNewData(preferences: WidgetPreferences) {
 	const {
-		api: {
-			endpoint,
-			method,
+		api: { endpoint, method },
+		data: {
 			location: { latitude, longitude },
 		},
-		widget: {
+		user: {
 			settings: { offline: offlineDays },
 		},
 	} = preferences;
@@ -74,7 +73,7 @@ export async function getNewData(preferences: Preferences) {
 			method: method,
 		});
 
-		const response = await getData(url);
+		const response = await requestData(url);
 		const data = response.data;
 		newData.push(data);
 	}

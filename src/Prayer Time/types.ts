@@ -1,36 +1,46 @@
+import { WidgetSize } from "../../modules/scriptableTypes";
+
 export type Timing = { prayer: string; dateTime: Date; status?: { state: RelativeDateTimeState; next: boolean } };
 
 export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
-export type ScriptData = {
+export type WidgetData = {
+	prayerTimes: PrayerTime[];
+};
+
+export interface WidgetPreferences {
+	user: WidgetPreferencesUser;
+	data: WidgetPreferencesData;
+	api: WidgetPreferencesAPI;
+	developer: WidgetPreferencesDeveloper;
+}
+
+type WidgetPreferencesUser = {
+	settings: {
+		file: string;
+		directory: string;
+		offline: number;
+	};
+	display: {
+		prayerTimes: PrayerTime[];
+	};
+};
+
+type WidgetPreferencesData = {
 	location: {
 		latitude: number;
 		longitude: number;
 	};
-	prayerTimes: PrayerTime[];
 };
 
-export interface Preferences {
-	widget: {
-		settings: {
-			file: string;
-			directory: string;
-			size: string;
-			offline: number;
-		};
-		display: {
-			prayerTimes: PrayerTime[];
-		};
-	};
-	api: {
-		endpoint: string;
-		method?: number;
-		location: {
-			latitude: number;
-			longitude: number;
-		};
-	};
-}
+type WidgetPreferencesAPI = {
+	endpoint: string;
+	method?: number;
+};
+
+type WidgetPreferencesDeveloper = {
+	widgetSize: WidgetSize;
+};
 
 export type PrayerTime = {
 	name: string;
