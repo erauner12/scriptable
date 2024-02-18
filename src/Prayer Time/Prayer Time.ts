@@ -1,5 +1,5 @@
 import { loadData } from "Prayer Time/generics/fileManager";
-import { calculateDistance, getFilePath, getLocation, isOnline } from "Prayer Time/utilities";
+import { calculateDistance, getFilePath, isOnline } from "Prayer Time/utilities";
 import { APIData, Preferences } from "Prayer Time/types";
 import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
