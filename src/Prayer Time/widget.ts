@@ -57,9 +57,11 @@ export function createWidget(
 				addTimeStackInWidget(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
 				break;
 			case "accessoryCircular":
+				addTimeStackInAccessoryCircular(timingsStack, prayerTitleString, prayerTiming, textColour);
+				break;
 			case "accessoryInline":
 			case "accessoryRectangular":
-				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, textColour);
+				addTimeStackInAccessoryInlineRectangle(timingsStack, prayerTitleString, prayerTiming, textColour);
 				break;
 			default:
 				break;
@@ -89,7 +91,46 @@ export function createWidget(
 	return listWidget;
 }
 
-function addTimeStackInAccessory(
+function addTimeStackInAccessoryInlineRectangle(
+	stack: WidgetStack,
+	prayerTitleString: string,
+	prayerTiming: Timing,
+	textColour: Color
+): WidgetStack {
+	const { dateTime, status } = prayerTiming;
+
+	const fontSizeNext = 14;
+	const fontSizeDefault = 12;
+
+	let textFont = new Font("AvenirNext-Regular", fontSizeDefault);
+
+	let _textColour;
+	if (status && status.state === "future") _textColour = textColour;
+
+	if (status && status.next) {
+		textFont = new Font("AvenirNext-Bold", fontSizeNext);
+	}
+
+	const timeStack = stack.addStack();
+
+	const _text = timeStack.addText(prayerTitleString);
+	_text.font = textFont;
+	_text.lineLimit = 1;
+
+	const _date = timeStack.addDate(dateTime);
+	_date.font = textFont;
+	_date.lineLimit = 1;
+	_date.applyTimeStyle();
+
+	if (_textColour) {
+		_text.textColor = _textColour;
+		_date.textColor = _textColour;
+	}
+
+	return timeStack;
+}
+
+function addTimeStackInAccessoryCircular(
 	stack: WidgetStack,
 	prayerTitleString: string,
 	prayerTiming: Timing,
