@@ -2,6 +2,14 @@ export type Timing = { prayer: string; dateTime: Date; status?: { state: Relativ
 
 export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
+export type ScriptData = {
+	location: {
+		latitude: number;
+		longitude: number;
+	};
+	prayerTimes: PrayerTime[];
+};
+
 export interface Preferences {
 	widget: {
 		settings: {
