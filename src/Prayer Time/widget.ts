@@ -57,7 +57,7 @@ export function createWidget(
 				addTimeStackInWidget(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
 				break;
 			case "accessoryCircular":
-				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
+				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, textColour);
 				break;
 			case "accessoryInline":
 			case "accessoryRectangular":
@@ -93,7 +93,6 @@ function addTimeStackInAccessory(
 	stack: WidgetStack,
 	prayerTitleString: string,
 	prayerTiming: Timing,
-	itemSpacing: number,
 	textColour: Color
 ): WidgetStack {
 	const { dateTime, status } = prayerTiming;
@@ -111,9 +110,6 @@ function addTimeStackInAccessory(
 	}
 
 	const timeStack = stack.addStack();
-	timeStack.spacing = itemSpacing;
-	timeStack.centerAlignContent();
-
 	timeStack.layoutVertically();
 
 	const textStack = timeStack.addStack();
@@ -121,7 +117,6 @@ function addTimeStackInAccessory(
 	const _text = textStack.addText(prayerTitleString);
 	_text.font = textFont;
 	_text.lineLimit = 1;
-	_text.centerAlignText();
 	textStack.addSpacer();
 
 	const dateStack = timeStack.addStack();
@@ -164,7 +159,6 @@ function addTimeStackInWidget(
 
 	const timeStack = stack.addStack();
 	timeStack.spacing = itemSpacing;
-	timeStack.centerAlignContent();
 
 	const _text = timeStack.addText(prayerTitleString);
 	_text.font = textFont;
