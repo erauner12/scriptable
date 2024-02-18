@@ -102,5 +102,9 @@ typings/
 # TernJS port file
 .tern-port
 
+# MacOS
 .DS_Store
+
+# User
+.json
 build
