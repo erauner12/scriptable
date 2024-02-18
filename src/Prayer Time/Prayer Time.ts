@@ -111,6 +111,7 @@ async function runScript() {
 	if (dayData) {
 		const widget = createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, WIDGET_SIZE, offlineDataDistanceMetres);
 		if (config.runsInAccessoryWidget) {
+			widget.addAccessoryWidgetBackground = true;
 			Script.setWidget(widget);
 		} else {
 			await widget.presentLarge();
