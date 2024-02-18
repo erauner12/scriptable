@@ -57,10 +57,10 @@ export function createWidget(
 				addTimeStackInWidget(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
 				break;
 			case "accessoryCircular":
-				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, textColour);
-				break;
 			case "accessoryInline":
 			case "accessoryRectangular":
+				addTimeStackInAccessory(timingsStack, prayerTitleString, prayerTiming, textColour);
+				break;
 			default:
 				break;
 		}
