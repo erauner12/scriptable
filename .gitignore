@@ -106,5 +106,5 @@ typings/
 .DS_Store
 
 # User
-.json
+*.json
 build
