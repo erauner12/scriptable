@@ -82,11 +82,6 @@ export function createWidget(
 			updatedAt.font = new Font("AvenirNext-Regular", 10);
 			updatedAt.textColor = new Color(textColourHex, textOpacitySubtle);
 			break;
-		case "accessoryCircular":
-		case "accessoryInline":
-		case "accessoryRectangular":
-			listWidget.addAccessoryWidgetBackground = true;
-			break;
 		default:
 			break;
 	}
