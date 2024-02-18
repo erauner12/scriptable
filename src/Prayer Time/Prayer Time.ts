@@ -41,6 +41,7 @@ const PREFERENCES: Preferences = {
 (async () => {
 	try {
 		await runScript();
+		Script.complete();
 	} catch (error) {
 		console.error(error);
 	}
@@ -59,13 +60,23 @@ async function runScript() {
 	const WIDGET_SIZE: WidgetSize = config.widgetFamily ? config.widgetFamily : "small";
 	let ITEMS_TO_SHOW = 5;
 
-	if (WIDGET_SIZE === "large") ITEMS_TO_SHOW = 14;
-	if (
-		WIDGET_SIZE === "accessoryCircular" ||
-		WIDGET_SIZE === "accessoryInline" ||
-		WIDGET_SIZE === "accessoryRectangular"
-	) {
-		ITEMS_TO_SHOW = 1;
+	switch (WIDGET_SIZE) {
+		case "small":
+			ITEMS_TO_SHOW = 5;
+			break;
+		case "medium":
+		case "large":
+		case "extraLarge":
+			ITEMS_TO_SHOW = 14;
+			break;
+		case "accessoryCircular":
+		case "accessoryInline":
+		case "accessoryRectangular":
+			ITEMS_TO_SHOW = 1;
+			break;
+		default:
+			ITEMS_TO_SHOW = 5;
+			break;
 	}
 
 	const filePath = getFilePath(fileName, directoryName);
@@ -102,8 +113,7 @@ async function runScript() {
 		if (config.runsInAccessoryWidget) {
 			Script.setWidget(widget);
 		} else {
-			widget.presentLarge();
+			await widget.presentLarge();
 		}
 	}
-	Script.complete();
 }
