@@ -89,6 +89,9 @@ async function runScript() {
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
 		const currentLocation = await Location.current();
+
+		// TODO Add location to stored data
+
 		const hasCurrentLocation = currentLocation.latitude !== undefined && currentLocation.longitude !== undefined;
 
 		if (hasCurrentLocation && todayData) {
