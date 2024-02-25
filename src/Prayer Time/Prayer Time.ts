@@ -52,7 +52,6 @@ async function runScript() {
 			settings: { directory: directoryName, file: fileName, offline: offlineDays },
 			display: { prayerTimes: userPrayerTimes },
 		},
-		data: { location },
 	} = PREFERENCES;
 
 	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
@@ -89,21 +88,20 @@ async function runScript() {
 		const todayData = getDay(offlineData, today);
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
-		const { latitude: deviceLatitude, longitude: deviceLongitude } = await Location.current();
+		const currentLocation = await Location.current();
+		const hasCurrentLocation = currentLocation.latitude !== undefined && currentLocation.longitude !== undefined;
 
-		if (PREFERENCES.data && PREFERENCES.data.location) {
-			PREFERENCES.data.location.latitude = deviceLatitude;
-			PREFERENCES.data.location.longitude = deviceLongitude;
-		}
-
-		if (location && todayData) {
+		if (hasCurrentLocation && todayData) {
 			const { meta } = todayData;
-			const distance = calculateDistance(location, meta);
+			const distance = calculateDistance(currentLocation, meta);
 			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
 
-		if (location && (numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)) {
-			const updatedData = await getNewData(PREFERENCES);
+		if (
+			hasCurrentLocation &&
+			(numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)
+		) {
+			const updatedData = await getNewData({ ...PREFERENCES, data: { location: currentLocation } });
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
 	}
@@ -115,8 +113,10 @@ async function runScript() {
 		if (config.runsInAccessoryWidget) {
 			widget.addAccessoryWidgetBackground = true;
 			Script.setWidget(widget);
+			Script.complete();
 		} else {
 			await widget.presentLarge();
+			Script.complete();
 		}
 	}
 }
