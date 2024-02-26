@@ -1,11 +1,11 @@
 import { loadData } from "Prayer Time/generics/fileManager";
 import { calculateDistance, getFilePath, isOnline } from "Prayer Time/utilities";
-import { APIData, WidgetPreferences } from "Prayer Time/types";
+import { PrayerTime, WidgetPreferences } from "Prayer Time/types";
 import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
 import { WidgetSize } from "../../modules/scriptableTypes";
 
-const PREFERENCES: WidgetPreferences = {
+const DEFAULT_PREFERENCES: WidgetPreferences = {
 	user: {
 		settings: {
 			file: "Prayer Time",
@@ -28,9 +28,10 @@ const PREFERENCES: WidgetPreferences = {
 			],
 		},
 	},
-	data: {},
-	api: {
-		endpoint: "https://api.aladhan.com/v1/timings/",
+	data: {
+		api: {
+			endpoint: "https://api.aladhan.com/v1/timings/",
+		},
 	},
 	developer: {
 		previewWidgetSize: "small",
@@ -52,7 +53,7 @@ async function runScript() {
 			settings: { directory: directoryName, file: fileName, offline: offlineDays },
 			display: { prayerTimes: userPrayerTimes },
 		},
-	} = PREFERENCES;
+	} = DEFAULT_PREFERENCES;
 
 	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
 	const WIDGET_SIZE: WidgetSize = config.widgetFamily ? config.widgetFamily : "small";
@@ -84,7 +85,7 @@ async function runScript() {
 
 	if (deviceOnline) {
 		const today = new Date();
-		const offlineData: APIData[] = await loadData(filePath);
+		const offlineData: PrayerTime[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
 		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
 
@@ -104,7 +105,8 @@ async function runScript() {
 			hasCurrentLocation &&
 			(numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)
 		) {
-			const updatedData = await getNewData({ ...PREFERENCES, data: { location: currentLocation } });
+			const updatedData = await getNewData({ ...DEFAULT_PREFERENCES, data: { location: currentLocation } });
+			if (!updatedData) throw Error("No updated data was available!");
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
 	}

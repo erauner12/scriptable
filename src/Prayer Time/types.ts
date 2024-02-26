@@ -5,16 +5,15 @@ export type Timing = { prayer: string; dateTime: Date; status?: { state: Relativ
 export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
 export type WidgetData = {
-	prayerTimes: PrayerTime[];
+	prayerTimes: UserPrayerTime[];
 };
 
 type EmptyObject = Record<string, never>;
 
 export interface WidgetPreferences {
 	user: WidgetPreferencesUser | EmptyObject;
-	data: WidgetPreferencesData | EmptyObject;
-	api: WidgetPreferencesAPI;
-	developer: WidgetPreferencesDeveloper | EmptyObject;
+	data: WidgetPreferencesData | EmptyObject | undefined;
+	developer: WidgetPreferencesDeveloper | EmptyObject | undefined;
 }
 
 type WidgetPreferencesUser = {
@@ -24,12 +23,14 @@ type WidgetPreferencesUser = {
 		offline: number;
 	};
 	display: {
-		prayerTimes: PrayerTime[];
+		prayerTimes: UserPrayerTime[];
 	};
 };
 
 type WidgetPreferencesData = {
-	location: Location.CurrentLocation;
+	location?: Location.CurrentLocation;
+	api?: WidgetPreferencesAPI;
+	data?: PrayerTime[];
 };
 
 type WidgetPreferencesAPI = {
@@ -38,16 +39,16 @@ type WidgetPreferencesAPI = {
 };
 
 type WidgetPreferencesDeveloper = {
-	previewWidgetSize: WidgetSize;
+	previewWidgetSize?: WidgetSize;
 };
 
-export type PrayerTime = {
+export type UserPrayerTime = {
 	name: string;
 	display: string;
 	abbreviation: string;
 };
 
-export interface APIData extends Object {
+export interface PrayerTime extends Object {
 	timings: Timings;
 	date: DateClass;
 	meta: Meta;

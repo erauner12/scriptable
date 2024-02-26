@@ -1,9 +1,9 @@
 import { loadData, saveData } from "Prayer Time/generics/fileManager";
 import { requestData } from "Prayer Time/generics/getData";
-import { APIData, PrayerTime, WidgetPreferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
+import { PrayerTime, UserPrayerTime, WidgetPreferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
 import { stringToDate, getUrl } from "Prayer Time/utilities";
 
-export function convertTimingsToDateArray(day: APIData): Timing[] {
+export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
 	const {
 		timings,
 		date: { gregorian },
@@ -19,8 +19,8 @@ export function convertTimingsToDateArray(day: APIData): Timing[] {
 	});
 }
 
-export function getDay(data: APIData[], dayDate?: Date) {
-	const dayArray: APIData[] = data.filter(
+export function getDay(data: PrayerTime[], dayDate?: Date) {
+	const dayArray: PrayerTime[] = data.filter(
 		({
 			date: {
 				gregorian: { date },
@@ -35,13 +35,13 @@ export function getDay(data: APIData[], dayDate?: Date) {
 	);
 
 	if (dayArray[0]) {
-		const today: APIData = dayArray[0];
+		const today: PrayerTime = dayArray[0];
 		return today;
 	}
 }
 
-export function removeDuplicateData(array: APIData[]): APIData[] {
-	const newArray: APIData[] = [];
+export function removeDuplicateData(array: PrayerTime[]): PrayerTime[] {
+	const newArray: PrayerTime[] = [];
 	array.forEach((object) => {
 		if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
 			newArray.push(object);
@@ -52,16 +52,21 @@ export function removeDuplicateData(array: APIData[]): APIData[] {
 
 export async function getNewData(preferences: WidgetPreferences) {
 	const {
-		api: { endpoint, method },
-		data: {
-			location: { latitude, longitude },
-		},
+		data,
 		user: {
 			settings: { offline: offlineDays },
 		},
 	} = preferences;
+	if (!data) return;
+	const { api, location } = data;
 
-	const newData: APIData[] = [];
+	if (!api) return;
+	const { endpoint, method } = api;
+
+	if (!location) return;
+	const { latitude, longitude } = location;
+
+	const newData: PrayerTime[] = [];
 
 	for (let day = 0; day < offlineDays; day++) {
 		const date = new Date();
@@ -81,10 +86,10 @@ export async function getNewData(preferences: WidgetPreferences) {
 	return newData;
 }
 
-export async function saveNewData(path: string, offlineDays: number, data: APIData[]) {
-	const newData: APIData[] = data;
-	const offlineData: APIData[] = await loadData(path);
-	const mergedData: APIData[] = [];
+export async function saveNewData(path: string, offlineDays: number, data: PrayerTime[]) {
+	const newData: PrayerTime[] = data;
+	const offlineData: PrayerTime[] = await loadData(path);
+	const mergedData: PrayerTime[] = [];
 
 	removeDuplicateData(offlineData).filter(
 		({
@@ -104,7 +109,7 @@ export async function saveNewData(path: string, offlineDays: number, data: APIDa
 	);
 
 	// Update merged `day` values if already exist, else add new `days`
-	newData.forEach((day: APIData) => {
+	newData.forEach((day: PrayerTime) => {
 		const existsAlready = mergedData.some((d) => {
 			return JSON.stringify(d) === JSON.stringify(day);
 		});
@@ -147,7 +152,7 @@ export async function saveNewData(path: string, offlineDays: number, data: APIDa
 	saveData(path, mergedData);
 }
 
-export function getPrayerTimes(dayData: APIData[], userPrayerTimes: PrayerTime[], itemsToShow?: number) {
+export function getPrayerTimes(dayData: PrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number) {
 	const now = new Date();
 
 	const displayKeys = userPrayerTimes.map((prayerTime) => {
