@@ -11,6 +11,7 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 			file: "Prayer Time",
 			directory: "Prayer Time",
 			offline: 5,
+			distance: 1000,
 		},
 		display: {
 			prayerTimes: [
@@ -50,34 +51,13 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 async function runScript() {
 	const {
 		user: {
-			settings: { directory: directoryName, file: fileName, offline: offlineDays },
+			settings: { directory: directoryName, file: fileName, offline: offlineDays, distance: distanceToleranceMetres },
 			display: { prayerTimes: userPrayerTimes },
 		},
 	} = DEFAULT_PREFERENCES;
 
-	const DISTANCE_TOLERANCE_METRES = 1000; // 1KM
 	const WIDGET_SIZE: WidgetSize = config.widgetFamily ? config.widgetFamily : "small";
-	let ITEMS_TO_SHOW = 5;
-
-	switch (WIDGET_SIZE) {
-		case "small":
-		case "medium":
-			ITEMS_TO_SHOW = 5;
-			break;
-		case "large":
-		case "extraLarge":
-			ITEMS_TO_SHOW = 14;
-			break;
-		case "accessoryCircular":
-		case "accessoryInline":
-		case "accessoryRectangular":
-			ITEMS_TO_SHOW = 1;
-			break;
-		default:
-			ITEMS_TO_SHOW = 5;
-			break;
-	}
-
+	const displayItems = getDisplayItems(WIDGET_SIZE);
 	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
 
@@ -103,7 +83,7 @@ async function runScript() {
 
 		if (
 			hasCurrentLocation &&
-			(numberOfPrayerTimes <= ITEMS_TO_SHOW || offlineDataDistanceMetres > DISTANCE_TOLERANCE_METRES)
+			(numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > distanceToleranceMetres)
 		) {
 			const updatedData = await getNewData({ ...DEFAULT_PREFERENCES, data: { location: currentLocation } });
 			if (!updatedData) throw Error("No updated data was available!");
@@ -114,7 +94,7 @@ async function runScript() {
 	const dayData = await loadData(filePath);
 
 	if (dayData) {
-		const widget = createWidget(dayData, userPrayerTimes, ITEMS_TO_SHOW, WIDGET_SIZE, offlineDataDistanceMetres);
+		const widget = createWidget(dayData, userPrayerTimes, displayItems, WIDGET_SIZE, offlineDataDistanceMetres);
 		if (config.runsInAccessoryWidget) {
 			widget.addAccessoryWidgetBackground = true;
 			Script.setWidget(widget);
@@ -123,5 +103,22 @@ async function runScript() {
 			await widget.presentLarge();
 			Script.complete();
 		}
+	}
+}
+
+function getDisplayItems(widgetSize: WidgetSize) {
+	switch (widgetSize) {
+		case "small":
+		case "medium":
+			return 5;
+		case "large":
+		case "extraLarge":
+			return 14;
+		case "accessoryCircular":
+		case "accessoryInline":
+		case "accessoryRectangular":
+			return 1;
+		default:
+			return 5;
 	}
 }

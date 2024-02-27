@@ -21,6 +21,7 @@ type WidgetPreferencesUser = {
 		file: string;
 		directory: string;
 		offline: number;
+		distance: number;
 	};
 	display: {
 		prayerTimes: UserPrayerTime[];
