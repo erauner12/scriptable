@@ -11,12 +11,12 @@ export type WidgetData = {
 type EmptyObject = Record<string, never>;
 
 export interface WidgetPreferences {
-	user: WidgetPreferencesUser | EmptyObject;
+	user: UserPreferences | EmptyObject;
 	data: WidgetPreferencesData | EmptyObject | undefined;
 	developer: WidgetPreferencesDeveloper | EmptyObject | undefined;
 }
 
-type WidgetPreferencesUser = {
+type UserPreferences = {
 	settings: {
 		file: string;
 		directory: string;
