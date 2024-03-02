@@ -73,19 +73,15 @@ async function runScript() {
 
 		// TODO Add location to stored data
 
-		const hasCurrentLocation = currentLocation.latitude !== undefined && currentLocation.longitude !== undefined;
-
-		if (hasCurrentLocation && todayData) {
+		if (todayData) {
 			const { meta } = todayData;
 			const distance = calculateDistance(currentLocation, meta);
 			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
 
-		if (
-			hasCurrentLocation &&
-			(numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > distanceToleranceMetres)
-		) {
+		if (numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > distanceToleranceMetres) {
 			const updatedData = await getNewData({ ...DEFAULT_PREFERENCES, data: { location: currentLocation } });
+			console.log(updatedData);
 			if (!updatedData) throw Error("No updated data was available!");
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
