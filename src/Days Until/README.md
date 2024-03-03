@@ -15,4 +15,4 @@ A [Scriptable](https://scriptable.app) widget which displays a countdown to a sp
 1. Add the widget to the home screen
 2. Set `Script` to `Days Until`
 3. Set `Parameter` to a comma separated list of the `title` and `date` (formatted as `YYYY-MM-DD hh:mm`)
-   - e.g. `Flight to Hong, 2024-04-11 18:50`
+    - e.g. `Flight to Hong, 2024-04-11 18:50`
