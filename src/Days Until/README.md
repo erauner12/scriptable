@@ -4,7 +4,7 @@
 
 A [Scriptable](https://scriptable.app) widget which displays a countdown to a specific date.
 
-<img src="./Days%20Until.jpg" width="500" alt="Days Until Widget Preview">
+<img src="./Days%20Until.jpg" width="400" alt="Days Until Widget Preview">
 
 ## Install
 
@@ -12,6 +12,7 @@ A [Scriptable](https://scriptable.app) widget which displays a countdown to a sp
 
 ## Setup
 
-1. Add the widget to the home screen.
-2. Set `Script` to `Days Until`.
-3. Set `Parameter` to a comma separated list of the `title` and `date` (formatted as `YYYY-MM-DD hh:mm`), e.g. `Flight to Hong, 2024-04-11 18:50`.
+1. Add the widget to the home screen
+2. Set `Script` to `Days Until`
+3. Set `Parameter` to a comma separated list of the `title` and `date` (formatted as `YYYY-MM-DD hh:mm`)
+   - e.g. `Flight to Hong, 2024-04-11 18:50`
