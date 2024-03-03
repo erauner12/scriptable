@@ -4,7 +4,7 @@
 
 A [Scriptable](https://scriptable.app) widget which displays a countdown to a specific date.
 
-![Days Until Preview](./Days%20Until.jpg)
+<img src="./Days%20Until.jpg" width="500" alt="Days Until Widget Preview">
 
 ## Install
 
