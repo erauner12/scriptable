@@ -108,3 +108,4 @@ typings/
 # User
 *.json
 build
+*.afphoto
