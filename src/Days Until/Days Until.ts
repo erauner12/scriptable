@@ -109,7 +109,7 @@ function presentErrors(widget: ListWidget, errors: string[]) {
 	errors.forEach((error) => {
 		const widgetText = widget.addText(error);
 		widgetText.centerAlignText();
-		widgetText.font = Font.boldSystemFont(14);
+		widgetText.font = Font.systemFont(14);
 		widgetText.textColor = Color.red();
 	});
 	widget.presentLarge();
