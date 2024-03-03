@@ -80,9 +80,12 @@ async function runScript() {
 		}
 
 		if (numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > distanceToleranceMetres) {
-			const updatedData = await getNewData({ ...DEFAULT_PREFERENCES, data: { location: currentLocation } });
-			console.log(updatedData);
-			if (!updatedData) throw Error("No updated data was available!");
+			const { data } = DEFAULT_PREFERENCES;
+			if (!data) throw new Error("No stored data found.");
+			if (!data.api) throw new Error("No API data found.");
+			const { endpoint, method } = data.api;
+
+			const updatedData = await getNewData(endpoint, method, currentLocation, offlineDays);
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
 	}

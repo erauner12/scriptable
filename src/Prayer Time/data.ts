@@ -50,26 +50,17 @@ export function removeDuplicateData(array: PrayerTime[]): PrayerTime[] {
 	return newArray;
 }
 
-export async function getNewData(preferences: WidgetPreferences): Promise<PrayerTime[]> {
+export async function getNewData(
+	endpoint: string,
+	method: number | undefined,
+	location: Location.CurrentLocation,
+	numberOfDays: number
+): Promise<PrayerTime[]> {
 	try {
-		const {
-			data,
-			user: {
-				settings: { offline: offlineDays },
-			},
-		} = preferences;
-		if (!data) throw new Error("No user data was found.");
-		const { api, location } = data;
-
-		if (!api) throw new Error("No API data was found.");
-		const { endpoint, method } = api;
-
-		if (!location) throw new Error("No location data was found.");
 		const { latitude, longitude } = location;
-
 		const newData: PrayerTime[] = [];
 
-		for (let day = 0; day < offlineDays; day++) {
+		for (let day = 0; day < numberOfDays; day++) {
 			const date = new Date();
 			date.setDate(date.getDate() + day);
 
@@ -80,6 +71,7 @@ export async function getNewData(preferences: WidgetPreferences): Promise<Prayer
 			});
 
 			const response = await requestData(url);
+			console.log(response);
 			const data = response.data;
 			newData.push(data);
 		}
