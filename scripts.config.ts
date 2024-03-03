@@ -26,4 +26,9 @@ export const SETTINGS: ScriptSettings = {
 		iconColor: "red",
 		iconGlyph: "archive",
 	},
+	"Days Until": {
+		iconColor: "orange",
+		iconGlyph: "calendar-alt",
+		shareSheetInputs: ["plain-text"],
+	},
 };
