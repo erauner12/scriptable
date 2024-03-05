@@ -31,7 +31,7 @@ async function runWidget(defaultSettings: Settings) {
 
 	switch (runLocation) {
 		case "App":
-			settingsMenu(cantoneseTransformer, runLocation);
+			settingsMenu(cantoneseTransformer);
 			break;
 		case "ActionExtension":
 			if (shareSheetInputText)
