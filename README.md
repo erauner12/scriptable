@@ -1,8 +1,10 @@
 # Scriptable
 
-## Summary
+Welcome to my [Scriptable](https://scriptable.app) repository!
 
-Welcome to my Scriptable repository, you'll find scripts and widgets that I've build for [Scriptable](https://scriptable.app).
+You'll discover a curated collection of scripts and widgets designed to enhance your iOS and MacOS experience. Whether you're looking to streamline your daily tasks, fetch specific data, or add a personal touch to your device, this repository serves as a treasure trove of Scriptable solutions.
+
+Get started by downloading the Scriptable app, follow the simple setup instructions, and explore the array of scripts available to transform your interaction with your device. Whether you're a seasoned programmer or a curious newbie, this repository offers the tools and guidance to unlock the full potential of Scriptable.
 
 ## Getting started
 
@@ -14,9 +16,9 @@ Welcome to my Scriptable repository, you'll find scripts and widgets that I've b
 
 | Script                                        | Description                                              |                                                                                                                                                             Install                                                                                                                                                              |
 | --------------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [Redirect Me](../src/Redirect%20Me/README.md) | Redirect a URL from the Share Sheet to another location. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Redirect%20Me&source=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fdist%2FRedirect%2520Me.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FRedirect%2520Me%2FREADME.md) |
-| [Prayer Time](../src/Prayer%20Time/README.md) | See the upcoming Islamic prayer times for the day.       | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Prayer%20Time&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FPrayer%2520Time.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FPrayer%2520Time%2FREADME.md) |
-| [Days Until](../src/Days%20Until/README.md)   | Display a countdown to a specific date.                  |  [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Days%20Until&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FDays%2520Until.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FDays%2520Until%2FREADME.md)   |
+| [Redirect Me](./src/Redirect%20Me/README.md) | Redirect a URL from the Share Sheet to another location. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Redirect%20Me&source=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fdist%2FRedirect%2520Me.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FRedirect%2520Me%2FREADME.md) |
+| [Prayer Time](./src/Prayer%20Time/README.md) | See the upcoming Islamic prayer times for the day.       | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Prayer%20Time&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FPrayer%2520Time.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FPrayer%2520Time%2FREADME.md) |
+| [Days Until](./src/Days%20Until/README.md)   | Display a countdown to a specific date.                  |  [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Days%20Until&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FDays%2520Until.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FDays%2520Until%2FREADME.md)   |
 
 ## Contents
 
