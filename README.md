@@ -9,7 +9,7 @@ Get started by downloading the Scriptable app, follow the simple setup instructi
 ## Getting started
 
 1. Download Scriptable for iOS / MacOS from the [App Store](https://apps.apple.com/us/app/scriptable/id1405459188).
-2. Install [ScriptDude](https://scriptdu.de/#installation) using the instructions on their website (_this is how we easily install and update our scripts_).
+2. Install [ScriptDude](https://scriptdu.de/#installation) using the instructions on their website (*this is how we easily install and update our scripts*).
 3. Install a Script from the list below!
 
 ## Scripts
@@ -108,8 +108,8 @@ npm run export_module
 
 These commands are for compiling from TypeScript to JavaScript and running the script in Scriptable. Each should be followed by an argument, either:
 
-- the name of the script (surrounded in quotation marks _if_ it contains spaces): e.g. `"Hello World"` or `Hello_World`
-- the relative path of the script with file extension (surrounded in quotation marks _if_ it contains spaces): e.g. `"./src/Hello World/Hello World.ts"` or `./src/Hello_World/Hello_World.ts`
+- the name of the script (surrounded in quotation marks *if* it contains spaces): e.g. `"Hello World"` or `Hello_World`
+- the relative path of the script with file extension (surrounded in quotation marks *if* it contains spaces): e.g. `"./src/Hello World/Hello World.ts"` or `./src/Hello_World/Hello_World.ts`
 
 #### Build
 
