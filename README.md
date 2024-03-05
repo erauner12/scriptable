@@ -4,11 +4,23 @@
 
 Welcome to my Scriptable repository, you'll find scripts and widgets that I've build for [Scriptable](https://scriptable.app).
 
+## Getting started
+
+1. Download Scriptable for iOS / MacOS from the [App Store](https://apps.apple.com/us/app/scriptable/id1405459188).
+2. Install [ScriptDude](https://scriptdu.de/#installation) using the instructions on their website (_this is how we easily install and update our scripts_).
+3. Install a Script from the list below!
+
+## Scripts
+
+| Script                                        | Description                                              |                                                                                                                                                             Install                                                                                                                                                              |
+| --------------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [Redirect Me](../src/Redirect%20Me/README.md) | Redirect a URL from the Share Sheet to another location. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Redirect%20Me&source=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fdist%2FRedirect%2520Me.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FRedirect%2520Me%2FREADME.md) |
+| [Prayer Time](../src/Prayer%20Time/README.md) | See the upcoming Islamic prayer times for the day.       | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Prayer%20Time&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FPrayer%2520Time.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FPrayer%2520Time%2FREADME.md) |
+| [Days Until](../src/Days%20Until/README.md)   | Display a countdown to a specific date.                  |  [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Days%20Until&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FDays%2520Until.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FDays%2520Until%2FREADME.md)   |
+
 ## Contents
 
 - [Scriptable](#scriptable)
-  - [Summary](#summary)
-  - [Contents](#contents)
   - [Getting started](#getting-started)
   - [Scripts](#scripts)
   - [Developing](#developing)
@@ -27,20 +39,6 @@ Welcome to my Scriptable repository, you'll find scripts and widgets that I've b
     - [Notes](#notes)
   - [Related projects](#related-projects)
   - [Thanks](#thanks)
-
-## Getting started
-
-1. Download Scriptable for iOS / MacOS from the [App Store](https://apps.apple.com/us/app/scriptable/id1405459188).
-2. Install [ScriptDude](https://scriptdu.de/#installation) using the instructions on their website (_this is how we easily install and update our scripts_).
-3. Install a Script from the list below!
-
-## Scripts
-
-| Script                                        | Description                                              |                                                                                                                                                             Install                                                                                                                                                              |
-| --------------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [Redirect Me](../src/Redirect%20Me/README.md) | Redirect a URL from the Share Sheet to another location. | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Redirect%20Me&source=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fdist%2FRedirect%2520Me.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FRedirect%2520Me%2FREADME.md) |
-| [Prayer Time](../src/Prayer%20Time/README.md) | See the upcoming Islamic prayer times for the day.       | [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Prayer%20Time&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FPrayer%2520Time.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FPrayer%2520Time%2FREADME.md) |
-| [Days Until](../src/Days%20Until/README.md)   | Display a countdown to a specific date.                  |  [![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de/?name=Days%20Until&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FDays%2520Until.js&docs=https%3A%2F%2Fgithub.com%2FElliott-Liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FDays%2520Until%2FREADME.md)   |
 
 ## Developing
 
