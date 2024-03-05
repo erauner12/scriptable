@@ -30,4 +30,9 @@ export const SETTINGS: ScriptSettings = {
 		iconColor: "orange",
 		iconGlyph: "calendar-alt",
 	},
+	"Cantonese Romanisation": {
+		iconColor: "red",
+		iconGlyph: "language",
+		shareSheetInputs: ["plain-text"],
+	},
 };
