@@ -1,6 +1,13 @@
 {
+	"[markdown]": {
+		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+		"editor.formatOnPaste": true,
+		"editor.formatOnSave": true
+	},
+	"editor.detectIndentation": true,
 	"files.exclude": {
 		"build/.Trash": true,
 		"build/cache": true
-	}
+	},
+	"cSpell.words": ["gebeto", "jsloat", "schl"]
 }
