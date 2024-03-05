@@ -94,7 +94,6 @@ async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
 		const { languageName } = localisation;
 		const isSelected = currentLanguageName === languageName;
 		const alertActionText = isSelected ? `${languageName} ✅` : languageName;
-
 		alert.addAction(alertActionText);
 	});
 
@@ -114,13 +113,21 @@ async function selectOutputRomanisationSystem(
 ) {
 	const { romanisationSystems, outputRomanisationSystem } =
 		CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem =
+		CantoneseTransformer.getOutputRomanisationSystem();
 
 	const alert = new Alert();
 	alert.title = outputRomanisationSystem;
 
-	Object.values(romanisationSystems).forEach((romanisationSystemName) => {
-		alert.addAction(romanisationSystemName);
-	});
+	Object.entries(romanisationSystems).forEach(
+		([key, romanisationSystemName]) => {
+			const isSelected = selectedRomanisationSystem === key;
+			const alertActionText = isSelected
+				? `${romanisationSystemName} ✅`
+				: romanisationSystemName;
+			alert.addAction(alertActionText);
+		}
+	);
 
 	const selectionIndex = await alert.present();
 	const selectionKey = Object.keys(romanisationSystems)[
@@ -130,6 +137,7 @@ async function selectOutputRomanisationSystem(
 	if (!selectionKey) return;
 
 	CantoneseTransformer.setOutputRomanisationSystem(selectionKey);
+	await settingsMenu(CantoneseTransformer);
 }
 
 async function selectInputRomanisationSystem(
@@ -137,13 +145,21 @@ async function selectInputRomanisationSystem(
 ) {
 	const { romanisationSystems, inputRomanisationSystem } =
 		CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem =
+		CantoneseTransformer.getInputRomanisationSystem();
 
 	const alert = new Alert();
 	alert.title = inputRomanisationSystem;
 
-	Object.values(romanisationSystems).forEach((romanisationSystemName) => {
-		alert.addAction(romanisationSystemName);
-	});
+	Object.entries(romanisationSystems).forEach(
+		([key, romanisationSystemName]) => {
+			const isSelected = selectedRomanisationSystem === key;
+			const alertActionText = isSelected
+				? `${romanisationSystemName} ✅`
+				: romanisationSystemName;
+			alert.addAction(alertActionText);
+		}
+	);
 
 	const selectionIndex = await alert.present();
 	const selectionKey = Object.keys(romanisationSystems)[
@@ -153,6 +169,7 @@ async function selectInputRomanisationSystem(
 	if (!selectionKey) return;
 
 	CantoneseTransformer.setInputRomanisationSystem(selectionKey);
+	await settingsMenu(CantoneseTransformer);
 }
 
 async function parseAndPrompt(
