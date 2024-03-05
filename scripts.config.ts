@@ -22,10 +22,6 @@ export const SETTINGS: ScriptSettings = {
 		iconColor: "pink",
 		iconGlyph: "book-open",
 	},
-	"Lockscreen Text": {
-		iconColor: "red",
-		iconGlyph: "archive",
-	},
 	"Days Until": {
 		iconColor: "orange",
 		iconGlyph: "calendar-alt",
