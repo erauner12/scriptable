@@ -2,13 +2,15 @@ import { type Localisations } from "src/Cantonese Romanisation/types/Localisatio
 
 export const localisations: Localisations = {
 	en: {
-		title: "Cantonese Romanisation Converter",
+		cancel: "Cancel",
+		convert: "Convert",
+		done: "Done",
 		input: "Input romanized Cantonese here",
 		inputRomanisationSystem: "From",
+		language: "Language",
+		languageName: "English",
 		outputRomanisationSystem: "To",
 		result: "Result",
-		convert: "Convert",
-		source: "Source",
 		romanisationSystems: {
 			yaleNumerals: "Yale (Numerals)",
 			yaleDiacritics: "Yale (Diacritics)",
@@ -22,18 +24,21 @@ export const localisations: Localisations = {
 			penkyampNumerals: "Penkyamp (Numerals)",
 			penkyampDiacritics: "Penkyamp (Diacritics)",
 		},
-		language: "Language",
-		languageName: "English",
 		settings: "Settings",
+		source: "Source",
+		submit: "Submit",
+		title: "Cantonese Romanisation Converter",
 	},
 	zhs: {
-		title: "粤语拼音转换",
+		cancel: "取消",
+		convert: "转换",
+		done: "完毕",
 		input: "输入粤语拼音",
 		inputRomanisationSystem: "原文",
+		language: "语言",
+		languageName: "简化字", // Chinese (Simplified)
 		outputRomanisationSystem: "转成",
 		result: "结果",
-		convert: "转换",
-		source: "原始码",
 		romanisationSystems: {
 			yaleNumerals: "耶鲁拼音（数字）",
 			yaleDiacritics: "耶鲁拼音（调符）",
@@ -47,18 +52,21 @@ export const localisations: Localisations = {
 			penkyampNumerals: "粤语拼音字（数字）",
 			penkyampDiacritics: "粤语拼音字（调符）",
 		},
-		language: "语言",
-		languageName: "简化字", // Chinese (Simplified)
 		settings: "设置",
+		source: "原始码",
+		submit: "提交",
+		title: "粤语拼音转换",
 	},
 	zht: {
-		title: "粵語拼音轉換",
+		cancel: "取消",
+		convert: "轉換",
+		done: "完畢",
 		input: "輸入粵語拼音",
 		inputRomanisationSystem: "原文",
+		language: "語言",
+		languageName: "簡化字", // Chinese (Traditional)
 		outputRomanisationSystem: "轉成",
 		result: "結果",
-		convert: "轉換",
-		source: "原始碼",
 		romanisationSystems: {
 			yaleNumerals: "耶魯拼音（數字）",
 			yaleDiacritics: "耶魯拼音（調符）",
@@ -72,8 +80,9 @@ export const localisations: Localisations = {
 			penkyampNumerals: "粵語拼音字（數字）",
 			penkyampDiacritics: "粵語拼音字（調符）",
 		},
-		language: "語言",
-		languageName: "簡化字", // Chinese (Traditional)
 		settings: "設置",
+		source: "原始碼",
+		submit: "提交",
+		title: "粵語拼音轉換",
 	},
 };

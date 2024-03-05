@@ -183,36 +183,43 @@ async function parseAndPrompt(
 	) {
 		const romanisation =
 			CantoneseTransformer.transformRomanisationSystem(jyutping);
-		await prompt(chineseCharacterString, romanisation);
+		await prompt(CantoneseTransformer, chineseCharacterString, romanisation);
 		return;
 	}
 
-	await prompt(chineseCharacterString, jyutping);
+	await prompt(CantoneseTransformer, chineseCharacterString, jyutping);
 }
 
-async function prompt(title: string, message: string) {
-	let alert = new Alert();
-	alert.title = title;
+async function prompt(
+	CantoneseTransformer: CantoneseTransformer,
+	originalText: string,
+	message: string
+) {
+	const { done } = CantoneseTransformer.getLocalisation();
+
+	const alert = new Alert();
+	alert.title = originalText;
 	alert.message = message;
 	alert.addAction("➡️📋");
 	alert.addAction("📋➡️");
-	alert.addAction("✅");
+	alert.addAction(`${done} ✅`);
 
 	const selectionIndex = await alert.present();
 
-	if (selectionIndex === 0) Pasteboard.copy(title);
+	if (selectionIndex === 0) Pasteboard.copy(originalText);
 	if (selectionIndex === 1) Pasteboard.copy(message);
 	if (selectionIndex === 2) Script.complete();
 }
 
 async function alertError(CantoneseTransformer: CantoneseTransformer) {
-	const { convert, input } = CantoneseTransformer.getLocalisation();
+	const { convert, input, cancel, submit } =
+		CantoneseTransformer.getLocalisation();
 
 	const alert = new Alert();
 	alert.title = `${convert} 🔄`;
 	alert.addTextField(input);
-	alert.addAction("Submit");
-	alert.addCancelAction("Cancel");
+	alert.addAction(submit);
+	alert.addCancelAction(cancel);
 
 	const selectionIndex = await alert.present();
 	if (selectionIndex === 0)
