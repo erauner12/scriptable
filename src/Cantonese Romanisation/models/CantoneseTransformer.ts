@@ -1,15 +1,15 @@
 import {
 	type CantoJpMin,
 	cantoJpMin,
-} from "Cantonese Romanisation/data/cantoJpMin";
-import { localisations } from "Cantonese Romanisation/data/localisations";
-import { type Pingyam, pingyam } from "Cantonese Romanisation/data/pingyam";
-import { type CantoneseRomanisationSystemName } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
+} from "src/Cantonese Romanisation/data/cantoJpMin";
+import { localisations } from "src/Cantonese Romanisation/data/localisations";
+import { type Pingyam, pingyam } from "src/Cantonese Romanisation/data/pingyam";
+import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
 import {
 	type Localisations,
 	type Localisation,
 	type LocalisationName,
-} from "Cantonese Romanisation/types/Localisations";
+} from "src/Cantonese Romanisation/types/Localisations";
 
 export class CantoneseTransformer {
 	private cantoJpMin: CantoJpMin;

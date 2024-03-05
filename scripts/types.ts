@@ -1,4 +1,15 @@
-import { Prettify, NonEmptyArray } from "../modules/typeHelpers";
+import type { NonEmptyArray, Prettify } from "src/types/helpers";
+
+export type ScriptSetting = {
+	iconColor: IconColor;
+	iconGlyph: IconGlyph;
+	alwaysRunInApp?: boolean;
+	shareSheetInputs?: NonEmptyArray<ShareSheetInput>;
+};
+
+export type ScriptSettings = Record<string, Prettify<ScriptSetting>>;
+
+type ShareSheetInput = "file-url" | "url" | "image" | "plain-text";
 
 type IconColor =
 	| "yellow"
@@ -830,14 +841,3 @@ type IconGlyph =
 	| "x-ray"
 	| "yen-sign"
 	| "yin-yang";
-
-type ShareSheetInput = "file-url" | "url" | "image" | "plain-text";
-
-export type ScriptSetting = {
-	iconColor: IconColor;
-	iconGlyph: IconGlyph;
-	alwaysRunInApp?: boolean;
-	shareSheetInputs?: NonEmptyArray<ShareSheetInput>;
-};
-
-export type ScriptSettings = Record<string, Prettify<ScriptSetting>>;

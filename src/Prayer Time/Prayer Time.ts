@@ -1,18 +1,18 @@
-import { loadData } from "Prayer Time/generics/fileManager";
+import { loadData } from "src/Prayer Time/generics/fileManager";
 import {
 	calculateDistance,
 	getFilePath,
 	isOnline,
-} from "Prayer Time/utilities";
-import { type PrayerTime, type WidgetPreferences } from "Prayer Time/types";
+} from "src/Prayer Time/utilities";
+import { type PrayerTime, type WidgetPreferences } from "src/Prayer Time/types";
 import {
 	getDay,
 	getNewData,
 	saveNewData,
 	getPrayerTimes,
-} from "Prayer Time/data";
-import { createWidget } from "Prayer Time/widget";
-import { type WidgetSize } from "types/scriptable";
+} from "src/Prayer Time/data";
+import { createWidget } from "src/Prayer Time/widget";
+import { type WidgetSize } from "src/types/scriptable";
 
 const DEFAULT_PREFERENCES: WidgetPreferences = {
 	user: {

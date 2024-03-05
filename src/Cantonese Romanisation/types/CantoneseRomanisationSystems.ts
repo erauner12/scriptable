@@ -1,3 +1,7 @@
+export type CantoneseRomanisationSystems = {
+	[key in CantoneseRomanisationSystemName]: string;
+};
+
 export type CantoneseRomanisationSystemName =
 	| "cantonesePinyin"
 	| "cantonRomanization"
@@ -10,7 +14,3 @@ export type CantoneseRomanisationSystemName =
 	| "wongNumerals"
 	| "yaleDiacritics"
 	| "yaleNumerals";
-
-export type CantoneseRomanisationSystems = {
-	[key in CantoneseRomanisationSystemName]: string;
-};

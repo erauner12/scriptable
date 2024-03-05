@@ -1,7 +1,7 @@
-import { CantoneseTransformer } from "Cantonese Romanisation/models/CantoneseTransformer";
-import { type CantoneseRomanisationSystemName } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import { type LocalisationName } from "Cantonese Romanisation/types/Localisations";
-import { getRunLocation } from "utilities/scriptable/getRunLocation";
+import { CantoneseTransformer } from "src/Cantonese Romanisation/models/CantoneseTransformer";
+import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import { type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
+import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
 
 type Settings = {
 	language: LocalisationName;
@@ -55,7 +55,6 @@ async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 		inputRomanisationSystem,
 		convert,
 	} = CantoneseTransformer.getLocalisation();
-	const runLocation = getRunLocation();
 
 	const alert = new Alert();
 	alert.title = String(settings);
@@ -67,7 +66,6 @@ async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 	alert.addAction(inputRomanisationSystem);
 	alert.addAction(outputRomanisationSystem);
 	alert.addAction(`${convert} 🔄`);
-	if (runLocation === "App") alert.addAction("From Clipboard 📋");
 
 	const selectionIndex = await alert.present();
 

@@ -18,15 +18,11 @@
 		"strictFunctionTypes": true,
 		"noErrorTruncation": true,
 		"removeComments": false,
-		"baseUrl": "./src",
+		"baseUrl": ".",
 		"outDir": "./dist",
 		"incremental": true,
 		"verbatimModuleSyntax": true
 	},
-	"paths": {
-		"@types/*": ["src/types/*"],
-		"@utilities/*": ["src/utilities/*"]
-	},
-	"include": ["src/**/*.ts", "types/**/*.ts", "utilities/**/*.ts"],
+	"include": ["src/**/*.ts", "./**/*.ts"],
 	"exclude": ["node_modules"]
 }

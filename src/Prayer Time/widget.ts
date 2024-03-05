@@ -1,12 +1,12 @@
-import { addStatusToPrayerTimes, getPrayerTimes } from "Prayer Time/data";
+import { addStatusToPrayerTimes, getPrayerTimes } from "src/Prayer Time/data";
 import {
 	type PrayerTime,
 	type UserPrayerTime,
 	type Timing,
-} from "Prayer Time/types";
-import { convertToLocaleAmPm, dateToString } from "Prayer Time/utilities";
-import { type WidgetSize } from "types/scriptable";
-import { getDaysBetweenDates } from "Prayer Time/date";
+} from "src/Prayer Time/types";
+import { convertToLocaleAmPm, dateToString } from "src/Prayer Time/utilities";
+import { type WidgetSize } from "src/types/scriptable";
+import { getDaysBetweenDates } from "src/Prayer Time/date";
 
 export function createWidget(
 	dayData: PrayerTime[],

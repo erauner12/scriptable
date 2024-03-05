@@ -13,8 +13,8 @@ This json was generated on 2020.11.19.
 Jyutpings for each char are delimited by 1. a forward slash "/", and a 2. ".".
 */
 
-export type CantoJpMin = { [key: string]: string[] };
 export const cantoJpMin: CantoJpMin = parseCantoJpMinData();
+export type CantoJpMin = { [key: string]: string[] };
 
 function parseCantoJpMinData(): CantoJpMin {
 	const cantoJpMinData: CantoJpMinRawData = JSON.parse(getCantoJpMinRawData());

@@ -1,5 +1,5 @@
-import { Plugin } from "rollup";
-import { ScriptSetting } from "./types";
+import { type Plugin } from "rollup";
+import { type ScriptSetting } from "./types";
 import { SETTINGS } from "../scripts.config";
 
 const COMMENT_ATOMS = {
@@ -41,15 +41,24 @@ function getBannerForFilePath(filePath: string | null) {
 
 	const DIVIDER = "-".repeat(50);
 	// eslint-disable-next-line no-console
-	console.log(["", DIVIDER, `Missing settings for ${fileName}!`, DIVIDER, ""].join("\n"));
+	console.log(
+		["", DIVIDER, `Missing settings for ${fileName}!`, DIVIDER, ""].join("\n")
+	);
 
 	return getScriptableSettingsCommentLines(fallbackIconSettings);
 }
 
-function getScriptableSettingsCommentLines({ iconColor, iconGlyph, alwaysRunInApp, shareSheetInputs }: ScriptSetting) {
+function getScriptableSettingsCommentLines({
+	iconColor,
+	iconGlyph,
+	alwaysRunInApp,
+	shareSheetInputs,
+}: ScriptSetting) {
 	const colorAtom = `icon-color: ${iconColor};`;
 	const iconAtom = `icon-glyph: ${iconGlyph};`;
-	const shareSheetInputAtom = shareSheetInputs ? `share-sheet-inputs: ${shareSheetInputs.join(", ")};` : null;
+	const shareSheetInputAtom = shareSheetInputs
+		? `share-sheet-inputs: ${shareSheetInputs.join(", ")};`
+		: null;
 
 	let line3;
 	let line4;
@@ -68,7 +77,11 @@ function getScriptableSettingsCommentLines({ iconColor, iconGlyph, alwaysRunInAp
 		line4 = null;
 	}
 
-	const commentLines = [COMMENT_ATOMS.line1, COMMENT_ATOMS.line2, line3.join(" ")];
+	const commentLines = [
+		COMMENT_ATOMS.line1,
+		COMMENT_ATOMS.line2,
+		line3.join(" "),
+	];
 
 	if (line4) {
 		commentLines.push(line4.join(" "));

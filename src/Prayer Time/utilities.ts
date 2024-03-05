@@ -37,7 +37,11 @@ function appendQueryParameter(
 			const value = parameters[key];
 
 			if (value !== null && value !== undefined) {
-				url += (hasQuery ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(value.toString());
+				url +=
+					(hasQuery ? "&" : "?") +
+					encodeURIComponent(key) +
+					"=" +
+					encodeURIComponent(value.toString());
 				hasQuery = true; // Subsequent parameters should use '&' instead of '?'
 			}
 		}
@@ -66,9 +70,15 @@ export function dateToString(dateString?: Date) {
 
 export function convertToLocaleAmPm(
 	date: Date,
-	options: Intl.DateTimeFormatOptions | undefined = { hour: "numeric", minute: "numeric", hour12: true }
+	options: Intl.DateTimeFormatOptions | undefined = {
+		hour: "numeric",
+		minute: "numeric",
+		hour12: true,
+	}
 ): string {
-	const localAmPmTime = date.toLocaleTimeString(undefined, options).toUpperCase();
+	const localAmPmTime = date
+		.toLocaleTimeString(undefined, options)
+		.toUpperCase();
 	return localAmPmTime;
 }
 
@@ -80,9 +90,15 @@ export function capitaliseWord(word: string) {
 }
 
 // Overwrite the default values when running as widget
-export function getWidgetArguments(userPreferences: Record<string, any>, argumentNames: string[]) {
+export function getWidgetArguments(
+	userPreferences: Record<string, any>,
+	argumentNames: string[]
+) {
 	argumentNames.forEach((argumentName) => {
-		if (userPreferences[argumentName] && args.widgetParameter.includes(argumentName)) {
+		if (
+			userPreferences[argumentName] &&
+			args.widgetParameter.includes(argumentName)
+		) {
 			userPreferences[argumentName] = args.widgetParameter[argumentName];
 		}
 	});

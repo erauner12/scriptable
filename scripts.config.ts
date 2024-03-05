@@ -1,4 +1,4 @@
-import type { ScriptSettings } from "./scripts/types";
+import type { ScriptSettings } from "scripts/types";
 
 export const SETTINGS: ScriptSettings = {
 	"Redirect Me": {

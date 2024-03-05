@@ -1,4 +1,4 @@
-import { type WidgetSize } from "types/scriptable";
+import { type WidgetSize } from "src/types/scriptable";
 
 export type Timing = {
 	prayer: string;

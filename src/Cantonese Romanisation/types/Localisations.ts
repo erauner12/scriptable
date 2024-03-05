@@ -1,4 +1,4 @@
-import { type CantoneseRomanisationSystems } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import { type CantoneseRomanisationSystems } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
 
 export type LocalisationName = "en" | "zhs" | "zht";
 

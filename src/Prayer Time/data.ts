@@ -1,13 +1,12 @@
-import { loadData, saveData } from "Prayer Time/generics/fileManager";
-import { requestData } from "Prayer Time/generics/getData";
+import { loadData, saveData } from "src/Prayer Time/generics/fileManager";
+import { requestData } from "src/Prayer Time/generics/getData";
 import {
 	type PrayerTime,
 	type UserPrayerTime,
-	type WidgetPreferences,
 	type RelativeDateTimeState,
 	type Timing,
-} from "Prayer Time/types";
-import { stringToDate, getUrl } from "Prayer Time/utilities";
+} from "src/Prayer Time/types";
+import { stringToDate, getUrl } from "src/Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
 	const {

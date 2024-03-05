@@ -1,4 +1,4 @@
-import { getRunLocation } from "utilities/scriptable/getRunLocation";
+import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
 
 export type WidgetSize = NonNullable<typeof config.widgetFamily>;
 
