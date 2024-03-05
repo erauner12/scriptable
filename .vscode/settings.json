@@ -9,5 +9,14 @@
 		"build/.Trash": true,
 		"build/cache": true
 	},
-	"cSpell.words": ["gebeto", "jsloat", "schl"]
+	"cSpell.words": [
+		"cantojpmin",
+		"gebeto",
+		"jsloat",
+		"jyutping",
+		"penkyamp",
+		"pingyam",
+		"schl",
+		"Siri"
+	]
 }
