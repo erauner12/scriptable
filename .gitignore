@@ -109,3 +109,4 @@ typings/
 *.json
 build
 *.afphoto
+.rollup.cache
