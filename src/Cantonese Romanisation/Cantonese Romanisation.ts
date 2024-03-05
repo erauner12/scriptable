@@ -83,13 +83,19 @@ async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 
 async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
 	const localisations = CantoneseTransformer.getLocalisations();
+	const { languageName: currentLanguageName } =
+		CantoneseTransformer.getLocalisation();
 
 	const alert = new Alert();
 	alert.title = Object.values(localisations)
 		.map((localisation) => localisation.language)
 		.join(" / ");
 	Object.values(localisations).forEach((localisation) => {
-		alert.addAction(localisation.languageName);
+		const { languageName } = localisation;
+		const isSelected = currentLanguageName === languageName;
+		const alertActionText = isSelected ? `${languageName} ✅` : languageName;
+
+		alert.addAction(alertActionText);
 	});
 
 	const selectionIndex = await alert.presentAlert();
