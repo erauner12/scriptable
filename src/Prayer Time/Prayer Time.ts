@@ -1,9 +1,18 @@
 import { loadData } from "Prayer Time/generics/fileManager";
-import { calculateDistance, getFilePath, isOnline } from "Prayer Time/utilities";
-import { PrayerTime, WidgetPreferences } from "Prayer Time/types";
-import { getDay, getNewData, saveNewData, getPrayerTimes } from "Prayer Time/data";
+import {
+	calculateDistance,
+	getFilePath,
+	isOnline,
+} from "Prayer Time/utilities";
+import { type PrayerTime, type WidgetPreferences } from "Prayer Time/types";
+import {
+	getDay,
+	getNewData,
+	saveNewData,
+	getPrayerTimes,
+} from "Prayer Time/data";
 import { createWidget } from "Prayer Time/widget";
-import { WidgetSize } from "../../modules/scriptableTypes";
+import { type WidgetSize } from "types/scriptable";
 
 const DEFAULT_PREFERENCES: WidgetPreferences = {
 	user: {
@@ -51,12 +60,19 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 async function runScript() {
 	const {
 		user: {
-			settings: { directory: directoryName, file: fileName, offline: offlineDays, distance: distanceToleranceMetres },
+			settings: {
+				directory: directoryName,
+				file: fileName,
+				offline: offlineDays,
+				distance: distanceToleranceMetres,
+			},
 			display: { prayerTimes: userPrayerTimes },
 		},
 	} = DEFAULT_PREFERENCES;
 
-	const WIDGET_SIZE: WidgetSize = config.widgetFamily ? config.widgetFamily : "small";
+	const WIDGET_SIZE: WidgetSize = config.widgetFamily
+		? config.widgetFamily
+		: "small";
 	const displayItems = getDisplayItems(WIDGET_SIZE);
 	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
@@ -67,7 +83,10 @@ async function runScript() {
 		const today = new Date();
 		const offlineData: PrayerTime[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
-		const numberOfPrayerTimes = getPrayerTimes(offlineData, userPrayerTimes).length;
+		const numberOfPrayerTimes = getPrayerTimes(
+			offlineData,
+			userPrayerTimes
+		).length;
 
 		const currentLocation = await Location.current();
 
@@ -76,16 +95,25 @@ async function runScript() {
 		if (todayData) {
 			const { meta } = todayData;
 			const distance = calculateDistance(currentLocation, meta);
-			offlineDataDistanceMetres = Math.round((distance + Number.EPSILON) * 100) / 100;
+			offlineDataDistanceMetres =
+				Math.round((distance + Number.EPSILON) * 100) / 100;
 		}
 
-		if (numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > distanceToleranceMetres) {
+		if (
+			numberOfPrayerTimes <= displayItems ||
+			offlineDataDistanceMetres > distanceToleranceMetres
+		) {
 			const { data } = DEFAULT_PREFERENCES;
 			if (!data) throw new Error("No stored data found.");
 			if (!data.api) throw new Error("No API data found.");
 			const { endpoint, method } = data.api;
 
-			const updatedData = await getNewData(endpoint, method, currentLocation, offlineDays);
+			const updatedData = await getNewData(
+				endpoint,
+				method,
+				currentLocation,
+				offlineDays
+			);
 			await saveNewData(filePath, offlineDays, updatedData);
 		}
 	}
@@ -93,7 +121,13 @@ async function runScript() {
 	const dayData = await loadData(filePath);
 
 	if (dayData) {
-		const widget = createWidget(dayData, userPrayerTimes, displayItems, WIDGET_SIZE, offlineDataDistanceMetres);
+		const widget = createWidget(
+			dayData,
+			userPrayerTimes,
+			displayItems,
+			WIDGET_SIZE,
+			offlineDataDistanceMetres
+		);
 		if (config.runsInAccessoryWidget) {
 			widget.addAccessoryWidgetBackground = true;
 			Script.setWidget(widget);

@@ -1,4 +1,4 @@
-import { Localisations } from "Cantonese Romanisation/types/Localisations";
+import { type Localisations } from "Cantonese Romanisation/types/Localisations";
 
 export const localisations: Localisations = {
 	en: {

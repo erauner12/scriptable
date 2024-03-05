@@ -1,7 +1,11 @@
 import { addStatusToPrayerTimes, getPrayerTimes } from "Prayer Time/data";
-import { PrayerTime, UserPrayerTime, Timing } from "Prayer Time/types";
+import {
+	type PrayerTime,
+	type UserPrayerTime,
+	type Timing,
+} from "Prayer Time/types";
 import { convertToLocaleAmPm, dateToString } from "Prayer Time/utilities";
-import { WidgetSize } from "../../modules/scriptableTypes";
+import { type WidgetSize } from "types/scriptable";
 import { getDaysBetweenDates } from "Prayer Time/date";
 
 export function createWidget(
@@ -42,26 +46,47 @@ export function createWidget(
 		const textOpacity = textOpacitySubtle / opacityScaling;
 		const textColour = new Color(textColourHex, textOpacity);
 
-		const userTiming = userPrayerTimes.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
+		const userTiming = userPrayerTimes.find(
+			(prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase()
+		);
 
 		if (!userTiming) return;
 
 		const { name, abbreviation } = userTiming;
-		const prayerTitleString = widgetSize === "medium" || widgetSize === "large" ? name.toUpperCase() : abbreviation;
+		const prayerTitleString =
+			widgetSize === "medium" || widgetSize === "large"
+				? name.toUpperCase()
+				: abbreviation;
 
 		switch (widgetSize) {
 			case "small":
 			case "medium":
 			case "large":
 			case "extraLarge":
-				addTimeStackInWidget(timingsStack, prayerTitleString, prayerTiming, timingsRowItemSpacing, textColour);
+				addTimeStackInWidget(
+					timingsStack,
+					prayerTitleString,
+					prayerTiming,
+					timingsRowItemSpacing,
+					textColour
+				);
 				break;
 			case "accessoryCircular":
-				addTimeStackInAccessoryCircular(timingsStack, prayerTitleString, prayerTiming, textColour);
+				addTimeStackInAccessoryCircular(
+					timingsStack,
+					prayerTitleString,
+					prayerTiming,
+					textColour
+				);
 				break;
 			case "accessoryInline":
 			case "accessoryRectangular":
-				addTimeStackInAccessoryInlineRectangle(timingsStack, prayerTitleString, prayerTiming, textColour);
+				addTimeStackInAccessoryInlineRectangle(
+					timingsStack,
+					prayerTitleString,
+					prayerTiming,
+					textColour
+				);
 				break;
 			default:
 				break;
@@ -76,11 +101,17 @@ export function createWidget(
 			const updatedStack = listWidget.addStack();
 			updatedStack.layoutVertically();
 
-			const updatedOn = addCenteredTextElementToStack(updatedStack, `${distance} metres`);
+			const updatedOn = addCenteredTextElementToStack(
+				updatedStack,
+				`${distance} metres`
+			);
 			updatedOn.font = new Font("AvenirNext-Regular", 10);
 			updatedOn.textColor = new Color(textColourHex, textOpacitySubtle);
 
-			const updatedAt = addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${convertToLocaleAmPm(now)}`);
+			const updatedAt = addCenteredTextElementToStack(
+				updatedStack,
+				`${dateToString(now)} ${convertToLocaleAmPm(now)}`
+			);
 			updatedAt.font = new Font("AvenirNext-Regular", 10);
 			updatedAt.textColor = new Color(textColourHex, textOpacitySubtle);
 			break;
@@ -220,7 +251,10 @@ function addTimeStackInWidget(
 	return timeStack;
 }
 
-function addCenteredTextElementToStack(stack: WidgetStack, text: string): WidgetText {
+function addCenteredTextElementToStack(
+	stack: WidgetStack,
+	text: string
+): WidgetText {
 	const horizontalStack = stack.addStack();
 
 	horizontalStack.addSpacer();

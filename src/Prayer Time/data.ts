@@ -1,6 +1,12 @@
 import { loadData, saveData } from "Prayer Time/generics/fileManager";
 import { requestData } from "Prayer Time/generics/getData";
-import { PrayerTime, UserPrayerTime, WidgetPreferences, RelativeDateTimeState, Timing } from "Prayer Time/types";
+import {
+	type PrayerTime,
+	type UserPrayerTime,
+	type WidgetPreferences,
+	type RelativeDateTimeState,
+	type Timing,
+} from "Prayer Time/types";
 import { stringToDate, getUrl } from "Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
@@ -14,7 +20,9 @@ export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
 
 	return Object.entries(timings).map(([prayerName, prayerTime]) => {
 		const timeComponents = prayerTime.split(":"); // Split into [HH, MM]
-		const dateTime = new Date(`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`);
+		const dateTime = new Date(
+			`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`
+		);
 		return { prayer: prayerName, dateTime: dateTime };
 	});
 }
@@ -83,7 +91,11 @@ export async function getNewData(
 	}
 }
 
-export async function saveNewData(path: string, offlineDays: number, data: PrayerTime[]) {
+export async function saveNewData(
+	path: string,
+	offlineDays: number,
+	data: PrayerTime[]
+) {
 	const newData: PrayerTime[] = data;
 	const offlineData: PrayerTime[] = await loadData(path);
 	const mergedData: PrayerTime[] = [];
@@ -149,7 +161,11 @@ export async function saveNewData(path: string, offlineDays: number, data: Praye
 	saveData(path, mergedData);
 }
 
-export function getPrayerTimes(dayData: PrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number) {
+export function getPrayerTimes(
+	dayData: PrayerTime[],
+	userPrayerTimes: UserPrayerTime[],
+	itemsToShow?: number
+) {
 	const now = new Date();
 
 	const displayKeys = userPrayerTimes.map((prayerTime) => {
@@ -159,9 +175,13 @@ export function getPrayerTimes(dayData: PrayerTime[], userPrayerTimes: UserPraye
 	let sortedTimes = dayData
 		.map((day) => convertTimingsToDateArray(day))
 		.flat()
-		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
+		.filter((prayerTime) =>
+			displayKeys.includes(prayerTime.prayer.toUpperCase())
+		)
 		.filter((prayerTime) => prayerTime.dateTime > now)
-		.sort((dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime());
+		.sort(
+			(dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime()
+		);
 
 	if (itemsToShow) sortedTimes = sortedTimes.slice(0, itemsToShow);
 
@@ -173,7 +193,9 @@ export function addStatusToPrayerTimes(prayerTimings: Timing[]): Timing[] {
 	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
 	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
 
-	const nextPrayerIndex = prayerTimings.findIndex((prayerTime) => prayerTime.dateTime > now);
+	const nextPrayerIndex = prayerTimings.findIndex(
+		(prayerTime) => prayerTime.dateTime > now
+	);
 
 	return prayerTimings.map((prayerTime, index) => {
 		let state: RelativeDateTimeState = "unknown";

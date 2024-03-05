@@ -1,6 +1,7 @@
 import { CantoneseTransformer } from "Cantonese Romanisation/models/CantoneseTransformer";
-import { CantoneseRomanisationSystemName } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import { LocalisationName } from "Cantonese Romanisation/types/Localisations";
+import { type CantoneseRomanisationSystemName } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import { type LocalisationName } from "Cantonese Romanisation/types/Localisations";
+import { getRunLocation } from "utilities/scriptable/getRunLocation";
 
 type Settings = {
 	language: LocalisationName;
@@ -218,15 +219,4 @@ async function alertError(CantoneseTransformer: CantoneseTransformer) {
 	const selectionIndex = await alert.present();
 	if (selectionIndex === 0)
 		parseAndPrompt(CantoneseTransformer, alert.textFieldValue(0));
-}
-
-type RunLocation = ReturnType<typeof getRunLocation>;
-function getRunLocation() {
-	if (config.runsInApp) return "App";
-	if (config.runsInActionExtension) return "ActionExtension";
-	if (config.runsWithSiri) return "Siri";
-	if (config.runsInWidget) return "Widget";
-	if (config.runsInNotification) return "Notification";
-	if (config.runsFromHomeScreen) return "HomeScreen";
-	return "Unknown";
 }

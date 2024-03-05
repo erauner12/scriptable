@@ -1,6 +1,9 @@
-import { CantoJpMin, cantoJpMin } from "Cantonese Romanisation/data/cantoJpMin";
+import {
+	type CantoJpMin,
+	cantoJpMin,
+} from "Cantonese Romanisation/data/cantoJpMin";
 import { localisations } from "Cantonese Romanisation/data/localisations";
-import { Pingyam, pingyam } from "Cantonese Romanisation/data/pingyam";
+import { type Pingyam, pingyam } from "Cantonese Romanisation/data/pingyam";
 import { type CantoneseRomanisationSystemName } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
 import {
 	type Localisations,

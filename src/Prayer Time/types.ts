@@ -1,8 +1,17 @@
-import { WidgetSize } from "../../modules/scriptableTypes";
+import { type WidgetSize } from "types/scriptable";
 
-export type Timing = { prayer: string; dateTime: Date; status?: { state: RelativeDateTimeState; next: boolean } };
+export type Timing = {
+	prayer: string;
+	dateTime: Date;
+	status?: { state: RelativeDateTimeState; next: boolean };
+};
 
-export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
+export type RelativeDateTimeState =
+	| "past"
+	| "next"
+	| "today"
+	| "future"
+	| "unknown";
 
 export type WidgetData = {
 	prayerTimes: UserPrayerTime[];

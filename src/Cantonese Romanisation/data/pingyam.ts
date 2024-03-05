@@ -1,6 +1,6 @@
 // Original source for pingyam-js: https://github.com/dohliam/pingyam-js
 
-import { CantoneseRomanisationSystems } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import { type CantoneseRomanisationSystems } from "Cantonese Romanisation/types/CantoneseRomanisationSystems";
 
 export type Pingyam = { [key: string]: CantoneseRomanisationSystems };
 export const pingyam: Pingyam = parsePingyamData();
