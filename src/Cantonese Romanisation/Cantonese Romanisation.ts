@@ -55,19 +55,10 @@ async function parseAndPrompt(
 	CantoneseTransformer: CantoneseTransformer,
 	chineseCharacterString: string
 ) {
-	const jyutping = CantoneseTransformer.toJyutping(chineseCharacterString);
-
-	if (
-		CantoneseTransformer.getInputRomanisationSystem() !==
-		CantoneseTransformer.getOutputRomanisationSystem()
-	) {
-		const romanisation =
-			CantoneseTransformer.transformRomanisationSystem(jyutping);
-		await prompt(CantoneseTransformer, chineseCharacterString, romanisation);
-		return;
-	}
-
-	await prompt(CantoneseTransformer, chineseCharacterString, jyutping);
+	const romanisation = CantoneseTransformer.convertToRomanisation(
+		chineseCharacterString
+	);
+	await prompt(CantoneseTransformer, chineseCharacterString, romanisation);
 }
 
 async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
