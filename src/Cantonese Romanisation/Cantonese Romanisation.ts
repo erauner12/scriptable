@@ -2,6 +2,10 @@ import { CantoneseTransformer } from "src/Cantonese Romanisation/models/Cantones
 import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
 import { type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
 import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
+import {
+	presentAlertActions,
+	type PresentAlertActions,
+} from "src/utilities/scriptable/presentAlertActions";
 
 type Settings = {
 	language: LocalisationName;
@@ -47,129 +51,6 @@ async function runWidget(defaultSettings: Settings) {
 	}
 }
 
-async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
-	const localisations = CantoneseTransformer.getLocalisations();
-	const {
-		settings,
-		outputRomanisationSystem,
-		inputRomanisationSystem,
-		convert,
-	} = CantoneseTransformer.getLocalisation();
-
-	const alert = new Alert();
-	alert.title = settings;
-	alert.addAction(
-		Object.values(localisations)
-			.map((localisation) => localisation.language)
-			.join(" / ")
-	);
-	alert.addAction(inputRomanisationSystem);
-	alert.addAction(outputRomanisationSystem);
-	alert.addAction(`${convert} 🔄`);
-
-	const selectionIndex = await alert.presentAlert();
-
-	if (selectionIndex === 0) await selectLanguage(CantoneseTransformer);
-	if (selectionIndex === 1)
-		await selectInputRomanisationSystem(CantoneseTransformer);
-	if (selectionIndex === 2)
-		await selectOutputRomanisationSystem(CantoneseTransformer);
-	if (selectionIndex === 3) presentTextInput(CantoneseTransformer);
-	if (selectionIndex === 4)
-		await parseAndPrompt(CantoneseTransformer, Pasteboard.paste());
-}
-
-async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
-	const localisations = CantoneseTransformer.getLocalisations();
-	const { languageName: currentLanguageName } =
-		CantoneseTransformer.getLocalisation();
-
-	const alert = new Alert();
-	alert.title = Object.values(localisations)
-		.map((localisation) => localisation.language)
-		.join(" / ");
-	Object.values(localisations).forEach((localisation) => {
-		const { languageName } = localisation;
-		const isSelected = currentLanguageName === languageName;
-		const alertActionText = isSelected ? `${languageName} ✅` : languageName;
-		alert.addAction(alertActionText);
-	});
-
-	const selectionIndex = await alert.presentAlert();
-	const selectedKey = Object.keys(localisations)[
-		selectionIndex
-	] as LocalisationName;
-
-	if (!selectedKey) return;
-
-	CantoneseTransformer.setLocalisation(selectedKey);
-	await settingsMenu(CantoneseTransformer);
-}
-
-async function selectOutputRomanisationSystem(
-	CantoneseTransformer: CantoneseTransformer
-) {
-	const { romanisationSystems, outputRomanisationSystem } =
-		CantoneseTransformer.getLocalisation();
-	const selectedRomanisationSystem =
-		CantoneseTransformer.getOutputRomanisationSystem();
-
-	const alert = new Alert();
-	alert.title = outputRomanisationSystem;
-
-	Object.entries(romanisationSystems).forEach(
-		([key, romanisationSystemName]) => {
-			const isSelected = selectedRomanisationSystem === key;
-			const alertActionText = isSelected
-				? `${romanisationSystemName} ✅`
-				: romanisationSystemName;
-			alert.addAction(alertActionText);
-		}
-	);
-
-	const selectionIndex = await alert.presentAlert();
-	const selectionKey = Object.keys(romanisationSystems)[
-		selectionIndex
-	] as CantoneseRomanisationSystemName;
-
-	if (!selectionKey) return;
-
-	CantoneseTransformer.setOutputRomanisationSystem(selectionKey);
-	await settingsMenu(CantoneseTransformer);
-}
-
-async function selectInputRomanisationSystem(
-	CantoneseTransformer: CantoneseTransformer
-) {
-	const { romanisationSystems, inputRomanisationSystem } =
-		CantoneseTransformer.getLocalisation();
-	const selectedRomanisationSystem =
-		CantoneseTransformer.getInputRomanisationSystem();
-
-	const alert = new Alert();
-	alert.title = inputRomanisationSystem;
-
-	Object.entries(romanisationSystems).forEach(
-		([key, romanisationSystemName]) => {
-			const isSelected = selectedRomanisationSystem === key;
-			const alertActionText = isSelected
-				? `${romanisationSystemName} ✅`
-				: romanisationSystemName;
-			alert.addAction(alertActionText);
-		}
-	);
-
-	const selectionIndex = await alert.presentAlert();
-	const selectionKey = Object.keys(romanisationSystems)[
-		selectionIndex
-	] as CantoneseRomanisationSystemName;
-
-	if (!selectionKey) return;
-
-	CantoneseTransformer.setInputRomanisationSystem(selectionKey);
-	await settingsMenu(CantoneseTransformer);
-}
-
 async function parseAndPrompt(
 	CantoneseTransformer: CantoneseTransformer,
 	chineseCharacterString: string
@@ -189,6 +70,113 @@ async function parseAndPrompt(
 	await prompt(CantoneseTransformer, chineseCharacterString, jyutping);
 }
 
+async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
+	const localisations = CantoneseTransformer.getLocalisations();
+	const { settings, outputRomanisationSystem, convert, done } =
+		CantoneseTransformer.getLocalisation();
+	const language = Object.values(localisations)
+		.map((localisation) => localisation.language)
+		.join(" / ");
+
+	const alert = new Alert();
+	alert.title = settings;
+
+	await presentAlertActions(alert, {
+		[language]: async () => await selectLanguage(CantoneseTransformer),
+		[outputRomanisationSystem]: async () =>
+			await selectOutputRomanisationSystem(CantoneseTransformer),
+		[`${convert} 🔄`]: async () => presentTextInput(CantoneseTransformer),
+		[done]: () => Script.complete(),
+	});
+}
+
+async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
+	const localisations = CantoneseTransformer.getLocalisations();
+	const { languageName: currentLanguageName } =
+		CantoneseTransformer.getLocalisation();
+	const language = Object.values(localisations)
+		.map((localisation) => localisation.language)
+		.join(" / ");
+
+	const alert = new Alert();
+	alert.title = language;
+	const actions: PresentAlertActions = Object.fromEntries(
+		Object.entries(localisations).map(([key, localisation]) => {
+			const { languageName } = localisation;
+			const isSelected = currentLanguageName === languageName;
+			const alertActionText = isSelected ? `${languageName} ✅` : languageName;
+			return [
+				alertActionText,
+				() => CantoneseTransformer.setLocalisation(key as LocalisationName),
+			];
+		})
+	);
+	await presentAlertActions(alert, actions);
+
+	await settingsMenu(CantoneseTransformer);
+}
+
+async function selectOutputRomanisationSystem(
+	CantoneseTransformer: CantoneseTransformer
+) {
+	const { romanisationSystems, outputRomanisationSystem } =
+		CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem =
+		CantoneseTransformer.getOutputRomanisationSystem();
+
+	const alert = new Alert();
+	alert.title = outputRomanisationSystem;
+	const actions: PresentAlertActions = Object.fromEntries(
+		Object.entries(romanisationSystems).map(([key, romanisationSystemName]) => {
+			const isSelected = selectedRomanisationSystem === key;
+			const alertActionText = isSelected
+				? `${romanisationSystemName} ✅`
+				: romanisationSystemName;
+			return [
+				alertActionText,
+				() =>
+					CantoneseTransformer.setOutputRomanisationSystem(
+						key as CantoneseRomanisationSystemName
+					),
+			];
+		})
+	);
+	await presentAlertActions(alert, actions);
+
+	await settingsMenu(CantoneseTransformer);
+}
+
+async function selectInputRomanisationSystem(
+	CantoneseTransformer: CantoneseTransformer
+) {
+	const { romanisationSystems, inputRomanisationSystem } =
+		CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem =
+		CantoneseTransformer.getInputRomanisationSystem();
+
+	const alert = new Alert();
+	alert.title = inputRomanisationSystem;
+
+	const actions: PresentAlertActions = Object.fromEntries(
+		Object.entries(romanisationSystems).map(([key, romanisationSystemName]) => {
+			const isSelected = selectedRomanisationSystem === key;
+			const alertActionText = isSelected
+				? `${romanisationSystemName} ✅`
+				: romanisationSystemName;
+			return [
+				alertActionText,
+				() =>
+					CantoneseTransformer.setInputRomanisationSystem(
+						key as CantoneseRomanisationSystemName
+					),
+			];
+		})
+	);
+	await presentAlertActions(alert, actions);
+
+	await settingsMenu(CantoneseTransformer);
+}
+
 async function presentTextInput(CantoneseTransformer: CantoneseTransformer) {
 	const { convert, input, done, submit, settings } =
 		CantoneseTransformer.getLocalisation();
@@ -196,17 +184,15 @@ async function presentTextInput(CantoneseTransformer: CantoneseTransformer) {
 	const alert = new Alert();
 	alert.title = `${convert} 🔄`;
 	alert.addTextField(input);
-	alert.addAction(`${submit} ✅`);
-	alert.addAction("From Clipboard 📋"); // TODO Add localisation for "From Clipboard"
-	alert.addAction(`${settings} ⚙️`);
-	alert.addCancelAction(`${done}`);
 
-	const selectionIndex = await alert.presentAlert();
-	if (selectionIndex === 0)
-		parseAndPrompt(CantoneseTransformer, alert.textFieldValue(0));
-	if (selectionIndex === 1)
-		await parseAndPrompt(CantoneseTransformer, Pasteboard.paste());
-	if (selectionIndex === 2) await settingsMenu(CantoneseTransformer);
+	presentAlertActions(alert, {
+		[`${submit} ✅`]: async () =>
+			await parseAndPrompt(CantoneseTransformer, alert.textFieldValue(0)),
+		["From Clipboard 📋"]: async () =>
+			await parseAndPrompt(CantoneseTransformer, Pasteboard.paste()), // TODO Add localisation for "From Clipboard"
+		[`${settings} ⚙️`]: async () => await settingsMenu(CantoneseTransformer),
+		[done]: () => Script.complete(),
+	});
 }
 
 async function prompt(
@@ -219,17 +205,12 @@ async function prompt(
 	const alert = new Alert();
 	alert.title = originalText;
 	alert.message = message;
-	alert.addAction("➡️📋"); // TODO Add localisation for "Copy original"
-	alert.addAction("📋➡️"); // TODO Add localisation for "Copy romanisation"
-	alert.addAction(`${convert} 🔄`);
-	alert.addAction(`${settings} ⚙️`);
-	alert.addAction(done);
 
-	const selectionIndex = await alert.presentAlert();
-
-	if (selectionIndex === 0) Pasteboard.copy(originalText);
-	if (selectionIndex === 1) Pasteboard.copy(message);
-	if (selectionIndex === 2) await presentTextInput(CantoneseTransformer);
-	if (selectionIndex === 3) await settingsMenu(CantoneseTransformer);
-	if (selectionIndex === 4) Script.complete();
+	await presentAlertActions(alert, {
+		["➡️📋"]: () => Pasteboard.copy(originalText),
+		["📋➡️"]: () => Pasteboard.copy(message),
+		[`${convert} 🔄`]: async () => await presentTextInput(CantoneseTransformer),
+		[`${settings} ⚙️`]: async () => await settingsMenu(CantoneseTransformer),
+		[done]: () => Script.complete(),
+	});
 }
