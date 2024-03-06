@@ -1,6 +1,7 @@
 import { CantoneseTransformer } from "src/Cantonese Romanisation/models/CantoneseTransformer";
-import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import { type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
+import type { CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import type { LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
+import type { Settings } from "src/Cantonese Romanisation/types/Settings";
 import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
 import {
 	presentAlertActions,
