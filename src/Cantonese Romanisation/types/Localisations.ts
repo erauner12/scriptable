@@ -1,6 +1,11 @@
 import { type CantoneseRomanisationSystems } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
 
-export type LocalisationName = "en" | "zhs" | "zht";
+export const LocalisationName = ["en", "zhs", "zht"] as const;
+export type LocalisationName = (typeof LocalisationName)[number];
+
+export function isLocalisationName(value: any): value is LocalisationName {
+	return LocalisationName.includes(value as LocalisationName);
+}
 
 export type Localisations = {
 	[key in LocalisationName]: Localisation;

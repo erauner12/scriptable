@@ -1,6 +1,12 @@
 import { CantoneseTransformer } from "src/Cantonese Romanisation/models/CantoneseTransformer";
-import type { CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import type { LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
+import {
+	getRomanisationSystemNameByIndex,
+	type CantoneseRomanisationSystemName,
+} from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
+import {
+	isLocalisationName,
+	type LocalisationName,
+} from "src/Cantonese Romanisation/types/Localisations";
 import type { Settings } from "src/Cantonese Romanisation/types/Settings";
 import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
 import {
@@ -17,7 +23,32 @@ function getDefaultSettings(settings?: Partial<Settings>): Settings {
 		outputRomanisationSystem: "jyutping",
 	};
 
-	return { ...defaultSettings, ...settings };
+	const parameters = args.widgetParameter;
+
+	let userSettings: Partial<Settings> = {};
+
+	if (parameters && typeof parameters === "string") {
+		const [localisationName, outputRomanisationSystemIndex] = parameters
+			.split(",")
+			.map((parameter) => parameter.trim());
+
+		if (isLocalisationName(localisationName)) {
+			userSettings.language = localisationName;
+		}
+
+		if (outputRomanisationSystemIndex) {
+			const parsedIndex = parseInt(outputRomanisationSystemIndex, 10);
+			if (!isNaN(parsedIndex)) {
+				const outputRomanisationSystem =
+					getRomanisationSystemNameByIndex(parsedIndex);
+				if (outputRomanisationSystem) {
+					userSettings.outputRomanisationSystem = outputRomanisationSystem;
+				}
+			}
+		}
+	}
+
+	return { ...defaultSettings, ...userSettings, ...settings };
 }
 
 async function runWidget(defaultSettings: Settings) {
