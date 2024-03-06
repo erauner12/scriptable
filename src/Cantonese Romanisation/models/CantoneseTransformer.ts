@@ -13,7 +13,7 @@ export class CantoneseTransformer extends CantoneseConverter {
 			defaultLanguage,
 			defaultInputRomanisationSystem,
 			defaultOutputRomanisationSystem
-		); // Call the superclass's constructor
+		);
 	}
 
 	getWordOfTheDay(date: Date = new Date()): CantoJpMin | undefined {
