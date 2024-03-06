@@ -36,19 +36,61 @@ async function runWidget(defaultSettings: Settings) {
 
 	switch (runLocation) {
 		case "App":
-			presentTextInput(cantoneseTransformer);
+			await presentTextInput(cantoneseTransformer);
 			break;
 		case "ActionExtension":
-			if (shareSheetInputText)
-				parseAndPrompt(cantoneseTransformer, shareSheetInputText);
+			if (shareSheetInputText) {
+				await parseAndPrompt(cantoneseTransformer, shareSheetInputText);
+				break;
+			}
 			await presentTextInput(cantoneseTransformer);
 			break;
 		case "HomeScreen":
 			await parseAndPrompt(cantoneseTransformer, Pasteboard.paste());
 			break;
+		case "Widget":
+			await presentWidgetWordOfTheDay(cantoneseTransformer);
+			break;
 		default:
 			break;
 	}
+}
+
+async function presentWidgetWordOfTheDay(
+	CantoneseTransformer: CantoneseTransformer
+) {
+	const wordOfTheDay = CantoneseTransformer.getWordOfTheDay();
+
+	if (!wordOfTheDay) throw new Error("Could not get word of the day.");
+
+	const widget = new ListWidget();
+	widget.setPadding(10, 16, 16, 16);
+
+	const widgetStack = widget.addStack();
+	widgetStack.layoutVertically();
+
+	Object.entries(wordOfTheDay).forEach(([chinese, romanisations]) => {
+		const titleStack = widgetStack.addStack();
+
+		titleStack.addSpacer();
+		const titleText = titleStack.addText(chinese);
+		titleText.font = new Font("PingFangHK-Regular", 42);
+		titleText.minimumScaleFactor = 0.5;
+		titleText.textOpacity = 0.8;
+		titleStack.addSpacer();
+
+		const romanisationStack = widgetStack.addStack();
+		romanisationStack.addSpacer();
+		const romanisationText = romanisationStack.addText(
+			romanisations.join(", ")
+		);
+		romanisationText.font = new Font("PingFangHK-Semibold", 24);
+		romanisationText.minimumScaleFactor = 0.5;
+		romanisationText.centerAlignText();
+		romanisationStack.addSpacer();
+	});
+
+	widget.presentSmall();
 }
 
 async function parseAndPrompt(
@@ -77,6 +119,8 @@ async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 		[outputRomanisationSystem]: async () =>
 			await selectOutputRomanisationSystem(CantoneseTransformer),
 		[`${convert} 🔄`]: async () => presentTextInput(CantoneseTransformer),
+		["Show Widget"]: async () =>
+			presentWidgetWordOfTheDay(CantoneseTransformer), // TODO Add localisation for "Show widget"
 		[done]: () => Script.complete(),
 	});
 }
