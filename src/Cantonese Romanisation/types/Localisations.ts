@@ -7,7 +7,7 @@ export type Localisations = {
 };
 
 export type Localisation = {
-	cancel: string
+	cancel: string;
 	convert: string;
 	done: string;
 	input: string;
@@ -19,6 +19,6 @@ export type Localisation = {
 	romanisationSystems: CantoneseRomanisationSystems;
 	settings: string;
 	source: string;
-	submit: string,
+	submit: string;
 	title: string;
 };
