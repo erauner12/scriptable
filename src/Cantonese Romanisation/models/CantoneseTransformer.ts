@@ -38,9 +38,12 @@ export class CantoneseTransformer extends CantoneseConverter {
 		const jyutpingArray = this.cantoJpMin[key];
 		if (!jyutpingArray) return undefined;
 
-		jyutpingArray.map((jyutping) =>
-			this.transformRomanisationSystem(jyutping, "jyutping")
-		);
+		jyutpingArray.map((jyutping) => {
+			if (this.inputRomanisationSystem !== this.outputRomanisationSystem) {
+				return this.transformRomanisationSystem(jyutping, "jyutping");
+			}
+			return jyutping;
+		});
 
 		return { [key]: jyutpingArray };
 	}
