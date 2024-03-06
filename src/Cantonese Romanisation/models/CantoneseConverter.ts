@@ -143,18 +143,16 @@ export class CantoneseConverter {
 
 	protected transformRomanisationSystem(
 		text: string,
-		inputRomanisationSystem?: CantoneseRomanisationSystemName,
-		outputRomanisationSystem?: CantoneseRomanisationSystemName
+		inputRomanisationSystem: CantoneseRomanisationSystemName = this
+			.inputRomanisationSystem,
+		outputRomanisationSystem: CantoneseRomanisationSystemName = this
+			.outputRomanisationSystem
 	): string {
-		const inputSystem = inputRomanisationSystem || this.inputRomanisationSystem;
-		const outputSystem =
-			outputRomanisationSystem || this.outputRomanisationSystem;
-
 		const transformationMapping = Object.entries(this.pingyam).reduce<
 			Record<string, string>
 		>((accumulator, [_, value]) => {
-			const source = value[inputSystem].toLowerCase();
-			const target = value[outputSystem];
+			const source = value[inputRomanisationSystem].toLowerCase();
+			const target = value[outputRomanisationSystem];
 			if (source && target) accumulator[source] = target;
 			return accumulator;
 		}, {});
