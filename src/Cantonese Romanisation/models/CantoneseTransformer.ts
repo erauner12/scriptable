@@ -86,11 +86,24 @@ export class CantoneseTransformer {
 			chineseCharacterString
 		);
 		return jyutpingRomanisations
-			.map((romanisation) => {
-				if (romanisation.jyutping) return romanisation.jyutping[0]; // Get the first Jyutping option
-				return romanisation.original; // Return the original character (usually punctuation or emoji)
+			.map((romanisation, index, array) => {
+				// If jyutping is undefined or an empty array, return the original character
+				if (!romanisation.jyutping || romanisation.jyutping.length === 0) {
+					return romanisation.original;
+				}
+
+				const jyutpingValue = romanisation.jyutping[0];
+
+				// Check if the next item exists and if it has a defined and non-empty jyutping
+				const nextItem = array[index + 1];
+				const shouldAddSpace =
+					nextItem && nextItem.jyutping && nextItem.jyutping.length > 0;
+
+				// Add a space only if there is a valid next item with a non-empty jyutping
+				return shouldAddSpace ? `${jyutpingValue} ` : jyutpingValue;
 			})
-			.join(" ");
+			.join("")
+			.trim(); // Join all parts together and trim any trailing space
 	}
 
 	/**
