@@ -22,8 +22,6 @@ const DEFAULT_SETTINGS: Settings = {
 runWidget(DEFAULT_SETTINGS);
 
 async function runWidget(defaultSettings: Settings) {
-	const shareSheetInputText = args.plainTexts[0];
-
 	const runLocation = getRunLocation();
 	const { language, inputRomanisationSystem, outputRomanisationSystem } =
 		defaultSettings;
@@ -39,6 +37,7 @@ async function runWidget(defaultSettings: Settings) {
 			await presentTextInput(cantoneseTransformer);
 			break;
 		case "ActionExtension":
+			const shareSheetInputText = args.plainTexts[0];
 			if (shareSheetInputText) {
 				await parseAndPrompt(cantoneseTransformer, shareSheetInputText);
 				break;
