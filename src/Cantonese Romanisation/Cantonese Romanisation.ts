@@ -8,19 +8,17 @@ import {
 	type PresentAlertActions,
 } from "src/utilities/scriptable/presentAlertActions";
 
-type Settings = {
-	language: LocalisationName;
-	inputRomanisationSystem: CantoneseRomanisationSystemName;
-	outputRomanisationSystem: CantoneseRomanisationSystemName;
-};
+runWidget(getDefaultSettings());
 
-const DEFAULT_SETTINGS: Settings = {
-	language: "en",
-	inputRomanisationSystem: "jyutping",
-	outputRomanisationSystem: "jyutping",
-};
+function getDefaultSettings(settings?: Partial<Settings>): Settings {
+	const defaultSettings: Settings = {
+		language: "en",
+		inputRomanisationSystem: "jyutping",
+		outputRomanisationSystem: "jyutping",
+	};
 
-runWidget(DEFAULT_SETTINGS);
+	return { ...defaultSettings, ...settings };
+}
 
 async function runWidget(defaultSettings: Settings) {
 	const runLocation = getRunLocation();
