@@ -23,7 +23,7 @@ A [Scriptable](https://scriptable.app) utility widget to transform Chinese into 
   1. Add the Scriptable widget to home screen
   2. Set `Script` to `Cantonese Romanisation`
   3. Set `When interacting` to `Run Script`
-  4. The script defaults to English, and the Jyutping system of romanisation. *Optionally*, set `Parameter` a to comma (`,`) separated list of `language`, `romanisation system` (e.g. `zhs, 6` for Chinese (Simplified) and Sidney Lau system of romanisation). Options are:
+  4. The script defaults to English, and the Jyutping system of romanisation. *Optionally*, set `Parameter` to a comma (`,`) separated list of `language`, `romanisation system` (e.g. `zhs, 6` for Chinese (Simplified) and Sidney Lau system of romanisation). Options are:
      * `language`:
        * `en`: English
        * `zhs`: Chinese (Simplified)
