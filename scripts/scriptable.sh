@@ -64,6 +64,9 @@ function create_link() {
 	local friendly_source_path=$(get_user_friendly_path "$source_path")
 	local friendly_destination_path=$(get_user_friendly_path "$destination_path")
 
+	destination_path=$(append_dev_to_filename "$destination_path")
+	friendly_destination_path=$(append_dev_to_filename "$friendly_destination_path")
+
 	if [ ! -d "$(dirname "$source_path")" ]; then
 		log_error "Source directory \"$(dirname "$friendly_source_path")\" does not exist"
 	fi
@@ -226,6 +229,29 @@ function check_file_exists() {
 		log "Leaving \"$path_user_friendly\" in place..."
 		return 1
 	fi
+}
+
+append_dev_to_filename() {
+	local path="$1"
+
+	# Extract the directory, filename without extension, and the extension
+	local dir filename extension
+
+	dir=$(dirname "$path")
+	filename=$(basename "$path" | cut -d. -f1)
+	extension=$(basename "$path" | cut -d. -f2-)
+
+	# Check if there is an extension to handle files without extensions
+	if [[ "$extension" != "$filename" ]]; then
+		local new_filename="${filename} (DEV).${extension}"
+	else
+		local new_filename="${filename} (DEV)"
+	fi
+
+	# Combine the directory and the new filename
+	local new_path="${dir}/${new_filename}"
+
+	echo "$new_path"
 }
 
 function get_user_friendly_path() {

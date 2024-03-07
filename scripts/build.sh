@@ -96,7 +96,9 @@ function open_in_scriptable() {
     echo "$dist_file_path"
   fi
 
-  local build_file_path="$(find_file "$build_relative_path" "$entry_file")"
+  local entry_dev_file=$(append_dev_to_filename "$entry_file")
+  local build_file_path
+  build_file_path="$(find_file "$build_relative_path" "$(basename "$entry_dev_file")")"
 
   # Check if directory exists in ./build
   if test -e "$build_file_path"; then
@@ -203,6 +205,29 @@ function exit_if_not_extension() {
     log_error "Exiting!"
     exit 1
   fi
+}
+
+append_dev_to_filename() {
+  local path="$1"
+
+  # Extract the directory, filename without extension, and the extension
+  local dir filename extension
+
+  dir=$(dirname "$path")
+  filename=$(basename "$path" | cut -d. -f1)
+  extension=$(basename "$path" | cut -d. -f2-)
+
+  # Check if there is an extension to handle files without extensions
+  if [[ "$extension" != "$filename" ]]; then
+    local new_filename="${filename} (DEV).${extension}"
+  else
+    local new_filename="${filename} (DEV)"
+  fi
+
+  # Combine the directory and the new filename
+  local new_path="${dir}/${new_filename}"
+
+  echo "$new_path"
 }
 
 function select_command() {
