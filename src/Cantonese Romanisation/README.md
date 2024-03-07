@@ -16,7 +16,7 @@ A [Scriptable](https://scriptable.app) utility widget to transform Chinese into 
 
 ## Install
 
-[![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de?name=Cantonese%20Romanisation&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FCantonese%20Romanisation.js&docs=https%3A%2F%2Fraw.githubusercontent.com%2FElliott-Liu%2Fscriptable%2Fmain%2Fsrc%2FCantonese%20Romanisation%2FREADME.md)
+[![Download with ScriptDude](https://scriptdu.de/download.svg)](https://scriptdu.de?name=Cantonese%20Romanisation&source=https%3A%2F%2Fraw.githubusercontent.com%2Felliott-liu%2Fscriptable%2Fmain%2Fdist%2FCantonese%20Romanisation.js&docs=https%3A%2F%2Fgithub.com%2Felliott-liu%2Fscriptable%2Fblob%2Fmain%2Fsrc%2FCantonese%20Romanisation%2FREADME.md)
 
 ## Setup
 
