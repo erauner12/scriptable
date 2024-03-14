@@ -45,7 +45,7 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 		},
 	},
 	developer: {
-		previewWidgetSize: "small",
+		previewWidgetSize: "medium",
 	},
 };
 
@@ -134,7 +134,7 @@ async function runScript() {
 			Script.setWidget(widget);
 			Script.complete();
 		} else {
-			await widget.presentLarge();
+			await widget.presentMedium();
 			Script.complete();
 		}
 	}
