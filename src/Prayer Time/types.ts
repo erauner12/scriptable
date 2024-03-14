@@ -1,6 +1,6 @@
 import { type WidgetSize } from "src/types/scriptable";
 
-const prayerTimesMethod = {
+const prayerTimesApiMethod = {
 	0: "Shia Ithna-Ashari",
 	1: "University of Islamic Sciences, Karachi",
 	2: "Islamic Society of North America",
@@ -20,7 +20,7 @@ const prayerTimesMethod = {
 	99: "Custom",
 } as const;
 
-export type PrayerTimesMethod = keyof typeof prayerTimesMethod;
+export type PrayerTimesApiMethod = keyof typeof prayerTimesApiMethod;
 
 export type Timing = {
 	prayer: string;
@@ -67,7 +67,7 @@ type WidgetPreferencesData = {
 
 type WidgetPreferencesAPI = {
 	endpoint: string;
-	method?: PrayerTimesMethod;
+	method?: PrayerTimesApiMethod;
 };
 
 type WidgetPreferencesDeveloper = {
