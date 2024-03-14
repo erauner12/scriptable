@@ -41,6 +41,7 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 	data: {
 		api: {
 			endpoint: "https://api.aladhan.com/v1/timings/",
+			method: 15,
 		},
 	},
 	developer: {
