@@ -13,6 +13,7 @@ import {
 } from "src/Prayer Time/data";
 import { createWidget } from "src/Prayer Time/widget";
 import { type WidgetSize } from "src/types/scriptable";
+import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
 
 const DEFAULT_PREFERENCES: WidgetPreferences = {
 	user: {
@@ -69,12 +70,11 @@ async function runScript() {
 			},
 			display: { prayerTimes: userPrayerTimes },
 		},
+		developer,
 	} = DEFAULT_PREFERENCES;
 
-	const WIDGET_SIZE: WidgetSize = config.widgetFamily
-		? config.widgetFamily
-		: "small";
-	const displayItems = getDisplayItems(WIDGET_SIZE);
+	const widgetSize = getWidgetSize(developer?.previewWidgetSize);
+	const displayItems = getDisplayItems(widgetSize);
 	const filePath = getFilePath(fileName, directoryName);
 	const deviceOnline = await isOnline();
 
@@ -126,7 +126,7 @@ async function runScript() {
 			dayData,
 			userPrayerTimes,
 			displayItems,
-			WIDGET_SIZE,
+			widgetSize,
 			offlineDataDistanceMetres
 		);
 		if (config.runsInAccessoryWidget) {
