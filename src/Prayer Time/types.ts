@@ -49,8 +49,6 @@ export interface WidgetPreferences {
 
 type UserPreferences = {
 	settings: {
-		file: string;
-		directory: string;
 		offline: number;
 		distance: number;
 	};
