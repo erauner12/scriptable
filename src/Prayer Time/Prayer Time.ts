@@ -18,8 +18,6 @@ import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
 const DEFAULT_PREFERENCES: WidgetPreferences = {
 	user: {
 		settings: {
-			file: "Prayer Time",
-			directory: "Prayer Time",
 			offline: 5,
 			distance: 1000,
 		},
@@ -62,12 +60,7 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 async function runScript() {
 	const {
 		user: {
-			settings: {
-				directory: directoryName,
-				file: fileName,
-				offline: offlineDays,
-				distance: distanceToleranceMetres,
-			},
+			settings: { offline: offlineDays, distance: distanceToleranceMetres },
 			display: { prayerTimes: userPrayerTimes },
 		},
 		developer,
@@ -75,7 +68,7 @@ async function runScript() {
 
 	const widgetSize = getWidgetSize(developer?.previewWidgetSize);
 	const displayItems = getDisplayItems(widgetSize);
-	const filePath = getFilePath(fileName, directoryName);
+	const filePath = getFilePath(Script.name(), Script.name());
 	const deviceOnline = await isOnline();
 
 	let offlineDataDistanceMetres: number = 0;
