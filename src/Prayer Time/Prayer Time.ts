@@ -3,6 +3,7 @@ import {
 	calculateDistance,
 	getFilePath,
 	isOnline,
+	roundToTwoDecimals,
 } from "src/Prayer Time/utilities";
 import { type PrayerTime, type WidgetPreferences } from "src/Prayer Time/types";
 import {
@@ -89,8 +90,7 @@ async function runScript() {
 		if (todayData) {
 			const { meta } = todayData;
 			const distance = calculateDistance(currentLocation, meta);
-			offlineDataDistanceMetres =
-				Math.round((distance + Number.EPSILON) * 100) / 100;
+			offlineDataDistanceMetres = roundToTwoDecimals(distance);
 		}
 
 		if (

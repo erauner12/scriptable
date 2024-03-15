@@ -142,3 +142,7 @@ export function calculateDistance(
 	const distance = R * c; // Distance in km
 	return distance * 1000; // Distance in metres
 }
+
+export function roundToTwoDecimals(number: number) {
+	return Math.round((number + Number.EPSILON) * 100) / 100;
+}
