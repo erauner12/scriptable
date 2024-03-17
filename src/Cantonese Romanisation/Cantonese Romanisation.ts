@@ -8,29 +8,21 @@ import {
 	type LocalisationName,
 } from "src/Cantonese Romanisation/types/Localisations";
 import type { Settings } from "src/Cantonese Romanisation/types/Settings";
+import { getSettings } from "src/utilities/getSettings";
 import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
+import { getWidgetParameters } from "src/utilities/scriptable/getWidgetParameters";
 import {
 	presentAlertActions,
 	type PresentAlertActions,
 } from "src/utilities/scriptable/presentAlertActions";
 
-runWidget(getDefaultSettings());
+const userSettings = getWidgetParameters<Settings>(
+	args.widgetParameter,
+	",",
+	(parsedParameters) => {
+		const userSettings: Partial<Settings> = {};
 
-function getDefaultSettings(settings?: Partial<Settings>): Settings {
-	const defaultSettings: Settings = {
-		language: "en",
-		inputRomanisationSystem: "jyutping",
-		outputRomanisationSystem: "jyutping",
-	};
-
-	const parameters = args.widgetParameter;
-
-	let userSettings: Partial<Settings> = {};
-
-	if (parameters && typeof parameters === "string") {
-		const [localisationName, outputRomanisationSystemIndex] = parameters
-			.split(",")
-			.map((parameter) => parameter.trim());
+		const [localisationName, outputRomanisationSystemIndex] = parsedParameters;
 
 		if (isLocalisationName(localisationName)) {
 			userSettings.language = localisationName;
@@ -38,18 +30,31 @@ function getDefaultSettings(settings?: Partial<Settings>): Settings {
 
 		if (outputRomanisationSystemIndex) {
 			const parsedIndex = parseInt(outputRomanisationSystemIndex, 10);
+
 			if (!isNaN(parsedIndex)) {
 				const outputRomanisationSystem =
 					getRomanisationSystemNameByIndex(parsedIndex);
+
 				if (outputRomanisationSystem) {
 					userSettings.outputRomanisationSystem = outputRomanisationSystem;
 				}
 			}
 		}
-	}
 
-	return { ...defaultSettings, ...userSettings, ...settings };
-}
+		return userSettings;
+	}
+);
+
+runWidget(
+	getSettings<Settings>(
+		{
+			language: "en",
+			inputRomanisationSystem: "jyutping",
+			outputRomanisationSystem: "jyutping",
+		},
+		userSettings
+	)
+);
 
 async function runWidget(defaultSettings: Settings) {
 	const runLocation = getRunLocation();
