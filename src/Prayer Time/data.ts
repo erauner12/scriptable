@@ -1,5 +1,4 @@
 import { loadData, saveData } from "src/Prayer Time/generics/fileManager";
-import { requestData } from "src/Prayer Time/generics/getData";
 import {
 	type PrayerTime,
 	type UserPrayerTime,
@@ -7,6 +6,7 @@ import {
 	type Timing,
 } from "src/Prayer Time/types";
 import { stringToDate, getUrl } from "src/Prayer Time/utilities";
+import { fetchRequest } from "src/utilities/fetch";
 
 export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
 	const {
@@ -77,8 +77,8 @@ export async function getNewData(
 				method: method,
 			});
 
-			const response = await requestData(url);
-			console.log(response);
+			const request = await fetchRequest(url);
+			const response = await request.loadJSON();
 			const data = response.data;
 			newData.push(data);
 		}
