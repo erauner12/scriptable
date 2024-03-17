@@ -15,37 +15,28 @@ import {
 import { createWidget } from "src/Prayer Time/widget";
 import { type WidgetSize } from "src/types/scriptable";
 import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
+import { getSettings } from "src/utilities/getSettings";
 
-const DEFAULT_PREFERENCES: WidgetPreferences = {
+const defaultPreferences: WidgetPreferences = {
 	user: {
-		settings: {
-			offline: 5,
-			distance: 1000,
-		},
-		display: {
-			prayerTimes: [
-				{ name: "fajr", display: "🌄", abbreviation: "FAJ" }, // Dawn
-				// { name: "sunrise", display: "🌅", abbreviation: "SUR" }, // Sunrise
-				{ name: "dhuhr", display: "🕛", abbreviation: "DHU" }, // Midday
-				{ name: "asr", display: "🌞", abbreviation: "ASR" }, // Afternoon
-				// { name: "sunset", display: "🌇", abbreviation: "SUS" }, // Sunset
-				{ name: "maghrib", display: "🌆", abbreviation: "MAG" }, // Dusk
-				{ name: "isha", display: "🌙", abbreviation: "ISH" }, // Night
-				{ name: "imsak", display: "⭐", abbreviation: "IMS" }, // Pre-dawn
-				// { name: "midnight", display: "🕛", abbreviation: "MID" }, // Midnight
-				// { name: "firstthird", display: "🌌", abbreviation: "FTH" }, // Late Night
-				// { name: "lastthird", display: "🌒", abbreviation: "LTH" }, // Pre-fajr
-			],
-		},
-	},
-	data: {
-		api: {
-			endpoint: "https://api.aladhan.com/v1/timings/",
+		offlineDays: 5,
+		distanceToleranceMetres: 1000,
+		displayPrayerTimes: [
+			{ name: "fajr", display: "🌄", abbreviation: "FAJ" }, // Dawn
+			{ name: "sunrise", display: "🌅", abbreviation: "SUR" }, // Sunrise
+			{ name: "dhuhr", display: "🕛", abbreviation: "DHU" }, // Midday
+			{ name: "asr", display: "🌞", abbreviation: "ASR" }, // Afternoon
+			{ name: "sunset", display: "🌇", abbreviation: "SUS" }, // Sunset
+			{ name: "maghrib", display: "🌆", abbreviation: "MAG" }, // Dusk
+			{ name: "isha", display: "🌙", abbreviation: "ISH" }, // Night
+			{ name: "imsak", display: "⭐", abbreviation: "IMS" }, // Pre-dawn
+			{ name: "midnight", display: "🕛", abbreviation: "MID" }, // Midnight
+			{ name: "firstthird", display: "🌌", abbreviation: "FTH" }, // Late Night
+			{ name: "lastthird", display: "🌒", abbreviation: "LTH" }, // Pre-fajr
+		],
+		aladhan: {
 			method: 15,
 		},
-	},
-	developer: {
-		previewWidgetSize: "medium",
 	},
 };
 
@@ -59,15 +50,24 @@ const DEFAULT_PREFERENCES: WidgetPreferences = {
 })();
 
 async function runScript() {
-	const {
-		user: {
-			settings: { offline: offlineDays, distance: distanceToleranceMetres },
-			display: { prayerTimes: userPrayerTimes },
-		},
-		developer,
-	} = DEFAULT_PREFERENCES;
+	const settings = getSettings<WidgetPreferences>(
+		defaultPreferences,
+		{},
+		{
+			user: {
+				displayPrayerTimes: [
+					{ name: "fajr", display: "🌄", abbreviation: "FAJ" }, // Dawn
+					{ name: "dhuhr", display: "🕛", abbreviation: "DHU" }, // Midday
+					{ name: "asr", display: "🌞", abbreviation: "ASR" }, // Afternoon
+					{ name: "maghrib", display: "🌆", abbreviation: "MAG" }, // Dusk
+					{ name: "isha", display: "🌙", abbreviation: "ISH" }, // Night
+					{ name: "imsak", display: "⭐", abbreviation: "IMS" }, // Pre-dawn
+				],
+			},
+		}
+	);
 
-	const widgetSize = getWidgetSize(developer?.previewWidgetSize);
+	const widgetSize = getWidgetSize("medium");
 	const displayItems = getDisplayItems(widgetSize);
 	const filePath = getFilePath(Script.name(), Script.name());
 	const deviceOnline = await isOnline();
@@ -80,7 +80,7 @@ async function runScript() {
 		const todayData = getDay(offlineData, today);
 		const numberOfPrayerTimes = getPrayerTimes(
 			offlineData,
-			userPrayerTimes
+			settings.user.displayPrayerTimes
 		).length;
 
 		const currentLocation = await Location.current();
@@ -95,20 +95,18 @@ async function runScript() {
 
 		if (
 			numberOfPrayerTimes <= displayItems ||
-			offlineDataDistanceMetres > distanceToleranceMetres
+			offlineDataDistanceMetres > settings.user.distanceToleranceMetres
 		) {
-			const { data } = DEFAULT_PREFERENCES;
+			const { data } = settings;
 			if (!data) throw new Error("No stored data found.");
-			if (!data.api) throw new Error("No API data found.");
-			const { endpoint, method } = data.api;
 
 			const updatedData = await getNewData(
-				endpoint,
-				method,
+				"https://api.aladhan.com/v1/timings/",
+				settings.user.aladhan.method,
 				currentLocation,
-				offlineDays
+				settings.user.offlineDays
 			);
-			await saveNewData(filePath, offlineDays, updatedData);
+			await saveNewData(filePath, settings.user.offlineDays, updatedData);
 		}
 	}
 
@@ -117,7 +115,7 @@ async function runScript() {
 	if (dayData) {
 		const widget = createWidget(
 			dayData,
-			userPrayerTimes,
+			settings.user.displayPrayerTimes,
 			displayItems,
 			widgetSize,
 			offlineDataDistanceMetres

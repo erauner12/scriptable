@@ -1,5 +1,3 @@
-import { type WidgetSize } from "src/types/scriptable";
-
 const prayerTimesApiMethod = {
 	0: "Shia Ithna-Ashari",
 	1: "University of Islamic Sciences, Karachi",
@@ -39,37 +37,25 @@ export type WidgetData = {
 	prayerTimes: UserPrayerTime[];
 };
 
-type EmptyObject = Record<string, never>;
-
 export interface WidgetPreferences {
-	user: UserPreferences | EmptyObject;
-	data: WidgetPreferencesData | EmptyObject | undefined;
-	developer: WidgetPreferencesDeveloper | EmptyObject | undefined;
+	user: UserPreferences;
+	data?: WidgetPreferencesData;
 }
 
 type UserPreferences = {
-	settings: {
-		offline: number;
-		distance: number;
-	};
-	display: {
-		prayerTimes: UserPrayerTime[];
-	};
+	offlineDays: number;
+	distanceToleranceMetres: number;
+	displayPrayerTimes: UserPrayerTime[];
+	aladhan: AladhanPreferences;
 };
 
 type WidgetPreferencesData = {
 	location?: Location.CurrentLocation;
-	api?: WidgetPreferencesAPI;
 	data?: PrayerTime[];
 };
 
-type WidgetPreferencesAPI = {
-	endpoint: string;
+type AladhanPreferences = {
 	method?: PrayerTimesApiMethod;
-};
-
-type WidgetPreferencesDeveloper = {
-	previewWidgetSize?: WidgetSize;
 };
 
 export type UserPrayerTime = {
