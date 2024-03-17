@@ -1,8 +1,8 @@
-export function getDefaultSettings<T>(
+export function getSettings<T>(
 	defaultSettings: T,
-	userSettingsCallback: () => Partial<T>,
+	userSettingsCallback: (defaultSettings: T) => Partial<T>,
 	overrideSettings?: Partial<T>
 ): T {
-	const userSettings: Partial<T> = userSettingsCallback();
+	const userSettings: Partial<T> = userSettingsCallback(defaultSettings);
 	return { ...defaultSettings, ...userSettings, ...overrideSettings };
 }
