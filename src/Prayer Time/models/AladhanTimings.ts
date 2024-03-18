@@ -24,14 +24,13 @@ export class AladhanTimings {
 				(response) => {
 					throw new Error(response.data);
 				},
-				this.parameters
+				this.parameters,
 			);
 
 			const data: AladhanPrayerTime = response.data;
 			return data;
 		} catch (error) {
-			const errorMessage =
-				error instanceof Error ? error.message : String(error);
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			throw new Error(`Failed to retrieve prayer times: ${errorMessage}`);
 		}
 	}

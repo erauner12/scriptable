@@ -1,12 +1,8 @@
 import { loadData, saveData } from "src/Prayer Time/generics/fileManager";
-import {
-	type AladhanPrayerTime,
-	type UserPrayerTime,
-	type RelativeDateTimeState,
-	type Timing,
-} from "src/Prayer Time/types";
-import { stringToDate, dateToString } from "src/Prayer Time/utilities";
-import { fetchRequest } from "src/utilities/fetch";
+import { AladhanTimings } from "src/Prayer Time/models/AladhanTimings";
+import { type AladhanPrayerTime, type UserPrayerTime, type RelativeDateTimeState, type Timing } from "src/Prayer Time/types";
+import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/Aladhan";
+import { stringToDate } from "src/Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: AladhanPrayerTime): Timing[] {
 	const {
@@ -19,9 +15,7 @@ export function convertTimingsToDateArray(day: AladhanPrayerTime): Timing[] {
 
 	return Object.entries(timings).map(([prayerName, prayerTime]) => {
 		const timeComponents = prayerTime.split(":"); // Split into [HH, MM]
-		const dateTime = new Date(
-			`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`
-		);
+		const dateTime = new Date(`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`);
 		return { prayer: prayerName, dateTime: dateTime };
 	});
 }
@@ -38,7 +32,7 @@ export function getDay(data: AladhanPrayerTime[], dayDate?: Date) {
 			const parsedDate = stringToDate(date);
 			const isDay = day.toDateString() === parsedDate.toDateString();
 			return isDay;
-		}
+		},
 	);
 
 	if (dayArray[0]) {
@@ -47,9 +41,7 @@ export function getDay(data: AladhanPrayerTime[], dayDate?: Date) {
 	}
 }
 
-export function removeDuplicateData(
-	array: AladhanPrayerTime[]
-): AladhanPrayerTime[] {
+export function removeDuplicateData(array: AladhanPrayerTime[]): AladhanPrayerTime[] {
 	const newArray: AladhanPrayerTime[] = [];
 	array.forEach((object) => {
 		if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
@@ -62,7 +54,7 @@ export function removeDuplicateData(
 export async function getNewData(
 	method: AladhanTimingsMethodValues,
 	location: Location.CurrentLocation,
-	numberOfDays: number
+	numberOfDays: number,
 ): Promise<AladhanPrayerTime[]> {
 	try {
 		const { latitude, longitude } = location;
@@ -89,11 +81,7 @@ export async function getNewData(
 	}
 }
 
-export async function saveNewData(
-	path: string,
-	offlineDays: number,
-	data: AladhanPrayerTime[]
-) {
+export async function saveNewData(path: string, offlineDays: number, data: AladhanPrayerTime[]) {
 	const newData: AladhanPrayerTime[] = data;
 	const offlineData: AladhanPrayerTime[] = await loadData(path);
 	const mergedData: AladhanPrayerTime[] = [];
@@ -112,7 +100,7 @@ export async function saveNewData(
 			const isLessOrEqualToMax = stringToDate(date) <= max;
 			const isInRange = isGreaterOrEqualToToday && isLessOrEqualToMax;
 			return isInRange;
-		}
+		},
 	);
 
 	// Update merged `day` values if already exist, else add new `days`
@@ -130,7 +118,7 @@ export async function saveNewData(
 					},
 				}) => {
 					return day.date.gregorian.date === date;
-				}
+				},
 			);
 
 			if (indexToReplace >= 0) {
@@ -159,11 +147,7 @@ export async function saveNewData(
 	saveData(path, mergedData);
 }
 
-export function getPrayerTimes(
-	dayData: AladhanPrayerTime[],
-	userPrayerTimes: UserPrayerTime[],
-	itemsToShow?: number
-) {
+export function getPrayerTimes(dayData: AladhanPrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number) {
 	const now = new Date();
 
 	const displayKeys = userPrayerTimes.map((prayerTime) => {
@@ -173,13 +157,9 @@ export function getPrayerTimes(
 	let sortedTimes = dayData
 		.map((day) => convertTimingsToDateArray(day))
 		.flat()
-		.filter((prayerTime) =>
-			displayKeys.includes(prayerTime.prayer.toUpperCase())
-		)
+		.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
 		.filter((prayerTime) => prayerTime.dateTime > now)
-		.sort(
-			(dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime()
-		);
+		.sort((dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime());
 
 	if (itemsToShow) sortedTimes = sortedTimes.slice(0, itemsToShow);
 
@@ -191,9 +171,7 @@ export function addStatusToPrayerTimes(prayerTimings: Timing[]): Timing[] {
 	const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
 	const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000 - 1);
 
-	const nextPrayerIndex = prayerTimings.findIndex(
-		(prayerTime) => prayerTime.dateTime > now
-	);
+	const nextPrayerIndex = prayerTimings.findIndex((prayerTime) => prayerTime.dateTime > now);
 
 	return prayerTimings.map((prayerTime, index) => {
 		let state: RelativeDateTimeState = "unknown";

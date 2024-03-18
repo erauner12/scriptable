@@ -37,10 +37,8 @@ const aladhanTimingsMethod = {
 } as const;
 export type AladhanTimingsMethodKeys = keyof typeof aladhanTimingsMethod;
 export type AladhanTimingsMethodValues = ValueOf<typeof aladhanTimingsMethod>;
-export const getAladhanTimingsMethodValue =
-	createValueGetter(aladhanTimingsMethod);
-export const getAladhanTimingsMethodKey =
-	createKeyGetter<Number>()(aladhanTimingsMethod);
+export const getAladhanTimingsMethodValue = createValueGetter(aladhanTimingsMethod);
+export const getAladhanTimingsMethodKey = createKeyGetter<Number>()(aladhanTimingsMethod);
 
 const aladhanTimingsShafaq = {
 	General: "general", // (Default)
@@ -49,10 +47,8 @@ const aladhanTimingsShafaq = {
 } as const;
 export type AladhanTimingsShafaqKeys = keyof typeof aladhanTimingsShafaq;
 export type AladhanTimingsShafaqValues = ValueOf<typeof aladhanTimingsShafaq>;
-export const getAladhanTimingsShafaqValue =
-	createValueGetter(aladhanTimingsShafaq);
-export const getAladhanTimingsShafaqKey =
-	createKeyGetter<String>()(aladhanTimingsShafaq);
+export const getAladhanTimingsShafaqValue = createValueGetter(aladhanTimingsShafaq);
+export const getAladhanTimingsShafaqKey = createKeyGetter<String>()(aladhanTimingsShafaq);
 
 const aladhanTimingsSchool = {
 	Shafi: 0, // (Default)
@@ -60,39 +56,24 @@ const aladhanTimingsSchool = {
 } as const;
 export type AladhanTimingsSchoolKeys = keyof typeof aladhanTimingsSchool;
 export type AladhanTimingsSchoolValues = ValueOf<typeof aladhanTimingsSchool>;
-export const getAladhanTimingsSchoolValue =
-	createValueGetter(aladhanTimingsSchool);
-export const getAladhanTimingsSchoolKey =
-	createKeyGetter<Number>()(aladhanTimingsSchool);
+export const getAladhanTimingsSchoolValue = createValueGetter(aladhanTimingsSchool);
+export const getAladhanTimingsSchoolKey = createKeyGetter<Number>()(aladhanTimingsSchool);
 
 const aladhanTimingsMidnightMode = {
 	Standard: 0, // (Default) Mid Sunset to Sunrise
 	Jafari: 1, // Mid Sunset to Fajr
 } as const;
-export type AladhanTimingsMidnightModeKeys =
-	keyof typeof aladhanTimingsMidnightMode;
-export type AladhanTimingsMidnightModeValues = ValueOf<
-	typeof aladhanTimingsMidnightMode
->;
-export const getAladhanTimingsMidnightModeValue = createValueGetter(
-	aladhanTimingsMidnightMode
-);
-export const getAladhanTimingsMidnightModeKey = createKeyGetter<Number>()(
-	aladhanTimingsMidnightMode
-);
+export type AladhanTimingsMidnightModeKeys = keyof typeof aladhanTimingsMidnightMode;
+export type AladhanTimingsMidnightModeValues = ValueOf<typeof aladhanTimingsMidnightMode>;
+export const getAladhanTimingsMidnightModeValue = createValueGetter(aladhanTimingsMidnightMode);
+export const getAladhanTimingsMidnightModeKey = createKeyGetter<Number>()(aladhanTimingsMidnightMode);
 
 const aladhanTimingsLatitudeAdjustmentMethod = {
 	"Middle of the Night": 1, // (Default)
 	"One Seventh": 2,
 	"Angle Based": 3,
 } as const;
-export type AladhanTimingsLatitudeAdjustmentMethodKeys =
-	keyof typeof aladhanTimingsLatitudeAdjustmentMethod;
-export type AladhanTimingsLatitudeAdjustmentMethodValues = ValueOf<
-	typeof aladhanTimingsLatitudeAdjustmentMethod
->;
-export const getAladhanTimingsLatitudeAdjustmentMethodValue = createValueGetter(
-	aladhanTimingsLatitudeAdjustmentMethod
-);
-export const getAladhanTimingsLatitudeAdjustmentMethodKey =
-	createKeyGetter<Number>()(aladhanTimingsLatitudeAdjustmentMethod);
+export type AladhanTimingsLatitudeAdjustmentMethodKeys = keyof typeof aladhanTimingsLatitudeAdjustmentMethod;
+export type AladhanTimingsLatitudeAdjustmentMethodValues = ValueOf<typeof aladhanTimingsLatitudeAdjustmentMethod>;
+export const getAladhanTimingsLatitudeAdjustmentMethodValue = createValueGetter(aladhanTimingsLatitudeAdjustmentMethod);
+export const getAladhanTimingsLatitudeAdjustmentMethodKey = createKeyGetter<Number>()(aladhanTimingsLatitudeAdjustmentMethod);

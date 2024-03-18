@@ -38,11 +38,9 @@ export function convertToLocaleAmPm(
 		hour: "numeric",
 		minute: "numeric",
 		hour12: true,
-	}
+	},
 ): string {
-	const localAmPmTime = date
-		.toLocaleTimeString(undefined, options)
-		.toUpperCase();
+	const localAmPmTime = date.toLocaleTimeString(undefined, options).toUpperCase();
 	return localAmPmTime;
 }
 
@@ -54,38 +52,15 @@ export function capitaliseWord(word: string) {
 }
 
 // Overwrite the default values when running as widget
-export function getWidgetArguments(
-	userPreferences: Record<string, any>,
-	argumentNames: string[]
-) {
+export function getWidgetArguments(userPreferences: Record<string, any>, argumentNames: string[]) {
 	argumentNames.forEach((argumentName) => {
-		if (
-			userPreferences[argumentName] &&
-			args.widgetParameter.includes(argumentName)
-		) {
+		if (userPreferences[argumentName] && args.widgetParameter.includes(argumentName)) {
 			userPreferences[argumentName] = args.widgetParameter[argumentName];
 		}
 	});
 }
 
-// Gets the path of the file containing the stored "Prayer Time" data. Creates the file if it doesn't exist.
-export function getFilePath(fileName: string, directoryName: string) {
-	const file = `${fileName}.json`;
-	const directory = directoryName;
-	const fm = FileManager.iCloud();
-	const dirPath = fm.joinPath(fm.documentsDirectory(), directory);
-
-	if (!fm.fileExists(dirPath)) {
-		fm.createDirectory(dirPath);
-	}
-
-	return fm.joinPath(dirPath, file);
-}
-
-export function calculateDistance(
-	point1: { latitude: number; longitude: number },
-	point2: { latitude: number; longitude: number }
-) {
+export function calculateDistance(point1: { latitude: number; longitude: number }, point2: { latitude: number; longitude: number }) {
 	const R = 6371; // Radius of the Earth in km
 	const radians = (degrees: number) => degrees * (Math.PI / 180); // Convert degrees to radians
 
@@ -96,10 +71,7 @@ export function calculateDistance(
 	// Apply Haversine formula
 	const a =
 		Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-		Math.cos(radians(point1.latitude)) *
-			Math.cos(radians(point2.latitude)) *
-			Math.sin(deltaLon / 2) *
-			Math.sin(deltaLon / 2);
+		Math.cos(radians(point1.latitude)) * Math.cos(radians(point2.latitude)) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
 
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 

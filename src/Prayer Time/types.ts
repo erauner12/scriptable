@@ -6,12 +6,7 @@ export type Timing = {
 	status?: { state: RelativeDateTimeState; next: boolean };
 };
 
-export type RelativeDateTimeState =
-	| "past"
-	| "next"
-	| "today"
-	| "future"
-	| "unknown";
+export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
 export type WidgetData = {
 	prayerTimes: UserPrayerTime[];

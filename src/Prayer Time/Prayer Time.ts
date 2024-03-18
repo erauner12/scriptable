@@ -1,20 +1,7 @@
-import { loadData } from "src/Prayer Time/generics/fileManager";
-import {
-	calculateDistance,
-	getFilePath,
-	isOnline,
-	roundToTwoDecimals,
-} from "src/Prayer Time/utilities";
-import {
-	type AladhanPrayerTime,
-	type WidgetPreferences,
-} from "src/Prayer Time/types";
-import {
-	getDay,
-	getNewData,
-	saveNewData,
-	getPrayerTimes,
-} from "src/Prayer Time/data";
+import { getFilePath, loadData } from "src/Prayer Time/generics/fileManager";
+import { calculateDistance, isOnline, roundToTwoDecimals } from "src/Prayer Time/utilities";
+import { type AladhanPrayerTime, type WidgetPreferences } from "src/Prayer Time/types";
+import { getNewData, saveNewData, getPrayerTimes, getDay } from "src/Prayer Time/data";
 import { createWidget } from "src/Prayer Time/widget";
 import { type WidgetSize } from "src/types/scriptable";
 import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
@@ -67,7 +54,7 @@ async function runScript() {
 					{ name: "imsak", display: "⭐", abbreviation: "IMS" }, // Pre-dawn
 				],
 			},
-		}
+		},
 	);
 
 	const widgetSize = getWidgetSize("medium");
@@ -81,10 +68,7 @@ async function runScript() {
 		const today = new Date();
 		const offlineData: AladhanPrayerTime[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
-		const numberOfPrayerTimes = getPrayerTimes(
-			offlineData,
-			settings.user.displayPrayerTimes
-		).length;
+		const numberOfPrayerTimes = getPrayerTimes(offlineData, settings.user.displayPrayerTimes).length;
 
 		const currentLocation = await Location.current();
 
@@ -96,19 +80,10 @@ async function runScript() {
 			offlineDataDistanceMetres = roundToTwoDecimals(distance);
 		}
 
-		if (
-			numberOfPrayerTimes <= displayItems ||
-			offlineDataDistanceMetres > settings.user.distanceToleranceMetres
-		) {
-			const { data } = settings;
-			if (!data) throw new Error("No stored data found.");
+		if (numberOfPrayerTimes <= displayItems || offlineDataDistanceMetres > settings.user.distanceToleranceMetres) {
+			if (!settings.data) throw new Error("No stored data found."); // Handle no data stored
 
-			const updatedData = await getNewData(
-				"https://api.aladhan.com/v1/timings/",
-				settings.user.aladhan.method,
-				currentLocation,
-				settings.user.offlineDays
-			);
+			const updatedData = await getNewData(settings.user.aladhan.method, currentLocation, settings.user.offlineDays);
 			await saveNewData(filePath, settings.user.offlineDays, updatedData);
 		}
 	}
@@ -116,21 +91,15 @@ async function runScript() {
 	const dayData = await loadData(filePath);
 
 	if (dayData) {
-		const widget = createWidget(
-			dayData,
-			settings.user.displayPrayerTimes,
-			displayItems,
-			widgetSize,
-			offlineDataDistanceMetres
-		);
+		const widget = createWidget(dayData, settings.user.displayPrayerTimes, displayItems, widgetSize, offlineDataDistanceMetres);
+
 		if (config.runsInAccessoryWidget) {
 			widget.addAccessoryWidgetBackground = true;
-			Script.setWidget(widget);
-			Script.complete();
-		} else {
-			await widget.presentMedium();
-			Script.complete();
 		}
+
+		Script.setWidget(widget);
+		await widget.presentMedium();
+		Script.complete();
 	}
 }
 
