@@ -8,7 +8,8 @@
 		"export_module": "./scripts/scriptable.sh export_module",
 		"build": "./scripts/build.sh build",
 		"build-watch": "./scripts/build.sh build_and_watch",
-		"open": "./scripts/build.sh open_in_scriptable"
+		"open": "./scripts/build.sh open_in_scriptable",
+		"format": "prettier --write \"src/**/*.ts\""
 	},
 	"repository": {
 		"type": "git",
