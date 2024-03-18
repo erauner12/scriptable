@@ -1,14 +1,14 @@
 import type { AladhanPrayerTime } from "src/Prayer Time/types";
-import type { AladhanPrayerTimesParameters } from "src/Prayer Time/types/Aladhan";
+import type { AladhanTimingsRequestQueryLocation } from "src/Prayer Time/types/Aladhan";
 import { dateToString } from "src/Prayer Time/utilities";
 import { fetchRequest } from "src/utilities/fetch";
 
-export class AladhanPrayerTimes {
+export class AladhanTimings {
 	private baseUrl: string = "http://api.aladhan.com/v1/timings";
 
 	async getPrayerTimes(
 		date: Date,
-		parameters: AladhanPrayerTimesParameters
+		parameters: AladhanTimingsRequestQueryLocation
 	): Promise<AladhanPrayerTime> {
 		const dateString = dateToString(date);
 		const baseUrl = `${this.baseUrl}${dateString}`;
