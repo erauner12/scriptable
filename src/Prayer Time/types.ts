@@ -35,7 +35,7 @@ type WidgetPreferencesData = {
 };
 
 type AladhanPreferences = {
-	method?: AladhanTimingsMethodValues;
+	method: AladhanTimingsMethodValues;
 };
 
 export type UserPrayerTime = {
