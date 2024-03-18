@@ -1,9 +1,6 @@
 export async function fetchRequest(
 	baseUrl: string,
-	queryParameters?: Record<
-		string,
-		string | number | boolean | null | undefined
-	>,
+	queryParameters?: Object,
 	options?: Partial<Request>
 ): Promise<Request> {
 	try {
@@ -31,7 +28,7 @@ export async function fetchRequest(
 
 function appendQueryParameter(
 	baseUrl: string,
-	parameters?: Record<string, string | number | boolean | null | undefined>
+	parameters?: Record<string, any>
 ): string {
 	if (!parameters) return baseUrl;
 
