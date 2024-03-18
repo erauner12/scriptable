@@ -9,9 +9,7 @@ const { present, connect, setState } = getTable<State>({
 	name: "Example table",
 });
 
-const Title = connect(({ state: { toneOfVoice } }) =>
-	H1(toneOfVoice === "friendly" ? "Hello world!" : "What do you want")
-);
+const Title = connect(({ state: { toneOfVoice } }) => H1(toneOfVoice === "friendly" ? "Hello world!" : "What do you want"));
 
 const ToggleToneOfVoice = connect(({ state: { toneOfVoice } }) =>
 	Button({
@@ -22,7 +20,7 @@ const ToggleToneOfVoice = connect(({ state: { toneOfVoice } }) =>
 			setState({
 				toneOfVoice: toneOfVoice === "friendly" ? "off-putting" : "friendly",
 			}),
-	})
+	}),
 );
 
 const LoremIpsum = connect(({ state: { toneOfVoice } }) =>
@@ -31,11 +29,11 @@ const LoremIpsum = connect(({ state: { toneOfVoice } }) =>
 			P(
 				toneOfVoice === "friendly"
 					? "Well hello there! Thanks for stopping by, this is my table, would you like to take a seat?"
-					: "Everyone always clicks me. I don't like it. Would you like it if I walked up to you and clicked you?"
+					: "Everyone always clicks me. I don't like it. Would you like it if I walked up to you and clicked you?",
 			),
 		],
-		{ height: 100 }
-	)
+		{ height: 100 },
+	),
 );
 
 const StateTable = connect(({ state: { toneOfVoice } }) =>
@@ -51,7 +49,7 @@ const StateTable = connect(({ state: { toneOfVoice } }) =>
 			},
 		],
 		hideColumnNames: true,
-	})
+	}),
 );
 
 present({
