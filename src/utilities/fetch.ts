@@ -1,8 +1,13 @@
 export async function fetchRequest(
-	url: string,
+	baseUrl: string,
+	queryParameters?: Record<
+		string,
+		string | number | boolean | null | undefined
+	>,
 	options?: Partial<Request>
 ): Promise<Request> {
 	try {
+		const url = appendQueryParameter(baseUrl, queryParameters);
 		const request = new Request(url);
 
 		if (options && options.method) request.method = options.method;
@@ -22,4 +27,29 @@ export async function fetchRequest(
 			throw new Error(String(error));
 		}
 	}
+}
+
+function appendQueryParameter(
+	baseUrl: string,
+	parameters?: Record<string, string | number | boolean | null | undefined>
+): string {
+	if (!parameters) return baseUrl;
+
+	let hasQuery: boolean = baseUrl.includes("?");
+
+	for (const key in parameters) {
+		if (parameters.hasOwnProperty(key)) {
+			const value = parameters[key];
+
+			if (value !== null && value !== undefined) {
+				baseUrl +=
+					(hasQuery ? "&" : "?") +
+					encodeURIComponent(key) +
+					"=" +
+					encodeURIComponent(value.toString());
+			}
+		}
+	}
+
+	return encodeURI(baseUrl);
 }

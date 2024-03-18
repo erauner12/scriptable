@@ -14,42 +14,6 @@ export async function isOnline() {
 	}
 }
 
-export function getUrl(
-	endpoint: string,
-	date: Date,
-	parameters: Record<string, string | number | boolean | null | undefined>
-): string {
-	const dateString = dateToString(date);
-	const baseUrl = `${endpoint}${dateString}`;
-	const urlWithParameters = appendQueryParameter(baseUrl, parameters);
-	return encodeURI(urlWithParameters);
-}
-
-function appendQueryParameter(
-	url: string,
-	parameters: Record<string, string | number | boolean | null | undefined>
-): string {
-	let hasQuery: boolean = url.includes("?");
-
-	for (const key in parameters) {
-		// Check if the property/key is defined in the object itself, not in parent prototypes
-		if (parameters.hasOwnProperty(key)) {
-			const value = parameters[key];
-
-			if (value !== null && value !== undefined) {
-				url +=
-					(hasQuery ? "&" : "?") +
-					encodeURIComponent(key) +
-					"=" +
-					encodeURIComponent(value.toString());
-				hasQuery = true; // Subsequent parameters should use '&' instead of '?'
-			}
-		}
-	}
-
-	return url;
-}
-
 export function stringToDate(dateString: string) {
 	const [day, month, year] = dateString.split("-");
 	const date = new Date(Number(year), Number(month) - 1, Number(day));

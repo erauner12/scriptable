@@ -5,7 +5,7 @@ import {
 	type RelativeDateTimeState,
 	type Timing,
 } from "src/Prayer Time/types";
-import { stringToDate, getUrl } from "src/Prayer Time/utilities";
+import { stringToDate, dateToString } from "src/Prayer Time/utilities";
 import { fetchRequest } from "src/utilities/fetch";
 
 export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
@@ -71,13 +71,13 @@ export async function getNewData(
 			const date = new Date();
 			date.setDate(date.getDate() + day);
 
-			const url = getUrl(endpoint, date, {
+			const dateString = dateToString(date);
+			const baseUrl = `${endpoint}${dateString}`;
+			const request = await fetchRequest(baseUrl, {
 				latitude: latitude,
 				longitude: longitude,
 				method: method,
 			});
-
-			const request = await fetchRequest(url);
 			const response = await request.loadJSON();
 			const data = response.data;
 			newData.push(data);
