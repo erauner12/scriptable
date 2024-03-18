@@ -11,15 +11,23 @@ export class AladhanTimings {
 		this.parameters = parameters;
 	}
 
-	async getPrayerTimes(date: Date = new Date()): Promise<AladhanPrayerTime> {
+	async getPrayerTimes(date?: Date): Promise<AladhanPrayerTime> {
 		try {
-			const request = await fetchRequest(this.baseUrl, {
-				...this.parameters,
-				date: dateToString(date),
-			});
-			const response = await request.loadJSON();
-			const data: AladhanPrayerTime = response.data;
+			const dateString = dateToString(date);
+			const baseUrl = `${this.baseUrl}/${dateString}`;
 
+			const response = await fetchRequest(
+				baseUrl,
+				async (request) => {
+					await request.loadJSON();
+				},
+				(response) => {
+					throw new Error(response.data);
+				},
+				this.parameters
+			);
+
+			const data: AladhanPrayerTime = response.data;
 			return data;
 		} catch (error) {
 			const errorMessage =
