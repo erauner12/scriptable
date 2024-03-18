@@ -5,7 +5,10 @@ import {
 	isOnline,
 	roundToTwoDecimals,
 } from "src/Prayer Time/utilities";
-import { type PrayerTime, type WidgetPreferences } from "src/Prayer Time/types";
+import {
+	type AladhanPrayerTime,
+	type WidgetPreferences,
+} from "src/Prayer Time/types";
 import {
 	getDay,
 	getNewData,
@@ -76,7 +79,7 @@ async function runScript() {
 
 	if (deviceOnline) {
 		const today = new Date();
-		const offlineData: PrayerTime[] = await loadData(filePath);
+		const offlineData: AladhanPrayerTime[] = await loadData(filePath);
 		const todayData = getDay(offlineData, today);
 		const numberOfPrayerTimes = getPrayerTimes(
 			offlineData,

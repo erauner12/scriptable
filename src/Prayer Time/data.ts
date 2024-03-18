@@ -1,6 +1,6 @@
 import { loadData, saveData } from "src/Prayer Time/generics/fileManager";
 import {
-	type PrayerTime,
+	type AladhanPrayerTime,
 	type UserPrayerTime,
 	type RelativeDateTimeState,
 	type Timing,
@@ -8,7 +8,7 @@ import {
 import { stringToDate, dateToString } from "src/Prayer Time/utilities";
 import { fetchRequest } from "src/utilities/fetch";
 
-export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
+export function convertTimingsToDateArray(day: AladhanPrayerTime): Timing[] {
 	const {
 		timings,
 		date: { gregorian },
@@ -26,8 +26,8 @@ export function convertTimingsToDateArray(day: PrayerTime): Timing[] {
 	});
 }
 
-export function getDay(data: PrayerTime[], dayDate?: Date) {
-	const dayArray: PrayerTime[] = data.filter(
+export function getDay(data: AladhanPrayerTime[], dayDate?: Date) {
+	const dayArray: AladhanPrayerTime[] = data.filter(
 		({
 			date: {
 				gregorian: { date },
@@ -42,13 +42,15 @@ export function getDay(data: PrayerTime[], dayDate?: Date) {
 	);
 
 	if (dayArray[0]) {
-		const today: PrayerTime = dayArray[0];
+		const today: AladhanPrayerTime = dayArray[0];
 		return today;
 	}
 }
 
-export function removeDuplicateData(array: PrayerTime[]): PrayerTime[] {
-	const newArray: PrayerTime[] = [];
+export function removeDuplicateData(
+	array: AladhanPrayerTime[]
+): AladhanPrayerTime[] {
+	const newArray: AladhanPrayerTime[] = [];
 	array.forEach((object) => {
 		if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
 			newArray.push(object);
@@ -62,10 +64,10 @@ export async function getNewData(
 	method: number | undefined,
 	location: Location.CurrentLocation,
 	numberOfDays: number
-): Promise<PrayerTime[]> {
+): Promise<AladhanPrayerTime[]> {
 	try {
 		const { latitude, longitude } = location;
-		const newData: PrayerTime[] = [];
+		const newData: AladhanPrayerTime[] = [];
 
 		for (let day = 0; day < numberOfDays; day++) {
 			const date = new Date();
@@ -93,11 +95,11 @@ export async function getNewData(
 export async function saveNewData(
 	path: string,
 	offlineDays: number,
-	data: PrayerTime[]
+	data: AladhanPrayerTime[]
 ) {
-	const newData: PrayerTime[] = data;
-	const offlineData: PrayerTime[] = await loadData(path);
-	const mergedData: PrayerTime[] = [];
+	const newData: AladhanPrayerTime[] = data;
+	const offlineData: AladhanPrayerTime[] = await loadData(path);
+	const mergedData: AladhanPrayerTime[] = [];
 
 	removeDuplicateData(offlineData).filter(
 		({
@@ -117,7 +119,7 @@ export async function saveNewData(
 	);
 
 	// Update merged `day` values if already exist, else add new `days`
-	newData.forEach((day: PrayerTime) => {
+	newData.forEach((day: AladhanPrayerTime) => {
 		const existsAlready = mergedData.some((d) => {
 			return JSON.stringify(d) === JSON.stringify(day);
 		});
@@ -161,7 +163,7 @@ export async function saveNewData(
 }
 
 export function getPrayerTimes(
-	dayData: PrayerTime[],
+	dayData: AladhanPrayerTime[],
 	userPrayerTimes: UserPrayerTime[],
 	itemsToShow?: number
 ) {

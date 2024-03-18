@@ -51,7 +51,7 @@ type UserPreferences = {
 
 type WidgetPreferencesData = {
 	location?: Location.CurrentLocation;
-	data?: PrayerTime[];
+	data?: AladhanPrayerTime[];
 };
 
 type AladhanPreferences = {
@@ -64,7 +64,7 @@ export type UserPrayerTime = {
 	abbreviation: string;
 };
 
-export interface PrayerTime extends Object {
+export interface AladhanPrayerTime extends Object {
 	timings: Timings;
 	date: DateClass;
 	meta: Meta;

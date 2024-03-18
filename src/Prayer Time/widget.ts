@@ -1,6 +1,6 @@
 import { addStatusToPrayerTimes, getPrayerTimes } from "src/Prayer Time/data";
 import {
-	type PrayerTime,
+	type AladhanPrayerTime,
 	type UserPrayerTime,
 	type Timing,
 } from "src/Prayer Time/types";
@@ -9,7 +9,7 @@ import { type WidgetSize } from "src/types/scriptable";
 import { getDaysBetweenDates } from "src/Prayer Time/date";
 
 export function createWidget(
-	dayData: PrayerTime[],
+	dayData: AladhanPrayerTime[],
 	userPrayerTimes: UserPrayerTime[],
 	itemsToShow: number,
 	widgetSize: WidgetSize,
