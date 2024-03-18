@@ -60,8 +60,7 @@ export function removeDuplicateData(
 }
 
 export async function getNewData(
-	endpoint: string,
-	method: number | undefined,
+	method: AladhanTimingsMethodValues,
 	location: Location.CurrentLocation,
 	numberOfDays: number
 ): Promise<AladhanPrayerTime[]> {
@@ -69,20 +68,18 @@ export async function getNewData(
 		const { latitude, longitude } = location;
 		const newData: AladhanPrayerTime[] = [];
 
+		const aladhanTimings = new AladhanTimings({
+			latitude,
+			longitude,
+			method,
+		});
+
 		for (let day = 0; day < numberOfDays; day++) {
 			const date = new Date();
 			date.setDate(date.getDate() + day);
 
-			const dateString = dateToString(date);
-			const baseUrl = `${endpoint}${dateString}`;
-			const request = await fetchRequest(baseUrl, {
-				latitude: latitude,
-				longitude: longitude,
-				method: method,
-			});
-			const response = await request.loadJSON();
-			const data = response.data;
-			newData.push(data);
+			const aladhanPrayerTimeData = await aladhanTimings.getPrayerTimes(date);
+			newData.push(aladhanPrayerTimeData);
 		}
 
 		return newData;
