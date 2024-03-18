@@ -1,7 +1,7 @@
 import type { ValueOf } from "src/types/helpers";
 import { createKeyGetter, createValueGetter } from "src/utilities/getters";
 
-export interface AladhanTimingsRequestQueryLocation extends Object {
+export interface AladhanTimingsRequestQueryLocation {
 	date?: string;
 	latitude: number;
 	longitude: number;
