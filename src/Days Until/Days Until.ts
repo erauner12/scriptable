@@ -14,7 +14,7 @@ function widget() {
 			widget,
 			errors,
 			'No arguments provided.\n\nArguments should be configured on the home screen using a comma separated:\n\ntitle, date\n("YYYY-MM-DD hh:mm")',
-			presentErrors
+			presentErrors,
 		);
 		return;
 	}
@@ -37,12 +37,7 @@ function widget() {
 
 	const date = new Date(dateString);
 	if (isNaN(date.getTime())) {
-		addError(
-			widget,
-			errors,
-			'Invalid date format.\n\nEnsure the date is formatted as "YYYY-MM-DD hh:mm".',
-			presentErrors
-		);
+		addError(widget, errors, 'Invalid date format.\n\nEnsure the date is formatted as "YYYY-MM-DD hh:mm".', presentErrors);
 		return;
 	}
 
@@ -95,12 +90,7 @@ function displayWidget(widget: ListWidget, title: string, date: Date) {
 	Script.complete();
 }
 
-function addError(
-	widget: ListWidget,
-	errors: string[],
-	message: string,
-	onError?: (widget: ListWidget, errors: string[]) => void
-) {
+function addError(widget: ListWidget, errors: string[], message: string, onError?: (widget: ListWidget, errors: string[]) => void) {
 	errors.push(message);
 	if (onError) onError(widget, errors);
 }

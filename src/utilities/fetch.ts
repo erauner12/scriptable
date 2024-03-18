@@ -5,7 +5,7 @@ export async function fetchRequest(
 	onRequest: (request: Request) => Promise<String | Image | Data | any>,
 	onError: (response: { [key: string]: any }) => void,
 	queryParameters?: Record<string, any>,
-	options?: Partial<RequestProperties>
+	options?: Partial<RequestProperties>,
 ): Promise<String | Image | Data | any> {
 	try {
 		const url = appendQueryParameter(baseUrl, queryParameters);
@@ -18,11 +18,7 @@ export async function fetchRequest(
 		const response = await onRequest(request);
 
 		const statusCode = request.response.statusCode;
-		const isError =
-			isClientError(statusCode) ||
-			isRedirection(statusCode) ||
-			isClientError(statusCode) ||
-			isServerError(statusCode);
+		const isError = isClientError(statusCode) || isRedirection(statusCode) || isClientError(statusCode) || isServerError(statusCode);
 
 		if (isError) {
 			onError(response);
@@ -40,10 +36,7 @@ export async function fetchRequest(
 	}
 }
 
-function appendQueryParameter(
-	baseUrl: string,
-	parameters?: Record<string, any>
-): string {
+function appendQueryParameter(baseUrl: string, parameters?: Record<string, any>): string {
 	if (!parameters) return baseUrl;
 
 	let hasQuery: boolean = baseUrl.includes("?");
@@ -53,11 +46,7 @@ function appendQueryParameter(
 			const value = parameters[key];
 
 			if (value !== null && value !== undefined) {
-				baseUrl +=
-					(hasQuery ? "&" : "?") +
-					encodeURIComponent(key) +
-					"=" +
-					encodeURIComponent(value.toString());
+				baseUrl += (hasQuery ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(value.toString());
 				hasQuery = true;
 			}
 		}

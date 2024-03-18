@@ -1,15 +1,8 @@
-import {
-	type CantoJpMin,
-	cantoJpMin,
-} from "src/Cantonese Romanisation/data/cantoJpMin";
+import { type CantoJpMin, cantoJpMin } from "src/Cantonese Romanisation/data/cantoJpMin";
 import { localisations } from "src/Cantonese Romanisation/data/localisations";
 import { type Pingyam, pingyam } from "src/Cantonese Romanisation/data/pingyam";
 import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import {
-	type Localisations,
-	type Localisation,
-	type LocalisationName,
-} from "src/Cantonese Romanisation/types/Localisations";
+import { type Localisations, type Localisation, type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
 
 export class CantoneseConverter {
 	protected cantoJpMin: CantoJpMin;
@@ -22,7 +15,7 @@ export class CantoneseConverter {
 	constructor(
 		defaultLanguage: LocalisationName,
 		defaultInputRomanisationSystem: CantoneseRomanisationSystemName,
-		defaultOutputRomanisationSystem: CantoneseRomanisationSystemName
+		defaultOutputRomanisationSystem: CantoneseRomanisationSystemName,
 	) {
 		this.cantoJpMin = cantoJpMin;
 		this.pingyam = pingyam;
@@ -90,9 +83,7 @@ export class CantoneseConverter {
 	 * CantoneseRomanisation.toJyutpingString("食咗飯未呀 ? 🍚")
 	 */
 	protected toJyutpingString(chineseCharacterString: string): string {
-		const jyutpingRomanisations = this.toJyutpingRomanisations(
-			chineseCharacterString
-		);
+		const jyutpingRomanisations = this.toJyutpingRomanisations(chineseCharacterString);
 		return jyutpingRomanisations
 			.map((romanisation, index, array) => {
 				// If jyutping is undefined or an empty array, return the original character
@@ -104,8 +95,7 @@ export class CantoneseConverter {
 
 				// Check if the next item exists and if it has a defined and non-empty jyutping
 				const nextItem = array[index + 1];
-				const shouldAddSpace =
-					nextItem && nextItem.jyutping && nextItem.jyutping.length > 0;
+				const shouldAddSpace = nextItem && nextItem.jyutping && nextItem.jyutping.length > 0;
 
 				// Add a space only if there is a valid next item with a non-empty jyutping
 				return shouldAddSpace ? `${jyutpingValue} ` : jyutpingValue;
@@ -143,14 +133,10 @@ export class CantoneseConverter {
 
 	protected transformRomanisationSystem(
 		text: string,
-		inputRomanisationSystem: CantoneseRomanisationSystemName = this
-			.inputRomanisationSystem,
-		outputRomanisationSystem: CantoneseRomanisationSystemName = this
-			.outputRomanisationSystem
+		inputRomanisationSystem: CantoneseRomanisationSystemName = this.inputRomanisationSystem,
+		outputRomanisationSystem: CantoneseRomanisationSystemName = this.outputRomanisationSystem,
 	): string {
-		const transformationMapping = Object.entries(this.pingyam).reduce<
-			Record<string, string>
-		>((accumulator, [_, value]) => {
+		const transformationMapping = Object.entries(this.pingyam).reduce<Record<string, string>>((accumulator, [_, value]) => {
 			const source = value[inputRomanisationSystem].toLowerCase();
 			const target = value[outputRomanisationSystem];
 			if (source && target) accumulator[source] = target;

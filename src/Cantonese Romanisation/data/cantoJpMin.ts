@@ -19,13 +19,10 @@ export type CantoJpMin = { [key: string]: string[] };
 function parseCantoJpMinData(): CantoJpMin {
 	const cantoJpMinData: CantoJpMinRawData = JSON.parse(getCantoJpMinRawData());
 
-	return Object.entries(cantoJpMinData).reduce<CantoJpMin>(
-		(accumulator, [key, value]) => {
-			accumulator[key] = value.split(/[\/\.]/g).map((value) => value.trim()); // Split the value by '/' or '.'
-			return accumulator;
-		},
-		{}
-	);
+	return Object.entries(cantoJpMinData).reduce<CantoJpMin>((accumulator, [key, value]) => {
+		accumulator[key] = value.split(/[\/\.]/g).map((value) => value.trim()); // Split the value by '/' or '.'
+		return accumulator;
+	}, {});
 }
 
 type CantoJpMinRawData = { [key: string]: string };

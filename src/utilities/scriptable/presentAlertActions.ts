@@ -2,10 +2,7 @@ export type PresentAlertActions = {
 	[title: string]: () => Promise<void> | void;
 };
 
-export async function presentAlertActions(
-	alert: Alert,
-	actions: PresentAlertActions
-) {
+export async function presentAlertActions(alert: Alert, actions: PresentAlertActions) {
 	Object.keys(actions).forEach((title) => alert.addAction(title));
 
 	const selectionIndex = await alert.presentAlert();

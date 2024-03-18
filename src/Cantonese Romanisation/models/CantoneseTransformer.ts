@@ -7,20 +7,14 @@ export class CantoneseTransformer extends CantoneseConverter {
 	constructor(
 		defaultLanguage: LocalisationName,
 		defaultInputRomanisationSystem: CantoneseRomanisationSystemName,
-		defaultOutputRomanisationSystem: CantoneseRomanisationSystemName
+		defaultOutputRomanisationSystem: CantoneseRomanisationSystemName,
 	) {
-		super(
-			defaultLanguage,
-			defaultInputRomanisationSystem,
-			defaultOutputRomanisationSystem
-		);
+		super(defaultLanguage, defaultInputRomanisationSystem, defaultOutputRomanisationSystem);
 	}
 
 	getWordOfTheDay(date: Date = new Date()): CantoJpMin | undefined {
 		const now = new Date(date);
-		const utcDate = new Date(
-			Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
-		);
+		const utcDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
 		const startOfYear = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 0));
 		const diff = utcDate.valueOf() - startOfYear.valueOf();

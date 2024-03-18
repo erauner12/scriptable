@@ -8,36 +8,31 @@ export const pingyam: Pingyam = parsePingyamData();
 function parsePingyamData(): Pingyam {
 	const pingyamData: PingyamRawData = JSON.parse(getPingyamRawData());
 
-	return Object.entries(pingyamData).reduce<Pingyam>(
-		(accumulator, [key, value]) => {
-			const cantoneseRomanisationSystems = value
-				.split(",")
-				.map((system) => system.trim());
+	return Object.entries(pingyamData).reduce<Pingyam>((accumulator, [key, value]) => {
+		const cantoneseRomanisationSystems = value.split(",").map((system) => system.trim());
 
-			cantoneseRomanisationSystems.forEach((system, index) => {
-				if (!system) {
-					throw new Error(`Missing value for ${key} at position ${index}`);
-				}
-			});
+		cantoneseRomanisationSystems.forEach((system, index) => {
+			if (!system) {
+				throw new Error(`Missing value for ${key} at position ${index}`);
+			}
+		});
 
-			accumulator[key] = {
-				yaleNumerals: cantoneseRomanisationSystems[0]!,
-				yaleDiacritics: cantoneseRomanisationSystems[1]!,
-				cantonesePinyin: cantoneseRomanisationSystems[2]!,
-				wongNumerals: cantoneseRomanisationSystems[3]!,
-				wongDiacritics: cantoneseRomanisationSystems[4]!,
-				ipa: cantoneseRomanisationSystems[5]!,
-				jyutping: cantoneseRomanisationSystems[6]!,
-				cantonRomanization: cantoneseRomanisationSystems[7]!,
-				sidneyLau: cantoneseRomanisationSystems[8]!,
-				penkyampNumerals: cantoneseRomanisationSystems[9]!,
-				penkyampDiacritics: cantoneseRomanisationSystems[10]!,
-			};
+		accumulator[key] = {
+			yaleNumerals: cantoneseRomanisationSystems[0]!,
+			yaleDiacritics: cantoneseRomanisationSystems[1]!,
+			cantonesePinyin: cantoneseRomanisationSystems[2]!,
+			wongNumerals: cantoneseRomanisationSystems[3]!,
+			wongDiacritics: cantoneseRomanisationSystems[4]!,
+			ipa: cantoneseRomanisationSystems[5]!,
+			jyutping: cantoneseRomanisationSystems[6]!,
+			cantonRomanization: cantoneseRomanisationSystems[7]!,
+			sidneyLau: cantoneseRomanisationSystems[8]!,
+			penkyampNumerals: cantoneseRomanisationSystems[9]!,
+			penkyampDiacritics: cantoneseRomanisationSystems[10]!,
+		};
 
-			return accumulator;
-		},
-		{}
-	);
+		return accumulator;
+	}, {});
 }
 
 type PingyamRawData = { [key: string]: string };

@@ -3,47 +3,36 @@ import {
 	getRomanisationSystemNameByIndex,
 	type CantoneseRomanisationSystemName,
 } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import {
-	isLocalisationName,
-	type LocalisationName,
-} from "src/Cantonese Romanisation/types/Localisations";
+import { isLocalisationName, type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
 import type { Settings } from "src/Cantonese Romanisation/types/Settings";
 import { getSettings } from "src/utilities/getSettings";
 import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
 import { getWidgetParameters } from "src/utilities/scriptable/getWidgetParameters";
-import {
-	presentAlertActions,
-	type PresentAlertActions,
-} from "src/utilities/scriptable/presentAlertActions";
+import { presentAlertActions, type PresentAlertActions } from "src/utilities/scriptable/presentAlertActions";
 
-const userSettings = getWidgetParameters<Settings>(
-	args.widgetParameter,
-	",",
-	(parsedParameters) => {
-		const userSettings: Partial<Settings> = {};
+const userSettings = getWidgetParameters<Settings>(args.widgetParameter, ",", (parsedParameters) => {
+	const userSettings: Partial<Settings> = {};
 
-		const [localisationName, outputRomanisationSystemIndex] = parsedParameters;
+	const [localisationName, outputRomanisationSystemIndex] = parsedParameters;
 
-		if (isLocalisationName(localisationName)) {
-			userSettings.language = localisationName;
-		}
+	if (isLocalisationName(localisationName)) {
+		userSettings.language = localisationName;
+	}
 
-		if (outputRomanisationSystemIndex) {
-			const parsedIndex = parseInt(outputRomanisationSystemIndex, 10);
+	if (outputRomanisationSystemIndex) {
+		const parsedIndex = parseInt(outputRomanisationSystemIndex, 10);
 
-			if (!isNaN(parsedIndex)) {
-				const outputRomanisationSystem =
-					getRomanisationSystemNameByIndex(parsedIndex);
+		if (!isNaN(parsedIndex)) {
+			const outputRomanisationSystem = getRomanisationSystemNameByIndex(parsedIndex);
 
-				if (outputRomanisationSystem) {
-					userSettings.outputRomanisationSystem = outputRomanisationSystem;
-				}
+			if (outputRomanisationSystem) {
+				userSettings.outputRomanisationSystem = outputRomanisationSystem;
 			}
 		}
-
-		return userSettings;
 	}
-);
+
+	return userSettings;
+});
 
 runWidget(
 	getSettings<Settings>(
@@ -52,20 +41,15 @@ runWidget(
 			inputRomanisationSystem: "jyutping",
 			outputRomanisationSystem: "jyutping",
 		},
-		userSettings
-	)
+		userSettings,
+	),
 );
 
 async function runWidget(defaultSettings: Settings) {
 	const runLocation = getRunLocation();
-	const { language, inputRomanisationSystem, outputRomanisationSystem } =
-		defaultSettings;
+	const { language, inputRomanisationSystem, outputRomanisationSystem } = defaultSettings;
 
-	const cantoneseTransformer = new CantoneseTransformer(
-		language,
-		inputRomanisationSystem,
-		outputRomanisationSystem
-	);
+	const cantoneseTransformer = new CantoneseTransformer(language, inputRomanisationSystem, outputRomanisationSystem);
 
 	switch (runLocation) {
 		case "App":
@@ -90,9 +74,7 @@ async function runWidget(defaultSettings: Settings) {
 	}
 }
 
-async function presentWidgetWordOfTheDay(
-	CantoneseTransformer: CantoneseTransformer
-) {
+async function presentWidgetWordOfTheDay(CantoneseTransformer: CantoneseTransformer) {
 	const wordOfTheDay = CantoneseTransformer.getWordOfTheDay();
 
 	if (!wordOfTheDay) throw new Error("Could not get word of the day.");
@@ -115,9 +97,7 @@ async function presentWidgetWordOfTheDay(
 
 		const romanisationStack = widgetStack.addStack();
 		romanisationStack.addSpacer();
-		const romanisationText = romanisationStack.addText(
-			romanisations.join(", ")
-		);
+		const romanisationText = romanisationStack.addText(romanisations.join(", "));
 		romanisationText.font = new Font("PingFangHK-Semibold", 24);
 		romanisationText.minimumScaleFactor = 0.5;
 		romanisationText.centerAlignText();
@@ -127,20 +107,14 @@ async function presentWidgetWordOfTheDay(
 	widget.presentSmall();
 }
 
-async function parseAndPrompt(
-	CantoneseTransformer: CantoneseTransformer,
-	chineseCharacterString: string
-) {
-	const romanisation = CantoneseTransformer.convertToRomanisation(
-		chineseCharacterString
-	);
+async function parseAndPrompt(CantoneseTransformer: CantoneseTransformer, chineseCharacterString: string) {
+	const romanisation = CantoneseTransformer.convertToRomanisation(chineseCharacterString);
 	await prompt(CantoneseTransformer, chineseCharacterString, romanisation);
 }
 
 async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 	const localisations = CantoneseTransformer.getLocalisations();
-	const { settings, outputRomanisationSystem, convert, done } =
-		CantoneseTransformer.getLocalisation();
+	const { settings, outputRomanisationSystem, convert, done } = CantoneseTransformer.getLocalisation();
 	const language = Object.values(localisations)
 		.map((localisation) => localisation.language)
 		.join(" / ");
@@ -150,19 +124,16 @@ async function settingsMenu(CantoneseTransformer: CantoneseTransformer) {
 
 	await presentAlertActions(alert, {
 		[language]: async () => await selectLanguage(CantoneseTransformer),
-		[outputRomanisationSystem]: async () =>
-			await selectOutputRomanisationSystem(CantoneseTransformer),
+		[outputRomanisationSystem]: async () => await selectOutputRomanisationSystem(CantoneseTransformer),
 		[`${convert} 🔄`]: async () => presentTextInput(CantoneseTransformer),
-		["Show Widget"]: async () =>
-			presentWidgetWordOfTheDay(CantoneseTransformer), // TODO Add localisation for "Show widget"
+		["Show Widget"]: async () => presentWidgetWordOfTheDay(CantoneseTransformer), // TODO Add localisation for "Show widget"
 		[done]: () => Script.complete(),
 	});
 }
 
 async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
 	const localisations = CantoneseTransformer.getLocalisations();
-	const { languageName: currentLanguageName } =
-		CantoneseTransformer.getLocalisation();
+	const { languageName: currentLanguageName } = CantoneseTransformer.getLocalisation();
 	const language = Object.values(localisations)
 		.map((localisation) => localisation.language)
 		.join(" / ");
@@ -174,54 +145,35 @@ async function selectLanguage(CantoneseTransformer: CantoneseTransformer) {
 			const { languageName } = localisation;
 			const isSelected = currentLanguageName === languageName;
 			const alertActionText = isSelected ? `${languageName} ✅` : languageName;
-			return [
-				alertActionText,
-				() => CantoneseTransformer.setLocalisation(key as LocalisationName),
-			];
-		})
+			return [alertActionText, () => CantoneseTransformer.setLocalisation(key as LocalisationName)];
+		}),
 	);
 	await presentAlertActions(alert, actions);
 
 	await settingsMenu(CantoneseTransformer);
 }
 
-async function selectOutputRomanisationSystem(
-	CantoneseTransformer: CantoneseTransformer
-) {
-	const { romanisationSystems, outputRomanisationSystem } =
-		CantoneseTransformer.getLocalisation();
-	const selectedRomanisationSystem =
-		CantoneseTransformer.getOutputRomanisationSystem();
+async function selectOutputRomanisationSystem(CantoneseTransformer: CantoneseTransformer) {
+	const { romanisationSystems, outputRomanisationSystem } = CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem = CantoneseTransformer.getOutputRomanisationSystem();
 
 	const alert = new Alert();
 	alert.title = outputRomanisationSystem;
 	const actions: PresentAlertActions = Object.fromEntries(
 		Object.entries(romanisationSystems).map(([key, romanisationSystemName]) => {
 			const isSelected = selectedRomanisationSystem === key;
-			const alertActionText = isSelected
-				? `${romanisationSystemName} ✅`
-				: romanisationSystemName;
-			return [
-				alertActionText,
-				() =>
-					CantoneseTransformer.setOutputRomanisationSystem(
-						key as CantoneseRomanisationSystemName
-					),
-			];
-		})
+			const alertActionText = isSelected ? `${romanisationSystemName} ✅` : romanisationSystemName;
+			return [alertActionText, () => CantoneseTransformer.setOutputRomanisationSystem(key as CantoneseRomanisationSystemName)];
+		}),
 	);
 	await presentAlertActions(alert, actions);
 
 	await settingsMenu(CantoneseTransformer);
 }
 
-async function selectInputRomanisationSystem(
-	CantoneseTransformer: CantoneseTransformer
-) {
-	const { romanisationSystems, inputRomanisationSystem } =
-		CantoneseTransformer.getLocalisation();
-	const selectedRomanisationSystem =
-		CantoneseTransformer.getInputRomanisationSystem();
+async function selectInputRomanisationSystem(CantoneseTransformer: CantoneseTransformer) {
+	const { romanisationSystems, inputRomanisationSystem } = CantoneseTransformer.getLocalisation();
+	const selectedRomanisationSystem = CantoneseTransformer.getInputRomanisationSystem();
 
 	const alert = new Alert();
 	alert.title = inputRomanisationSystem;
@@ -229,17 +181,9 @@ async function selectInputRomanisationSystem(
 	const actions: PresentAlertActions = Object.fromEntries(
 		Object.entries(romanisationSystems).map(([key, romanisationSystemName]) => {
 			const isSelected = selectedRomanisationSystem === key;
-			const alertActionText = isSelected
-				? `${romanisationSystemName} ✅`
-				: romanisationSystemName;
-			return [
-				alertActionText,
-				() =>
-					CantoneseTransformer.setInputRomanisationSystem(
-						key as CantoneseRomanisationSystemName
-					),
-			];
-		})
+			const alertActionText = isSelected ? `${romanisationSystemName} ✅` : romanisationSystemName;
+			return [alertActionText, () => CantoneseTransformer.setInputRomanisationSystem(key as CantoneseRomanisationSystemName)];
+		}),
 	);
 	await presentAlertActions(alert, actions);
 
@@ -247,28 +191,21 @@ async function selectInputRomanisationSystem(
 }
 
 async function presentTextInput(CantoneseTransformer: CantoneseTransformer) {
-	const { convert, input, done, submit, settings } =
-		CantoneseTransformer.getLocalisation();
+	const { convert, input, done, submit, settings } = CantoneseTransformer.getLocalisation();
 
 	const alert = new Alert();
 	alert.title = `${convert} 🔄`;
 	alert.addTextField(input);
 
 	presentAlertActions(alert, {
-		[`${submit} ✅`]: async () =>
-			await parseAndPrompt(CantoneseTransformer, alert.textFieldValue(0)),
-		["From Clipboard 📋"]: async () =>
-			await parseAndPrompt(CantoneseTransformer, Pasteboard.paste()), // TODO Add localisation for "From Clipboard"
+		[`${submit} ✅`]: async () => await parseAndPrompt(CantoneseTransformer, alert.textFieldValue(0)),
+		["From Clipboard 📋"]: async () => await parseAndPrompt(CantoneseTransformer, Pasteboard.paste()), // TODO Add localisation for "From Clipboard"
 		[`${settings} ⚙️`]: async () => await settingsMenu(CantoneseTransformer),
 		[done]: () => Script.complete(),
 	});
 }
 
-async function prompt(
-	CantoneseTransformer: CantoneseTransformer,
-	originalText: string,
-	message: string
-) {
+async function prompt(CantoneseTransformer: CantoneseTransformer, originalText: string, message: string) {
 	const { done, convert, settings } = CantoneseTransformer.getLocalisation();
 
 	const alert = new Alert();
