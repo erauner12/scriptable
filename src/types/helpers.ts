@@ -65,3 +65,24 @@ export type ValueOf<T> = T[keyof T];
 export type KeyByValue<T, V> = {
 	[K in keyof T]: T[K] extends V ? K : never;
 }[keyof T];
+
+/**
+ * A utility type that extracts only the property names (excluding methods) of a given type `T`.
+ * It iterates over all keys of `T` and excludes any keys where the value is a function.
+ *
+ * @template T - The type from which to extract property names.
+ * @typedef PropertiesOf
+ * @example
+ * // Given a class with both properties and methods:
+ * class Example {
+ *   prop1: string;
+ *   prop2: number;
+ *   method1(): void {}
+ * }
+ *
+ * // PropertiesOf will only include "prop1" and "prop2":
+ * type ExampleProperties = PropertiesOf<Example>; // "prop1" | "prop2"
+ */
+export type PropertiesOf<T> = {
+	[K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
