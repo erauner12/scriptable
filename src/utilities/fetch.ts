@@ -1,6 +1,6 @@
-export async function fetchRequest(
+export async function fetchRequest<TObject extends Object>(
 	baseUrl: string,
-	queryParameters?: Object,
+	queryParameters?: TObject,
 	options?: Partial<Request>
 ): Promise<Request> {
 	try {
