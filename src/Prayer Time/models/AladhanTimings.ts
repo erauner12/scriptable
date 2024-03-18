@@ -5,17 +5,26 @@ import { fetchRequest } from "src/utilities/fetch";
 
 export class AladhanTimings {
 	private baseUrl: string = "http://api.aladhan.com/v1/timings";
+	private parameters: AladhanTimingsRequestQueryLocation;
 
-	async getPrayerTimes(
-		date: Date,
-		parameters: AladhanTimingsRequestQueryLocation
-	): Promise<AladhanPrayerTime> {
-		const dateString = dateToString(date);
-		const baseUrl = `${this.baseUrl}${dateString}`;
-		const request = await fetchRequest(baseUrl, parameters);
-		const response = await request.loadJSON();
-		const data: AladhanPrayerTime = response.data;
+	constructor(parameters: AladhanTimingsRequestQueryLocation) {
+		this.parameters = parameters;
+	}
 
-		return data;
+	async getPrayerTimes(date: Date = new Date()): Promise<AladhanPrayerTime> {
+		try {
+			const request = await fetchRequest(this.baseUrl, {
+				...this.parameters,
+				date: dateToString(date),
+			});
+			const response = await request.loadJSON();
+			const data: AladhanPrayerTime = response.data;
+
+			return data;
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : String(error);
+			throw new Error(`Failed to retrieve prayer times: ${errorMessage}`);
+		}
 	}
 }
