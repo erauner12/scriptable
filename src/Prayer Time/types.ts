@@ -1,4 +1,4 @@
-import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/Aladhan";
+import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTimings";
 
 export type Timing = {
 	prayer: string;

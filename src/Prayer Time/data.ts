@@ -1,7 +1,7 @@
 import { loadData, saveData } from "src/Prayer Time/generics/fileManager";
 import { AladhanTimings } from "src/Prayer Time/models/AladhanTimings";
 import { type AladhanPrayerTime, type UserPrayerTime, type RelativeDateTimeState, type Timing } from "src/Prayer Time/types";
-import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/Aladhan";
+import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTimings";
 import { stringToDate } from "src/Prayer Time/utilities";
 
 export function convertTimingsToDateArray(day: AladhanPrayerTime): Timing[] {
