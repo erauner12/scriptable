@@ -1,4 +1,4 @@
-class ScriptableFileManager {
+export class ScriptableFileManager {
 	protected fileManager: FileManager;
 	protected documentsDirectory: string;
 
@@ -18,43 +18,85 @@ class ScriptableFileManager {
 		}
 	}
 
-	public async saveJSON(
-		fileNameWithExtension: string,
-		directoryName: string,
-		data: object,
+	public async saveJSON<TObject extends Object>(
+		path: string,
+		data: TObject,
 		onOverwrite?: (existingFileNameWithoutExtension: string) => string,
-	): Promise<void> {
+	): Promise<string> {
 		try {
-			const path = await this.getFilePath(fileNameWithExtension, directoryName, true);
 			const fileContents = JSON.stringify(data, null, 2);
+			await this.createDirectoryFromFilePath(path);
 
 			if (!onOverwrite) {
 				this.fileManager.writeString(path, fileContents);
+				return fileContents;
 			}
 
-			if (onOverwrite) {
-				const existingFileNameWithoutExtension = this.fileManager.fileName(path);
-				const existingFileExtension = this.fileManager.fileExtension(path);
+			const existingFileNameWithoutExtension = this.fileManager.fileName(path);
+			const existingFileExtension = this.fileManager.fileExtension(path);
 
-				const newFileNameWithoutExtension = onOverwrite(existingFileNameWithoutExtension);
-				const newFileNameWithExtension = newFileNameWithoutExtension + existingFileExtension;
-				const newPath = await this.getFilePath(newFileNameWithExtension, directoryName, true);
-				this.fileManager.writeString(newPath, fileContents);
-			}
+			const newFileNameWithoutExtension = onOverwrite(existingFileNameWithoutExtension);
+			const newFileNameWithExtension = newFileNameWithoutExtension + existingFileExtension;
+			const newPath = path.replace(existingFileExtension, newFileNameWithExtension);
+			this.fileManager.writeString(newPath, fileContents);
+			return fileContents;
 		} catch (error) {
 			throw this.handleError(error);
 		}
 	}
 
-	private async getFilePath(
-		fileNameWithExtension: string,
-		directoryName: string,
-		createDirectoryRecursively: boolean = true,
-	): Promise<string> {
-		const path = this.fileManager.joinPath(directoryName, fileNameWithExtension);
+	/**
+	 * Joins the given path segments to the documents directory and appends a file extension if provided.
+	 *
+	 * If the path segments are an array, they are joined in order. If a file extension is provided and doesn't start with a dot, one is prepended.
+	 *
+	 * @param {string | string[]} pathSegments - A single path segment or an array of path segments to join.
+	 * @param {string} [fileExtension] - The file extension to append to the path. A dot is prepended if not present.
+	 * @returns {string} The full path combining the documents directory, path segments, and the file extension.
+	 *
+	 * @example
+	 * // Single path segment without an extension
+	 * joinDocumentPaths("folder/subfolder", "txt")
+	 * // returns "documentsDirectory/folder/subfolder.txt"
+	 *
+	 * @example
+	 * // Multiple path segments with an extension
+	 * joinDocumentPaths(["folder", "subfolder", "file"], "txt")
+	 * // returns "documentsDirectory/folder/subfolder/file.txt"
+	 *
+	 * @example
+	 * // Extension already starts with a dot
+	 * joinDocumentPaths("folder/file", ".txt")
+	 * // returns "documentsDirectory/folder/file.txt"
+	 */
+	public joinDocumentPaths(pathSegments: string | string[], fileExtension?: string): string {
+		let fullPath: string;
+
+		if (typeof pathSegments === "string") {
+			fullPath = this.fileManager.joinPath(this.documentsDirectory, pathSegments);
+		} else {
+			fullPath = pathSegments.reduce(
+				(accumulatedPath, currentSegment) => this.fileManager.joinPath(accumulatedPath, currentSegment),
+				this.documentsDirectory,
+			);
+		}
+
+		if (fileExtension) {
+			// Add a dot if the extension doesn't start with one.
+			const formattedExtension = fileExtension.startsWith(".") ? fileExtension : `.${fileExtension}`;
+			fullPath += formattedExtension;
+		}
+
+		return fullPath;
+	}
+
+	private async createDirectoryFromFilePath(path: string, createDirectoryRecursively: boolean = true): Promise<string> {
 		if (await this.ensureExists(path)) return path;
 
-		await this.createDirectory(directoryName, createDirectoryRecursively);
+		const fileName = this.fileManager.fileName(path, true);
+		const directoryPath = path.replace(fileName, "").replace(this.documentsDirectory, "");
+
+		await this.createDirectory(directoryPath, createDirectoryRecursively);
 		return path;
 	}
 
