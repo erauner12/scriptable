@@ -1,6 +1,6 @@
 import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTimings";
 
-export type Timing = {
+export type WidgetPrayerTiming = {
 	prayer: string;
 	dateTime: Date;
 	status?: { state: RelativeDateTimeState; next: boolean };
@@ -8,13 +8,9 @@ export type Timing = {
 
 export type RelativeDateTimeState = "past" | "next" | "today" | "future" | "unknown";
 
-export type WidgetData = {
-	prayerTimes: UserPrayerTime[];
-};
-
 export interface WidgetPreferences {
 	user: UserPreferences;
-	data?: WidgetPreferencesData;
+	data: WidgetPreferencesData;
 }
 
 type UserPreferences = {
@@ -25,8 +21,8 @@ type UserPreferences = {
 };
 
 type WidgetPreferencesData = {
-	location?: Location.CurrentLocation;
-	data?: AladhanPrayerTime[];
+	location: Location.CurrentLocation | undefined;
+	prayerTimes: AladhanPrayerTime[] | undefined;
 };
 
 type AladhanPreferences = {
