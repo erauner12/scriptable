@@ -13,7 +13,10 @@ async function runScript() {
 		const userPreferences = await fileManager.readJSON(filePath);
 
 		const prayerTime = new PrayerTime(userPreferences);
+		await prayerTime.initialise(async (PrayerTime) => await PrayerTime.setup());
 		await prayerTime.setup();
+		await prayerTime.displayWidget();
+		Script.complete();
 	} catch (error) {
 		throw handleError(error);
 	}

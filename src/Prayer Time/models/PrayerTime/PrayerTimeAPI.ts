@@ -1,7 +1,6 @@
 import { AladhanTimings } from "src/Prayer Time/models/AladhanTimings";
 import { PrayerTimeFileSystem } from "src/Prayer Time/models/PrayerTime/PrayerTimeFileSystem";
 import type { AladhanPrayerTime, WidgetPreferences } from "src/Prayer Time/types";
-import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTimings";
 import type { DeepPartial } from "src/types/helpers";
 import { handleError } from "src/utilities/handleError";
 
@@ -26,11 +25,7 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 		}
 	}
 
-	protected async fetchPrayerTimes(
-		calculationMethod: AladhanTimingsMethodValues,
-		location: Location.CurrentLocation,
-		daysToFetch: number,
-	): Promise<AladhanPrayerTime[]> {
+	protected async fetchPrayerTimes(location: Location.CurrentLocation): Promise<AladhanPrayerTime[]> {
 		try {
 			const { latitude, longitude } = location;
 			const newPrayerTimes: AladhanPrayerTime[] = [];
@@ -38,10 +33,10 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 			const aladhanTimings = new AladhanTimings({
 				latitude,
 				longitude,
-				method: calculationMethod,
+				method: this.preferences.user.aladhan.method,
 			});
 
-			for (let day = 0; day < daysToFetch; day++) {
+			for (let day = 0; day < this.preferences.user.offlineDays; day++) {
 				const date = new Date();
 				date.setDate(date.getDate() + day);
 
@@ -49,7 +44,7 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 				newPrayerTimes.push(aladhanPrayerTimeData);
 			}
 
-			return this.mergeAndSortPrayerTimes(newPrayerTimes, this.preferences.data.prayerTimes, daysToFetch);
+			return this.mergeAndSortPrayerTimes(newPrayerTimes, this.preferences.data.prayerTimes, this.preferences.user.offlineDays);
 		} catch (error) {
 			throw handleError(error);
 		}

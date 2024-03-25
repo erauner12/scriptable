@@ -7,63 +7,56 @@ export class PrayerTime extends PrayerTimeWidget {
 		super(userPreferences);
 	}
 
-	private async initialise() {
-		this.online = await this.isOnline();
+	public async initialise(onLocation: (PrayerTime: PrayerTime) => Promise<void>): Promise<void> {
+		this.preferences = await this.loadPreferences();
 
-		const widgetPreferences: WidgetPreferences = await this.loadPreferences();
-		if (!widgetPreferences) this.initialiseWidgetPreferences(this.preferences);
+		this.online = await this.isOnline();
 
 		Location.current().then(async (location) => {
 			this.preferences.data.location = location;
 			await this.mergeAndSavePreferences({ data: { location: location } });
-			console.log(`Location updated: ${JSON.stringify(location)}`);
+			Script.complete();
+			await onLocation(this);
 		});
 	}
 
 	public async setup(): Promise<void> {
-		await this.initialise();
-
-		if (!this.preferences.data.prayerTimes) {
-			if (!this.online) {
-				console.error("Script requires an internet connection to fetch prayer times for the first time.");
-				return Script.complete();
-			}
-
-			await this.getSaveAladhanPrayerTime(this.preferences.data.location);
-		} else {
+		if (this.preferences.data.prayerTimes) {
 			const todayData = this.getPrayerTimeForDay(this.preferences.data.prayerTimes);
 			const numberOfPrayerTimes = this.getFilteredPrayerTimes(this.preferences.data.prayerTimes).length;
 
 			this.offlineDataDistanceMetres = this.calculateDistanceFromLocation(todayData);
 
 			if (numberOfPrayerTimes <= this.displayItems || this.offlineDataDistanceMetres > this.preferences.user.distanceToleranceMetres) {
-				await this.getSaveAladhanPrayerTime(this.preferences.data.location);
+				await this.fetchAndSavePrayerTimes(this.preferences.data.location);
+			}
+		}
+
+		if (!this.online) {
+			console.error("Script requires an internet connection to fetch prayer times for the first time.");
+			return Script.complete();
+		}
+
+		await this.fetchAndSavePrayerTimes(this.preferences.data.location);
+	}
+
+	public async displayWidget(): Promise<void> {
+		if (this.preferences.data.prayerTimes) {
+			const widget = this.createWidget(
+				this.preferences.data.prayerTimes,
+				this.preferences.user.displayPrayerTimes,
+				this.displayItems,
+				this.widgetSize,
+				this.offlineDataDistanceMetres,
+			);
+
+			if (config.runsInAccessoryWidget) {
+				widget.addAccessoryWidgetBackground = true;
+				Script.setWidget(widget);
 			}
 
-			if (this.preferences.data.prayerTimes) this.displayPrayerTimes(this.preferences.data.prayerTimes);
+			await widget.presentMedium();
 		}
-	}
-
-	private async displayPrayerTimes(prayerTimes: AladhanPrayerTime[]): Promise<void> {
-		const widget = this.createWidget(
-			prayerTimes,
-			this.preferences.user.displayPrayerTimes,
-			this.displayItems,
-			this.widgetSize,
-			this.offlineDataDistanceMetres,
-		);
-
-		if (config.runsInAccessoryWidget) {
-			widget.addAccessoryWidgetBackground = true;
-			Script.setWidget(widget);
-		}
-
-		await widget.presentMedium();
-		Script.complete();
-	}
-
-	private initialiseWidgetPreferences(preferences: WidgetPreferences): void {
-		this.savePreferences(preferences);
 	}
 
 	private calculateDistanceFromLocation(prayerTime: AladhanPrayerTime | undefined): number {
@@ -75,14 +68,13 @@ export class PrayerTime extends PrayerTimeWidget {
 		return this.preferences.user.distanceToleranceMetres;
 	}
 
-	private async getSaveAladhanPrayerTime(location: Location.CurrentLocation | undefined): Promise<void> {
-		if (location) {
-			this.preferences.data.prayerTimes = await this.fetchPrayerTimes(
-				this.preferences.user.aladhan.method,
-				location,
-				this.preferences.user.offlineDays,
-			);
-			await this.savePreferences(this.preferences);
+	private async fetchAndSavePrayerTimes(location: Location.CurrentLocation | undefined): Promise<void> {
+		if (!location) {
+			console.error("Location not available. Please enable location services.");
+			return Script.complete();
 		}
+
+		const prayerTimes = await this.fetchPrayerTimes(location);
+		await this.mergeAndSavePreferences({ data: { prayerTimes } });
 	}
 }
