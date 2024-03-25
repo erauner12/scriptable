@@ -34,7 +34,7 @@ export class PrayerTime extends PrayerTimeWidget {
 			}
 			await this.getSaveAladhanPrayerTime(location);
 		} else {
-			const todayData = this.getPrayerTimesForDay(prayerTimes, today);
+			const todayData = this.getPrayerTimeForDay(prayerTimes, today);
 			const numberOfPrayerTimes = this.getFilteredPrayerTimes(prayerTimes).length;
 
 			this.getCurrentDistanceFromOfflineAladhanPrayerTime(todayData);

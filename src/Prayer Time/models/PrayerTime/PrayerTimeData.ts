@@ -13,22 +13,16 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
-	protected getPrayerTimesForDay(prayerTimes: AladhanPrayerTime[], targetDate?: Date): AladhanPrayerTime | undefined {
+	protected getPrayerTimeForDay(prayerTimes: AladhanPrayerTime[], targetDate?: Date): AladhanPrayerTime | undefined {
 		if (!prayerTimes) return undefined;
 
-		const filteredPrayerTimes: AladhanPrayerTime[] = prayerTimes.filter(
-			({
-				date: {
-					gregorian: { date },
-				},
-			}) => {
-				const day = targetDate ? targetDate : new Date();
-				day.setHours(0, 0, 0, 0);
-				const parsedDate = this.stringToDate(date);
-				const isTargetDay = day.toDateString() === parsedDate.toDateString();
-				return isTargetDay;
-			},
-		);
+		const filteredPrayerTimes: AladhanPrayerTime[] = prayerTimes.filter((prayerTime) => {
+			const day = targetDate ? targetDate : new Date();
+			day.setHours(0, 0, 0, 0);
+			const parsedDate = this.stringToDate(prayerTime.date.gregorian.date);
+			const isTargetDay = day.toDateString() === parsedDate.toDateString();
+			return isTargetDay;
+		});
 
 		if (filteredPrayerTimes[0]) {
 			const prayerTimesForDay: AladhanPrayerTime = filteredPrayerTimes[0];
