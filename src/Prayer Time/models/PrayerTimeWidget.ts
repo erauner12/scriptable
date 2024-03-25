@@ -16,6 +16,7 @@ export class PrayerTimeWidget extends PrayerTime {
 		Location.current().then(async (location) => {
 			this.preferences.data.location = location;
 			await this.mergePreferencesAndSave(this.preferences, { data: { location: location } });
+			console.log(`Location updated: ${JSON.stringify(location)}`);
 		});
 	}
 
