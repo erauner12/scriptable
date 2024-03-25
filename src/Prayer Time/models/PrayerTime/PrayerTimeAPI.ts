@@ -19,7 +19,6 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 
 		try {
 			const response = await request.load();
-			console.log(response);
 			if (response) return true;
 			return false;
 		} catch (error) {
