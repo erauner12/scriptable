@@ -20,7 +20,7 @@ export class PrayerTimeWidget extends PrayerTime {
 		});
 	}
 
-	public async setup() {
+	public async setup(): Promise<void> {
 		await this.initialise();
 
 		const today = new Date();
@@ -28,7 +28,10 @@ export class PrayerTimeWidget extends PrayerTime {
 		const { location, prayerTimes } = this.preferences.data;
 
 		if (!prayerTimes) {
-			if (!this.online) throw Error("Device is offline, and no Prayer Times are stored.");
+			if (!this.online) {
+				console.error("Script requires an internet connection to fetch prayer times for the first time.");
+				return Script.complete();
+			}
 			await this.getSaveAladhanPrayerTime(location);
 		} else {
 			const todayData = this.getDay(prayerTimes, today);
@@ -44,7 +47,7 @@ export class PrayerTimeWidget extends PrayerTime {
 		}
 	}
 
-	private async displayPrayerTimes(prayerTimes: AladhanPrayerTime[]) {
+	private async displayPrayerTimes(prayerTimes: AladhanPrayerTime[]): Promise<void> {
 		const widget = this.createWidget(
 			prayerTimes,
 			this.preferences.user.displayPrayerTimes,
@@ -62,11 +65,11 @@ export class PrayerTimeWidget extends PrayerTime {
 		Script.complete();
 	}
 
-	private initialiseWidgetPreferences(preferences: WidgetPreferences) {
+	private initialiseWidgetPreferences(preferences: WidgetPreferences): void {
 		this.savePreferences(preferences);
 	}
 
-	private getCurrentDistanceFromOfflineAladhanPrayerTime(aladhanPrayerTime: AladhanPrayerTime | undefined) {
+	private getCurrentDistanceFromOfflineAladhanPrayerTime(aladhanPrayerTime: AladhanPrayerTime | undefined): void {
 		if (aladhanPrayerTime && this.preferences.data.location) {
 			const { meta } = aladhanPrayerTime;
 			const distance = this.calculateDistance(this.preferences.data.location, meta);
@@ -74,7 +77,7 @@ export class PrayerTimeWidget extends PrayerTime {
 		}
 	}
 
-	private async getSaveAladhanPrayerTime(location: Location.CurrentLocation | undefined) {
+	private async getSaveAladhanPrayerTime(location: Location.CurrentLocation | undefined): Promise<void> {
 		if (location) {
 			this.preferences.data.prayerTimes = await this.getAladhanTimings(
 				this.preferences.user.aladhan.method,
