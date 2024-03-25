@@ -18,11 +18,12 @@ export class PrayerTimeFileSystem extends PrayerTimeBase {
 		await this.fileManager.saveJSON(this.filePath, preferences);
 	}
 
-	protected async mergePreferencesAndSave(
-		targetPreferences: WidgetPreferences,
-		sourcePreferences: DeepPartial<WidgetPreferences>,
-	): Promise<void> {
-		const mergedPreferences = mergeDeep(targetPreferences, sourcePreferences);
+	protected async mergeAndSavePreferences(sourcePreferences: DeepPartial<WidgetPreferences>): Promise<void> {
+		const mergedPreferences = mergeDeep(this.preferences, sourcePreferences);
 		await this.savePreferences(mergedPreferences);
+	}
+
+	protected async loadPreferences(): Promise<WidgetPreferences> {
+		return await this.fileManager.readJSON(this.filePath);
 	}
 }
