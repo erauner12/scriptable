@@ -27,108 +27,110 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 		}
 	}
 
-	protected async getAladhanTimings(
-		method: AladhanTimingsMethodValues,
+	protected async fetchPrayerTimes(
+		calculationMethod: AladhanTimingsMethodValues,
 		location: Location.CurrentLocation,
-		numberOfDays: number,
+		daysToFetch: number,
 	): Promise<AladhanPrayerTime[]> {
 		try {
 			const { latitude, longitude } = location;
-			const newData: AladhanPrayerTime[] = [];
+			const newPrayerTimes: AladhanPrayerTime[] = [];
 
 			const aladhanTimings = new AladhanTimings({
 				latitude,
 				longitude,
-				method,
+				method: calculationMethod,
 			});
 
-			for (let day = 0; day < numberOfDays; day++) {
+			for (let day = 0; day < daysToFetch; day++) {
 				const date = new Date();
 				date.setDate(date.getDate() + day);
 
 				const aladhanPrayerTimeData = await aladhanTimings.getPrayerTimes(date);
-				newData.push(aladhanPrayerTimeData);
+				newPrayerTimes.push(aladhanPrayerTimeData);
 			}
 
-			return this.mergeAladhanPrayerTimes(newData, numberOfDays);
+			return this.mergeAndSortPrayerTimes(newPrayerTimes, this.preferences.data.prayerTimes, daysToFetch);
 		} catch (error) {
 			throw handleError(error);
 		}
 	}
 
-	private async mergeAladhanPrayerTimes(newData: AladhanPrayerTime[], offlineDays: number): Promise<AladhanPrayerTime[]> {
-		const mergedData: AladhanPrayerTime[] = [];
+	private mergeAndSortPrayerTimes(
+		newPrayerTimes: AladhanPrayerTime[],
+		existingPrayerTimes: AladhanPrayerTime[] | undefined,
+		offlineDays: number,
+	): AladhanPrayerTime[] {
+		const mergedAndSortedPrayerTimes: AladhanPrayerTime[] = [];
 
-		if (this.preferences.data.prayerTimes) {
-			this.removeDuplicateData(this.preferences.data.prayerTimes).filter(
-				({
-					date: {
-						gregorian: { date },
-					},
-				}) => {
-					const today = new Date();
-					today.setHours(0, 0, 0, 0);
-					const max = new Date(today);
-					max.setDate(today.getDate() + offlineDays);
-					const isGreaterOrEqualToToday = this.stringToDate(date) >= today;
-					const isLessOrEqualToMax = this.stringToDate(date) <= max;
-					const isInRange = isGreaterOrEqualToToday && isLessOrEqualToMax;
-					return isInRange;
-				},
-			);
+		if (existingPrayerTimes) {
+			const deduplicatedPrayerTimes = this.removeDuplicates(existingPrayerTimes);
+			const filteredPrayerTimes = this.filterPrayerTimesByDateRange(deduplicatedPrayerTimes, offlineDays);
+			const mergedPrayerTimes = this.mergeAndReplacePrayerTimes(filteredPrayerTimes, newPrayerTimes);
+			const sortedPrayerTimes = this.sortPrayerTimesByDate(mergedPrayerTimes);
+			mergedAndSortedPrayerTimes.push(...sortedPrayerTimes);
 		}
 
-		// Update merged `day` values if already exist, else add new `days`
-		newData.forEach((day: AladhanPrayerTime) => {
-			const existsAlready = mergedData.some((d) => {
-				return JSON.stringify(d) === JSON.stringify(day);
-			});
+		return mergedAndSortedPrayerTimes;
+	}
 
-			// Add to offline if it doesn't exist
-			if (existsAlready === false) {
-				const indexToReplace = mergedData.findIndex(
+	private filterPrayerTimesByDateRange(prayerTimes: AladhanPrayerTime[], numberOfDays: number): AladhanPrayerTime[] {
+		const filteredPrayerTimes = prayerTimes.filter((prayerTime) => {
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			const maxDate = new Date(today);
+			maxDate.setDate(today.getDate() + numberOfDays);
+			const prayerTimeDate = new Date(prayerTime.date.gregorian.date);
+			const isInRange = prayerTimeDate >= today && prayerTimeDate <= maxDate;
+			return isInRange;
+		});
+		return filteredPrayerTimes;
+	}
+
+	private mergeAndReplacePrayerTimes(existingPrayerTimes: AladhanPrayerTime[], newPrayerTimes: AladhanPrayerTime[]): AladhanPrayerTime[] {
+		const mergedAndReplacedPrayerTimes: AladhanPrayerTime[] = [...existingPrayerTimes];
+
+		newPrayerTimes.forEach((newPrayerTime: AladhanPrayerTime) => {
+			const alreadyExists = mergedAndReplacedPrayerTimes.some(
+				(existingPrayerTime) => JSON.stringify(existingPrayerTime) === JSON.stringify(newPrayerTime),
+			);
+
+			if (!alreadyExists) {
+				const indexToReplace = mergedAndReplacedPrayerTimes.findIndex(
 					({
 						date: {
 							gregorian: { date },
 						},
-					}) => {
-						return day.date.gregorian.date === date;
-					},
+					}) => newPrayerTime.date.gregorian.date === date,
 				);
 
 				if (indexToReplace >= 0) {
-					mergedData[indexToReplace] = day;
-				}
-
-				if (indexToReplace === -1) {
-					mergedData.push(day);
+					mergedAndReplacedPrayerTimes[indexToReplace] = newPrayerTime;
+				} else {
+					mergedAndReplacedPrayerTimes.push(newPrayerTime);
 				}
 			}
 		});
 
-		// Sort array in ascending order by date
-		mergedData.sort((a, b) => {
-			const dateA = new Date(a.date.gregorian.date);
-			const dateB = new Date(b.date.gregorian.date);
-			if (dateA < dateB) {
-				return -1;
-			}
-			if (dateA > dateB) {
-				return 1;
-			}
-			return 0;
-		});
-
-		return mergedData;
+		return mergedAndReplacedPrayerTimes;
 	}
 
-	private removeDuplicateData(array: AladhanPrayerTime[]): AladhanPrayerTime[] {
-		const newArray: AladhanPrayerTime[] = [];
-		array.forEach((object) => {
-			if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
-				newArray.push(object);
+	private sortPrayerTimesByDate(prayerTimes: AladhanPrayerTime[]): AladhanPrayerTime[] {
+		const sortedPrayerTimes = [...prayerTimes];
+		return sortedPrayerTimes.sort((a, b) => {
+			const dateA = new Date(a.date.gregorian.date).getTime();
+			const dateB = new Date(b.date.gregorian.date).getTime();
+			return dateA - dateB;
+		});
+	}
+
+	private removeDuplicates(prayerTimes: AladhanPrayerTime[]): AladhanPrayerTime[] {
+		const uniquePrayerTimes: AladhanPrayerTime[] = [];
+		prayerTimes.forEach((prayerTime) => {
+			if (!uniquePrayerTimes.some((uniqueTime) => JSON.stringify(uniqueTime) === JSON.stringify(prayerTime))) {
+				uniquePrayerTimes.push(prayerTime);
 			}
 		});
-		return newArray;
+		return uniquePrayerTimes;
 	}
 }
