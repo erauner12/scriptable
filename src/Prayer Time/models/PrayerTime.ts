@@ -11,6 +11,7 @@ import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTi
 import type { DeepPartial } from "src/types/helpers";
 import type { WidgetSize } from "src/types/scriptable";
 import { getSettings } from "src/utilities/getSettings";
+import { mergeDeep } from "src/utilities/mergeDeep";
 import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
 import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
@@ -197,7 +198,12 @@ export class PrayerTime {
 	}
 
 	protected async savePreferences(preferences: WidgetPreferences) {
-		this.fileManager.saveJSON(this.filePath, preferences);
+		await this.fileManager.saveJSON(this.filePath, preferences);
+	}
+
+	protected async mergePreferencesAndSave(targetPreferences: WidgetPreferences, sourcePreferences: DeepPartial<WidgetPreferences>) {
+		const mergedPreferences = mergeDeep(targetPreferences, sourcePreferences);
+		await this.savePreferences(mergedPreferences);
 	}
 
 	private stringToDate(dateString: string) {

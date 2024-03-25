@@ -13,8 +13,10 @@ export class PrayerTimeWidget extends PrayerTime {
 		const widgetPreferences: WidgetPreferences = await this.fileManager.readJSON(this.filePath);
 		if (!widgetPreferences) this.initialiseWidgetPreferences(this.preferences);
 
-		this.preferences.data.location = await Location.current();
-		this.savePreferences(this.preferences);
+		Location.current().then(async (location) => {
+			this.preferences.data.location = location;
+			await this.mergePreferencesAndSave(this.preferences, { data: { location: location } });
+		});
 	}
 
 	public async setup() {
