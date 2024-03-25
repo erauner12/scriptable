@@ -79,7 +79,7 @@ export class PrayerTime extends PrayerTimeWidget {
 
 	private async getSaveAladhanPrayerTime(location: Location.CurrentLocation | undefined): Promise<void> {
 		if (location) {
-			this.preferences.data.prayerTimes = await this.getAladhanTimings(
+			this.preferences.data.prayerTimes = await this.fetchPrayerTimes(
 				this.preferences.user.aladhan.method,
 				location,
 				this.preferences.user.offlineDays,
