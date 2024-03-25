@@ -19,9 +19,7 @@ export class AladhanTimings {
 
 			const response = await fetchRequest(
 				baseUrl,
-				async (request) => {
-					await request.loadJSON();
-				},
+				async (request) => await request.loadJSON(),
 				(response) => {
 					throw new Error(response.data);
 				},
