@@ -35,7 +35,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 		prayerTimings.forEach((prayerTiming) => {
 			const { prayer, dateTime } = prayerTiming;
 
-			const opacityScaling = this.getDaysBetweenDates(now, dateTime) + 1;
+			const opacityScaling = this.calculateDaysDifference(now, dateTime) + 1;
 			const textOpacity = textOpacitySubtle / opacityScaling;
 			const textColour = new Color(textColourHex, textOpacity);
 
