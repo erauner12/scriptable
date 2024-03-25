@@ -13,23 +13,27 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
-	protected getPrayerTimes(dayData: AladhanPrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number): WidgetPrayerTiming[] {
-		const now = new Date();
+	protected getFilteredPrayerTimes(
+		prayerTimes: AladhanPrayerTime[],
+		userPrayerTimes: UserPrayerTime[],
+		maxItems?: number,
+	): WidgetPrayerTiming[] {
+		const currentTime = new Date();
 
-		const displayKeys = userPrayerTimes.map((prayerTime) => {
+		const prayerNames = userPrayerTimes.map((prayerTime) => {
 			return prayerTime.name.toUpperCase();
 		});
 
-		let sortedTimes = dayData
+		let filteredTimes = prayerTimes
 			.map((day) => this.convertTimingsToDateArray(day))
 			.flat()
-			.filter((prayerTime) => displayKeys.includes(prayerTime.prayer.toUpperCase()))
-			.filter((prayerTime) => prayerTime.dateTime > now)
-			.sort((dateA, dateB) => dateA.dateTime.getTime() - dateB.dateTime.getTime());
+			.filter((prayerTime) => prayerNames.includes(prayerTime.prayer.toUpperCase()))
+			.filter((prayerTime) => prayerTime.dateTime > currentTime)
+			.sort((timeA, timeB) => timeA.dateTime.getTime() - timeB.dateTime.getTime());
 
-		if (itemsToShow) sortedTimes = sortedTimes.slice(0, itemsToShow);
+		if (maxItems) filteredTimes = filteredTimes.slice(0, maxItems);
 
-		return sortedTimes;
+		return filteredTimes;
 	}
 
 	private convertTimingsToDateArray(day: AladhanPrayerTime): WidgetPrayerTiming[] {
