@@ -13,7 +13,7 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
-	protected getPrayerTimeForDay(prayerTimes: AladhanPrayerTime[], targetDate?: Date): AladhanPrayerTime | undefined {
+	protected getPrayerTimeForDay(prayerTimes: AladhanPrayerTime[], targetDate: Date = new Date()): AladhanPrayerTime | undefined {
 		if (!prayerTimes) return undefined;
 
 		const filteredPrayerTimes: AladhanPrayerTime[] = prayerTimes.filter((prayerTime) => {

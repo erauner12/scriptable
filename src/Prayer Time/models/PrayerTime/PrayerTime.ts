@@ -23,24 +23,21 @@ export class PrayerTime extends PrayerTimeWidget {
 	public async setup(): Promise<void> {
 		await this.initialise();
 
-		const today = new Date();
-
-		const { location, prayerTimes } = this.preferences.data;
-
-		if (!prayerTimes) {
+		if (!this.preferences.data.prayerTimes) {
 			if (!this.online) {
 				console.error("Script requires an internet connection to fetch prayer times for the first time.");
 				return Script.complete();
 			}
-			await this.getSaveAladhanPrayerTime(location);
-		} else {
-			const todayData = this.getPrayerTimeForDay(prayerTimes, today);
-			const numberOfPrayerTimes = this.getFilteredPrayerTimes(prayerTimes).length;
 
-			this.getCurrentDistanceFromOfflineAladhanPrayerTime(todayData);
+			await this.getSaveAladhanPrayerTime(this.preferences.data.location);
+		} else {
+			const todayData = this.getPrayerTimeForDay(this.preferences.data.prayerTimes);
+			const numberOfPrayerTimes = this.getFilteredPrayerTimes(this.preferences.data.prayerTimes).length;
+
+			this.offlineDataDistanceMetres = this.calculateDistanceFromLocation(todayData);
 
 			if (numberOfPrayerTimes <= this.displayItems || this.offlineDataDistanceMetres > this.preferences.user.distanceToleranceMetres) {
-				await this.getSaveAladhanPrayerTime(location);
+				await this.getSaveAladhanPrayerTime(this.preferences.data.location);
 			}
 
 			if (this.preferences.data.prayerTimes) this.displayPrayerTimes(this.preferences.data.prayerTimes);
@@ -69,12 +66,13 @@ export class PrayerTime extends PrayerTimeWidget {
 		this.savePreferences(preferences);
 	}
 
-	private getCurrentDistanceFromOfflineAladhanPrayerTime(aladhanPrayerTime: AladhanPrayerTime | undefined): void {
-		if (aladhanPrayerTime && this.preferences.data.location) {
-			const { meta } = aladhanPrayerTime;
-			const distance = this.calculateDistance(this.preferences.data.location, meta);
-			this.offlineDataDistanceMetres = this.roundToTwoDecimals(distance);
+	private calculateDistanceFromLocation(prayerTime: AladhanPrayerTime | undefined): number {
+		if (prayerTime && this.preferences.data.location) {
+			const distance = this.calculateDistance(this.preferences.data.location, prayerTime.meta);
+			return this.roundToTwoDecimals(distance);
 		}
+
+		return this.preferences.user.distanceToleranceMetres;
 	}
 
 	private async getSaveAladhanPrayerTime(location: Location.CurrentLocation | undefined): Promise<void> {
