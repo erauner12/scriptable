@@ -25,6 +25,12 @@ export class PrayerTimeFileSystem extends PrayerTimeBase {
 	}
 
 	protected async loadPreferences(): Promise<WidgetPreferences> {
-		return await this.fileManager.readJSON(this.filePath);
+		try {
+			return await this.fileManager.readJSON(this.filePath);
+		} catch (e) {
+			console.error("Error reading preferences from file. Creating new preferences file.");
+			await this.savePreferences(this.preferences);
+			return await this.fileManager.readJSON(this.filePath);
+		}
 	}
 }
