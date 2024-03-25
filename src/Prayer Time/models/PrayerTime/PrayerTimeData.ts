@@ -13,9 +13,9 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
-	protected calculateDistanceFromLocation(prayerTime: AladhanPrayerTime | undefined): number {
-		if (prayerTime && this.preferences.data.location) {
-			return this.calculateDistance(this.preferences.data.location, prayerTime.meta);
+	protected calculateDistanceFromDeviceLocation(location: { latitude: number; longitude: number } | undefined): number {
+		if (location && this.preferences.data.location) {
+			return this.calculateDistance(this.preferences.data.location, location);
 		}
 
 		return this.preferences.user.distanceToleranceMetres;

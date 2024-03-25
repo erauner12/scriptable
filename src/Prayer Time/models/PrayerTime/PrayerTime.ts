@@ -25,9 +25,9 @@ export class PrayerTime extends PrayerTimeWidget {
 			const todayData = this.getPrayerTimeForDay(this.preferences.data.prayerTimes);
 			const numberOfPrayerTimes = this.getFilteredPrayerTimes(this.preferences.data.prayerTimes).length;
 
-			this.offlineDataDistanceMetres = this.calculateDistanceFromLocation(todayData);
+			this.distanceFromOfflineData = this.calculateDistanceFromDeviceLocation(todayData?.meta);
 
-			if (numberOfPrayerTimes <= this.displayItems || this.offlineDataDistanceMetres > this.preferences.user.distanceToleranceMetres) {
+			if (numberOfPrayerTimes <= this.displayItems || this.distanceFromOfflineData > this.preferences.user.distanceToleranceMetres) {
 				await this.fetchAndSavePrayerTimes(this.preferences.data.location);
 			}
 		}
@@ -42,7 +42,7 @@ export class PrayerTime extends PrayerTimeWidget {
 
 	public async displayWidget(): Promise<void> {
 		if (this.preferences.data.prayerTimes) {
-			const widget = this.createWidget(this.preferences.data.prayerTimes, this.offlineDataDistanceMetres);
+			const widget = this.createWidget(this.preferences.data.prayerTimes, this.distanceFromOfflineData);
 
 			if (config.runsInAccessoryWidget) {
 				widget.addAccessoryWidgetBackground = true;

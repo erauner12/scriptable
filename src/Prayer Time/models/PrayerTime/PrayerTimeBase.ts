@@ -9,7 +9,7 @@ export class PrayerTimeBase {
 	protected widgetSize: WidgetSize;
 	protected displayItems: number;
 	protected preferences: WidgetPreferences;
-	protected offlineDataDistanceMetres: number;
+	protected distanceFromOfflineData: number;
 
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
 		this.online = false;
@@ -54,7 +54,7 @@ export class PrayerTimeBase {
 				data: {},
 			},
 		);
-		this.offlineDataDistanceMetres = this.preferences.user.distanceToleranceMetres;
+		this.distanceFromOfflineData = this.preferences.user.distanceToleranceMetres;
 	}
 
 	private getDisplayItems(widgetSize: WidgetSize): number {
