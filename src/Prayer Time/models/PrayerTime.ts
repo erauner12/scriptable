@@ -73,7 +73,7 @@ export class PrayerTime {
 		);
 	}
 
-	private getDisplayItems(widgetSize: WidgetSize) {
+	private getDisplayItems(widgetSize: WidgetSize): number {
 		switch (widgetSize) {
 			case "small":
 			case "medium":
@@ -90,7 +90,7 @@ export class PrayerTime {
 		}
 	}
 
-	protected getPrayerTimes(dayData: AladhanPrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number) {
+	protected getPrayerTimes(dayData: AladhanPrayerTime[], userPrayerTimes: UserPrayerTime[], itemsToShow?: number): WidgetPrayerTiming[] {
 		const now = new Date();
 
 		const displayKeys = userPrayerTimes.map((prayerTime) => {
@@ -177,11 +177,11 @@ export class PrayerTime {
 		}
 	}
 
-	protected async savePreferences(preferences: WidgetPreferences) {
+	protected async savePreferences(preferences: WidgetPreferences): Promise<void> {
 		await this.fileManager.saveJSON(this.filePath, preferences);
 	}
 
-	private async mergeAladhanPrayerTimes(newData: AladhanPrayerTime[], offlineDays: number) {
+	private async mergeAladhanPrayerTimes(newData: AladhanPrayerTime[], offlineDays: number): Promise<AladhanPrayerTime[]> {
 		const mergedData: AladhanPrayerTime[] = [];
 
 		if (this.preferences.data.prayerTimes) {
@@ -257,19 +257,22 @@ export class PrayerTime {
 		return newArray;
 	}
 
-	protected async mergePreferencesAndSave(targetPreferences: WidgetPreferences, sourcePreferences: DeepPartial<WidgetPreferences>) {
+	protected async mergePreferencesAndSave(
+		targetPreferences: WidgetPreferences,
+		sourcePreferences: DeepPartial<WidgetPreferences>,
+	): Promise<void> {
 		const mergedPreferences = mergeDeep(targetPreferences, sourcePreferences);
 		await this.savePreferences(mergedPreferences);
 	}
 
-	private stringToDate(dateString: string) {
+	private stringToDate(dateString: string): Date {
 		const [day, month, year] = dateString.split("-");
 		const date = new Date(Number(year), Number(month) - 1, Number(day));
 		date.setHours(0, 0, 0, 0);
 		return date;
 	}
 
-	protected calculateDistance(point1: { latitude: number; longitude: number }, point2: { latitude: number; longitude: number }) {
+	protected calculateDistance(point1: { latitude: number; longitude: number }, point2: { latitude: number; longitude: number }): number {
 		const R = 6371; // Radius of the Earth in km
 		const radians = (degrees: number) => degrees * (Math.PI / 180); // Convert degrees to radians
 
@@ -288,11 +291,11 @@ export class PrayerTime {
 		return distance * 1000; // Distance in metres
 	}
 
-	protected roundToTwoDecimals(number: number) {
+	protected roundToTwoDecimals(number: number): number {
 		return Math.round((number + Number.EPSILON) * 100) / 100;
 	}
 
-	protected async isOnline() {
+	protected async isOnline(): Promise<boolean> {
 		const waitTimeMs = 15;
 		const url = "https://www.google.com";
 		const request = new Request(url);
@@ -301,6 +304,7 @@ export class PrayerTime {
 
 		try {
 			const response = await request.load();
+			console.log(response);
 			if (response) return true;
 			return false;
 		} catch (error) {
@@ -314,7 +318,7 @@ export class PrayerTime {
 		itemsToShow: number,
 		widgetSize: WidgetSize,
 		distance: number,
-	) {
+	): ListWidget {
 		const sortedTimes = this.getPrayerTimes(dayData, userPrayerTimes, itemsToShow);
 		const prayerTimings = this.addStatusToPrayerTimes(sortedTimes);
 
