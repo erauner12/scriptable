@@ -52,14 +52,4 @@ export class PrayerTime extends PrayerTimeWidget {
 			await widget.presentLarge();
 		}
 	}
-
-	private async fetchAndSavePrayerTimes(location: Location.CurrentLocation | undefined): Promise<void> {
-		if (!location) {
-			console.error("Location not available. Please enable location services.");
-			return Script.complete();
-		}
-
-		const prayerTimes = await this.fetchPrayerTimes(location);
-		await this.mergeAndSavePreferences({ data: { prayerTimes } });
-	}
 }

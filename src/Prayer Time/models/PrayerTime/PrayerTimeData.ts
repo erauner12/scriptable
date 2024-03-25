@@ -13,6 +13,16 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
+	protected async fetchAndSavePrayerTimes(location: { latitude: number; longitude: number } | undefined): Promise<void> {
+		if (!location) {
+			console.error("Location not available. Please enable location services.");
+			return Script.complete();
+		}
+
+		const prayerTimes = await this.fetchPrayerTimes(location);
+		await this.mergeAndSavePreferences({ data: { prayerTimes } });
+	}
+
 	protected calculateDistanceFromDeviceLocation(location: { latitude: number; longitude: number } | undefined): number {
 		if (location && this.preferences.data.location) {
 			return this.calculateDistance(this.preferences.data.location, location);

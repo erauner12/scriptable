@@ -25,7 +25,7 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 		}
 	}
 
-	protected async fetchPrayerTimes(location: Location.CurrentLocation): Promise<AladhanPrayerTime[]> {
+	protected async fetchPrayerTimes(location: { latitude: number; longitude: number }): Promise<AladhanPrayerTime[]> {
 		try {
 			const { latitude, longitude } = location;
 			const newPrayerTimes: AladhanPrayerTime[] = [];
