@@ -109,10 +109,11 @@ export class PrayerTimeBase {
 		};
 
 		const distanceInM = calculateHaversine(startLocation, endLocation) * 1000;
-		return distanceInM;
+		const roundedDistanceInM = this.roundToTwoDecimals(distanceInM);
+		return roundedDistanceInM;
 	}
 
-	protected roundToTwoDecimals(number: number): number {
+	private roundToTwoDecimals(number: number): number {
 		return Math.round((number + Number.EPSILON) * 100) / 100;
 	}
 
