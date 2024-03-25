@@ -1,6 +1,7 @@
+import { dateToString } from "src/Prayer Time/common/dateToString";
 import type { AladhanPrayerTime } from "src/Prayer Time/types";
 import type { AladhanTimingsRequestQueryLocation } from "src/Prayer Time/types/AladhanTimings";
-import { dateToString } from "src/Prayer Time/utilities";
+
 import { fetchRequest } from "src/utilities/fetch";
 
 export class AladhanTimings {

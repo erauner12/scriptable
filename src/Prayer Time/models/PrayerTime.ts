@@ -1,3 +1,4 @@
+import { dateToString } from "src/Prayer Time/common/dateToString";
 import { AladhanTimings } from "src/Prayer Time/models/AladhanTimings";
 import type {
 	AladhanPrayerTime,
@@ -145,15 +146,15 @@ export class PrayerTime {
 		}
 	}
 
-	private removeDuplicateData(array: AladhanPrayerTime[]): AladhanPrayerTime[] {
-		const newArray: AladhanPrayerTime[] = [];
-		array.forEach((object) => {
-			if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
-				newArray.push(object);
-			}
-		});
-		return newArray;
-	}
+	// private removeDuplicateData(array: AladhanPrayerTime[]): AladhanPrayerTime[] {
+	// 	const newArray: AladhanPrayerTime[] = [];
+	// 	array.forEach((object) => {
+	// 		if (!newArray.some((o) => JSON.stringify(o) === JSON.stringify(object))) {
+	// 			newArray.push(object);
+	// 		}
+	// 	});
+	// 	return newArray;
+	// }
 
 	protected async getAladhanTimings(
 		method: AladhanTimingsMethodValues,
@@ -321,7 +322,7 @@ export class PrayerTime {
 				updatedOn.font = new Font("AvenirNext-Regular", 10);
 				updatedOn.textColor = new Color(textColourHex, textOpacitySubtle);
 
-				const updatedAt = this.addCenteredTextElementToStack(updatedStack, `${this.dateToString(now)} ${this.convertToLocaleAmPm(now)}`);
+				const updatedAt = this.addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${this.convertToLocaleAmPm(now)}`);
 				updatedAt.font = new Font("AvenirNext-Regular", 10);
 				updatedAt.textColor = new Color(textColourHex, textOpacitySubtle);
 				break;
@@ -512,17 +513,6 @@ export class PrayerTime {
 		});
 	}
 
-	private dateToString(dateString?: Date) {
-		const date = dateString ? dateString : new Date();
-		return new Date(date)
-			.toLocaleString(undefined, {
-				day: "2-digit",
-				month: "2-digit",
-				year: "numeric",
-			})
-			.replace(/\//g, "-");
-	}
-
 	private convertToLocaleAmPm(
 		date: Date,
 		options: Intl.DateTimeFormatOptions | undefined = {
@@ -535,19 +525,19 @@ export class PrayerTime {
 		return localAmPmTime;
 	}
 
-	private capitaliseWord(word: string) {
-		const firstLetter = word.charAt(0).toUpperCase();
-		const rest = word.slice(1).toLowerCase();
-		const capitalisedWord = firstLetter + rest;
-		return capitalisedWord.trim();
-	}
+	// private capitaliseWord(word: string) {
+	// 	const firstLetter = word.charAt(0).toUpperCase();
+	// 	const rest = word.slice(1).toLowerCase();
+	// 	const capitalisedWord = firstLetter + rest;
+	// 	return capitalisedWord.trim();
+	// }
 
-	// Overwrite the default values when running as widget
-	private getWidgetArguments(userPreferences: Record<string, any>, argumentNames: string[]) {
-		argumentNames.forEach((argumentName) => {
-			if (userPreferences[argumentName] && args.widgetParameter.includes(argumentName)) {
-				userPreferences[argumentName] = args.widgetParameter[argumentName];
-			}
-		});
-	}
+	// // Overwrite the default values when running as widget
+	// private getWidgetArguments(userPreferences: Record<string, any>, argumentNames: string[]) {
+	// 	argumentNames.forEach((argumentName) => {
+	// 		if (userPreferences[argumentName] && args.widgetParameter.includes(argumentName)) {
+	// 			userPreferences[argumentName] = args.widgetParameter[argumentName];
+	// 		}
+	// 	});
+	// }
 }
