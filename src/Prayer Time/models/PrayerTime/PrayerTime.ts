@@ -1,5 +1,5 @@
 import { PrayerTimeWidget } from "src/Prayer Time/models/PrayerTime/PrayerTimeWidget";
-import type { AladhanPrayerTime, WidgetPreferences } from "src/Prayer Time/types";
+import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
 
 export class PrayerTime extends PrayerTimeWidget {
@@ -42,20 +42,14 @@ export class PrayerTime extends PrayerTimeWidget {
 
 	public async displayWidget(): Promise<void> {
 		if (this.preferences.data.prayerTimes) {
-			const widget = this.createWidget(
-				this.preferences.data.prayerTimes,
-				this.preferences.user.displayPrayerTimes,
-				this.displayItems,
-				this.widgetSize,
-				this.offlineDataDistanceMetres,
-			);
+			const widget = this.createWidget(this.preferences.data.prayerTimes, this.offlineDataDistanceMetres);
 
 			if (config.runsInAccessoryWidget) {
 				widget.addAccessoryWidgetBackground = true;
 				Script.setWidget(widget);
 			}
 
-			await widget.presentMedium();
+			await widget.presentLarge();
 		}
 	}
 

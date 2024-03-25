@@ -1,22 +1,14 @@
-import { dateToString } from "src/Prayer Time/common/dateToString";
 import { PrayerTimeData } from "src/Prayer Time/models/PrayerTime/PrayerTimeData";
-import type { AladhanPrayerTime, UserPrayerTime, WidgetPrayerTiming, WidgetPreferences } from "src/Prayer Time/types";
+import type { AladhanPrayerTime, WidgetPrayerTiming, WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
-import type { WidgetSize } from "src/types/scriptable";
 
 export class PrayerTimeWidget extends PrayerTimeData {
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}
 
-	protected createWidget(
-		dayData: AladhanPrayerTime[],
-		userPrayerTimes: UserPrayerTime[],
-		itemsToShow: number,
-		widgetSize: WidgetSize,
-		distance: number,
-	): ListWidget {
-		const sortedTimes = this.getFilteredPrayerTimes(dayData, itemsToShow);
+	protected createWidget(dayData: AladhanPrayerTime[], distance: number): ListWidget {
+		const sortedTimes = this.getFilteredPrayerTimes(dayData, this.displayItems);
 		const prayerTimings = this.addStatusToPrayerTimes(sortedTimes);
 
 		const now = new Date();
@@ -30,7 +22,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 
 		const listWidget = new ListWidget();
 
-		if (widgetSize !== "accessoryCircular") {
+		if (this.widgetSize !== "accessoryCircular") {
 			listWidget.setPadding(16, 20, 16, 20);
 			listWidget.spacing = listWidgetSpacing;
 		}
@@ -47,14 +39,16 @@ export class PrayerTimeWidget extends PrayerTimeData {
 			const textOpacity = textOpacitySubtle / opacityScaling;
 			const textColour = new Color(textColourHex, textOpacity);
 
-			const userTiming = userPrayerTimes.find((prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase());
+			const userTiming = this.preferences.user.displayPrayerTimes.find(
+				(prayerTime) => prayerTime.name.toLowerCase() === prayer.toLowerCase(),
+			);
 
 			if (!userTiming) return;
 
 			const { name, abbreviation } = userTiming;
-			const prayerTitleString = widgetSize === "medium" || widgetSize === "large" ? name.toUpperCase() : abbreviation;
+			const prayerTitleString = this.widgetSize === "medium" || this.widgetSize === "large" ? name.toUpperCase() : abbreviation;
 
-			switch (widgetSize) {
+			switch (this.widgetSize) {
 				case "small":
 				case "medium":
 				case "large":
@@ -73,7 +67,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 			}
 		});
 
-		switch (widgetSize) {
+		switch (this.widgetSize) {
 			case "small":
 			case "medium":
 			case "large":
@@ -81,13 +75,15 @@ export class PrayerTimeWidget extends PrayerTimeData {
 				const updatedStack = listWidget.addStack();
 				updatedStack.layoutVertically();
 
-				const updatedOn = this.addCenteredTextElementToStack(updatedStack, `${distance} metres`);
-				updatedOn.font = new Font("AvenirNext-Regular", 10);
-				updatedOn.textColor = new Color(textColourHex, textOpacitySubtle);
+				const distanceFromUpdate = this.addCenteredTextElementToStack(updatedStack, `${distance} metres`);
+				distanceFromUpdate.font = new Font("AvenirNext-Regular", 10);
+				distanceFromUpdate.textColor = new Color(textColourHex, textOpacitySubtle);
 
-				const updatedAt = this.addCenteredTextElementToStack(updatedStack, `${dateToString(now)} ${this.convertToLocaleAmPm(now)}`);
-				updatedAt.font = new Font("AvenirNext-Regular", 10);
-				updatedAt.textColor = new Color(textColourHex, textOpacitySubtle);
+				const [dateElement, timeElement] = this.addCenteredDateElementToStack(updatedStack, now);
+				dateElement.font = new Font("AvenirNext-Regular", 10);
+				dateElement.textColor = new Color(textColourHex, textOpacitySubtle);
+				timeElement.font = new Font("AvenirNext-Regular", 10);
+				timeElement.textColor = new Color(textColourHex, textOpacitySubtle);
 				break;
 			default:
 				break;
@@ -230,10 +226,32 @@ export class PrayerTimeWidget extends PrayerTimeData {
 
 		horizontalStack.addSpacer();
 
-		const textElement = horizontalStack.addText(text);
-		textElement.lineLimit = 1;
+		const element = horizontalStack.addText(text);
+		element.lineLimit = 1;
+		element.centerAlignText();
 
 		horizontalStack.addSpacer();
-		return textElement;
+		return element;
+	}
+
+	private addCenteredDateElementToStack(stack: WidgetStack, date: Date): [WidgetDate, WidgetDate] {
+		const horizontalStack = stack.addStack();
+
+		horizontalStack.addSpacer();
+
+		const dateElement = horizontalStack.addDate(date);
+		dateElement.applyDateStyle();
+		dateElement.lineLimit = 1;
+		dateElement.centerAlignText();
+
+		horizontalStack.spacing = 2;
+
+		const timeElement = horizontalStack.addDate(date);
+		timeElement.applyTimeStyle();
+		timeElement.lineLimit = 1;
+		timeElement.centerAlignText();
+
+		horizontalStack.addSpacer();
+		return [dateElement, timeElement];
 	}
 }

@@ -13,7 +13,7 @@ export class PrayerTimeBase {
 
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
 		this.online = false;
-		this.widgetSize = getWidgetSize("medium");
+		this.widgetSize = getWidgetSize("large");
 		this.displayItems = this.getDisplayItems(this.widgetSize);
 		this.preferences = getSettings<WidgetPreferences>(
 			{
@@ -64,7 +64,7 @@ export class PrayerTimeBase {
 				return 5;
 			case "large":
 			case "extraLarge":
-				return 14;
+				return 13;
 			case "accessoryCircular":
 			case "accessoryInline":
 			case "accessoryRectangular":
