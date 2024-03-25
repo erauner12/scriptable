@@ -81,23 +81,35 @@ export class PrayerTimeBase {
 		return date;
 	}
 
-	protected calculateDistance(point1: { latitude: number; longitude: number }, point2: { latitude: number; longitude: number }): number {
-		const R = 6371; // Radius of the Earth in km
-		const radians = (degrees: number) => degrees * (Math.PI / 180); // Convert degrees to radians
+	protected calculateDistance(
+		startLocation: { latitude: number; longitude: number },
+		endLocation: { latitude: number; longitude: number },
+	): number {
+		const calculateHaversine = (
+			startLocation: { latitude: number; longitude: number },
+			endLocation: { latitude: number; longitude: number },
+		): number => {
+			const EARTH_RADIUS_KM = 6371;
+			const degreesToRadians = (degrees: number) => degrees * (Math.PI / 180);
 
-		// Difference in coordinates
-		const deltaLat = radians(point2.latitude - point1.latitude);
-		const deltaLon = radians(point2.longitude - point1.longitude);
+			const deltaLatitude = degreesToRadians(endLocation.latitude - startLocation.latitude);
+			const deltaLongitude = degreesToRadians(endLocation.longitude - startLocation.longitude);
 
-		// Apply Haversine formula
-		const a =
-			Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-			Math.cos(radians(point1.latitude)) * Math.cos(radians(point2.latitude)) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+			const a =
+				Math.sin(deltaLatitude / 2) * Math.sin(deltaLatitude / 2) +
+				Math.cos(degreesToRadians(startLocation.latitude)) *
+					Math.cos(degreesToRadians(endLocation.latitude)) *
+					Math.sin(deltaLongitude / 2) *
+					Math.sin(deltaLongitude / 2);
 
-		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-		const distance = R * c; // Distance in km
-		return distance * 1000; // Distance in metres
+			const distanceInKm = EARTH_RADIUS_KM * c;
+			return distanceInKm;
+		};
+
+		const distanceInM = calculateHaversine(startLocation, endLocation) * 1000;
+		return distanceInM;
 	}
 
 	protected roundToTwoDecimals(number: number): number {
