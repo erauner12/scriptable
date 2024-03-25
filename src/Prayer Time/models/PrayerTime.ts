@@ -11,6 +11,7 @@ import type { AladhanTimingsMethodValues } from "src/Prayer Time/types/AladhanTi
 import type { DeepPartial } from "src/types/helpers";
 import type { WidgetSize } from "src/types/scriptable";
 import { getSettings } from "src/utilities/getSettings";
+import { handleError } from "src/utilities/handleError";
 import { mergeDeep } from "src/utilities/mergeDeep";
 import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
 import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
@@ -192,8 +193,7 @@ export class PrayerTime {
 				return 0;
 			});
 		} catch (error) {
-			if (typeof error === "string") throw Error(error);
-			throw new Error("An unknown error occurred.");
+			throw handleError(error);
 		}
 	}
 
