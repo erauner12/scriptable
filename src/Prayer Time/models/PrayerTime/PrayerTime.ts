@@ -1,8 +1,8 @@
-import { PrayerTime } from "src/Prayer Time/models/PrayerTime";
+import { PrayerTimeWidget } from "src/Prayer Time/models/PrayerTime/PrayerTimeWidget";
 import type { AladhanPrayerTime, WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
 
-export class PrayerTimeWidget extends PrayerTime {
+export class PrayerTime extends PrayerTimeWidget {
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}

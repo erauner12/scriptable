@@ -1,4 +1,4 @@
-import { PrayerTimeWidget } from "src/Prayer Time/models/PrayerTimeWidget";
+import PrayerTime from "src/Prayer Time/models/PrayerTime";
 import { handleError } from "src/utilities/handleError";
 import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
@@ -12,7 +12,7 @@ async function runScript() {
 		const filePath = fileManager.joinDocumentPaths([Script.name(), Script.name()], ".json");
 		const userPreferences = await fileManager.readJSON(filePath);
 
-		const prayerTime = new PrayerTimeWidget(userPreferences);
+		const prayerTime = new PrayerTime(userPreferences);
 		await prayerTime.setup();
 	} catch (error) {
 		throw handleError(error);
