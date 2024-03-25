@@ -15,6 +15,7 @@ export class PrayerTimeFileSystem extends PrayerTimeBase {
 	}
 
 	protected async savePreferences(preferences: WidgetPreferences): Promise<void> {
+		this.preferences = preferences; // Update the preferences in memory
 		await this.fileManager.saveJSON(this.filePath, preferences);
 	}
 
