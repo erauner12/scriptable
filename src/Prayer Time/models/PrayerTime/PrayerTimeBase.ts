@@ -14,7 +14,7 @@ export class PrayerTimeBase {
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
 		this.online = false;
 		this.widgetSize = getWidgetSize("large");
-		this.displayItems = this.getDisplayItems(this.widgetSize);
+		this.displayItems = this.calculateDisplayItems(this.widgetSize);
 		this.preferences = getSettings<WidgetPreferences>(
 			{
 				user: {
@@ -57,7 +57,7 @@ export class PrayerTimeBase {
 		this.distanceFromOfflineData = this.preferences.user.distanceToleranceMetres;
 	}
 
-	private getDisplayItems(widgetSize: WidgetSize): number {
+	private calculateDisplayItems(widgetSize: WidgetSize): number {
 		switch (widgetSize) {
 			case "small":
 			case "medium":
