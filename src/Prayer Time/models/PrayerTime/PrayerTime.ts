@@ -10,7 +10,7 @@ export class PrayerTime extends PrayerTimeWidget {
 	public async initialise(onLocation: (PrayerTime: PrayerTime) => Promise<void>): Promise<void> {
 		this.preferences = await this.loadPreferences();
 
-		this.isOnline = await this.isOnline();
+		this.online = await this.isOnline();
 
 		Location.current().then(async (location) => {
 			this.preferences.data.location = location;
