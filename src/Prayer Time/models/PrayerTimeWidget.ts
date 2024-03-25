@@ -1,7 +1,6 @@
 import { PrayerTime } from "src/Prayer Time/models/PrayerTime";
 import type { AladhanPrayerTime, WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
-import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
 export class PrayerTimeWidget extends PrayerTime {
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
@@ -12,7 +11,7 @@ export class PrayerTimeWidget extends PrayerTime {
 		this.online = await this.isOnline();
 
 		const widgetPreferences: WidgetPreferences = await this.fileManager.readJSON(this.filePath);
-		if (!widgetPreferences) this.initialiseWidgetPreferences(this.filePath, this.preferences);
+		if (!widgetPreferences) this.initialiseWidgetPreferences(this.preferences);
 
 		this.preferences.data.location = await Location.current();
 		this.savePreferences(this.preferences);
@@ -60,9 +59,8 @@ export class PrayerTimeWidget extends PrayerTime {
 		Script.complete();
 	}
 
-	private initialiseWidgetPreferences(filePath: string, settings: WidgetPreferences) {
-		const fileManager = new ScriptableFileManager();
-		fileManager.saveJSON(filePath, settings);
+	private initialiseWidgetPreferences(preferences: WidgetPreferences) {
+		this.savePreferences(preferences);
 	}
 
 	private getCurrentDistanceFromOfflineAladhanPrayerTime(aladhanPrayerTime: AladhanPrayerTime | undefined) {
