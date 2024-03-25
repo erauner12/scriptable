@@ -59,15 +59,6 @@ export class PrayerTime extends PrayerTimeWidget {
 		}
 	}
 
-	private calculateDistanceFromLocation(prayerTime: AladhanPrayerTime | undefined): number {
-		if (prayerTime && this.preferences.data.location) {
-			const distance = this.calculateDistance(this.preferences.data.location, prayerTime.meta);
-			return this.roundToTwoDecimals(distance);
-		}
-
-		return this.preferences.user.distanceToleranceMetres;
-	}
-
 	private async fetchAndSavePrayerTimes(location: Location.CurrentLocation | undefined): Promise<void> {
 		if (!location) {
 			console.error("Location not available. Please enable location services.");

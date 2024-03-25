@@ -13,6 +13,15 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
+	protected calculateDistanceFromLocation(prayerTime: AladhanPrayerTime | undefined): number {
+		if (prayerTime && this.preferences.data.location) {
+			const distance = this.calculateDistance(this.preferences.data.location, prayerTime.meta);
+			return this.roundToTwoDecimals(distance);
+		}
+
+		return this.preferences.user.distanceToleranceMetres;
+	}
+
 	protected getPrayerTimeForDay(prayerTimes: AladhanPrayerTime[], targetDate: Date = new Date()): AladhanPrayerTime | undefined {
 		if (!prayerTimes) return undefined;
 
