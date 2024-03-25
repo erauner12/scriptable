@@ -4,7 +4,6 @@ import { ScriptableFileManager } from "src/utilities/scriptable/models/Scriptabl
 
 (async () => {
 	await runScript();
-	Script.complete();
 })();
 
 async function runScript() {
