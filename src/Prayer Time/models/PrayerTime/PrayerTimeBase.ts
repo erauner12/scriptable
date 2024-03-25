@@ -5,14 +5,14 @@ import { getSettings } from "src/utilities/getSettings";
 import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
 
 export class PrayerTimeBase {
-	protected online: boolean;
+	protected isOnline: boolean;
 	protected widgetSize: WidgetSize;
 	protected displayItems: number;
 	protected preferences: WidgetPreferences;
 	protected distanceFromOfflineData: number;
 
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
-		this.online = false;
+		this.isOnline = false;
 		this.widgetSize = getWidgetSize("large");
 		this.displayItems = this.calculateDisplayItems(this.widgetSize);
 		this.preferences = getSettings<WidgetPreferences>(

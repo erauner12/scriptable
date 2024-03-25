@@ -10,7 +10,7 @@ export class PrayerTime extends PrayerTimeWidget {
 	public async initialise(onLocation: (PrayerTime: PrayerTime) => Promise<void>): Promise<void> {
 		this.preferences = await this.loadPreferences();
 
-		this.online = await this.isOnline();
+		this.isOnline = await this.isOnline();
 
 		Location.current().then(async (location) => {
 			this.preferences.data.location = location;
@@ -32,7 +32,7 @@ export class PrayerTime extends PrayerTimeWidget {
 			}
 		}
 
-		if (!this.online) {
+		if (!this.isOnline) {
 			console.error("Script requires an internet connection to fetch prayer times for the first time.");
 			return Script.complete();
 		}
