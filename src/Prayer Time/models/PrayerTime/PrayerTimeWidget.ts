@@ -16,7 +16,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 		widgetSize: WidgetSize,
 		distance: number,
 	): ListWidget {
-		const sortedTimes = this.getPrayerTimes(dayData, userPrayerTimes, itemsToShow);
+		const sortedTimes = this.getFilteredPrayerTimes(dayData, itemsToShow);
 		const prayerTimings = this.addStatusToPrayerTimes(sortedTimes);
 
 		const now = new Date();

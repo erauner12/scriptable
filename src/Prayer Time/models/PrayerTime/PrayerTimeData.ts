@@ -13,19 +13,39 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		super(userPreferences);
 	}
 
-	protected getFilteredPrayerTimes(
-		prayerTimes: AladhanPrayerTime[],
-		userPrayerTimes: UserPrayerTime[],
-		maxItems?: number,
-	): WidgetPrayerTiming[] {
+	protected getPrayerTimesForDay(prayerTimes: AladhanPrayerTime[], targetDate?: Date): AladhanPrayerTime | undefined {
+		if (!prayerTimes) return undefined;
+
+		const filteredPrayerTimes: AladhanPrayerTime[] = prayerTimes.filter(
+			({
+				date: {
+					gregorian: { date },
+				},
+			}) => {
+				const day = targetDate ? targetDate : new Date();
+				day.setHours(0, 0, 0, 0);
+				const parsedDate = this.stringToDate(date);
+				const isTargetDay = day.toDateString() === parsedDate.toDateString();
+				return isTargetDay;
+			},
+		);
+
+		if (filteredPrayerTimes[0]) {
+			const prayerTimesForDay: AladhanPrayerTime = filteredPrayerTimes[0];
+			return prayerTimesForDay;
+		}
+	}
+
+	protected getFilteredPrayerTimes(prayerTimes: AladhanPrayerTime[], maxItems?: number): WidgetPrayerTiming[] {
 		const currentTime = new Date();
+		const userPrayerTimes: UserPrayerTime[] = this.preferences.user.displayPrayerTimes;
 
 		const prayerNames = userPrayerTimes.map((prayerTime) => {
 			return prayerTime.name.toUpperCase();
 		});
 
 		let filteredTimes = prayerTimes
-			.map((day) => this.convertTimingsToDateArray(day))
+			.map((day) => this.convertPrayerTimingsToDateArray(day))
 			.flat()
 			.filter((prayerTime) => prayerNames.includes(prayerTime.prayer.toUpperCase()))
 			.filter((prayerTime) => prayerTime.dateTime > currentTime)
@@ -36,43 +56,16 @@ export class PrayerTimeData extends PrayerTimeAPI {
 		return filteredTimes;
 	}
 
-	private convertTimingsToDateArray(day: AladhanPrayerTime): WidgetPrayerTiming[] {
-		const {
-			timings,
-			date: { gregorian },
-		} = day;
-		const baseDateStr = gregorian.date; // "DD-MM-YYYY"
-		const baseDateComponents = baseDateStr.split("-"); // Split into [DD, MM, YYYY]
+	private convertPrayerTimingsToDateArray(prayerTime: AladhanPrayerTime): WidgetPrayerTiming[] {
+		const baseDateString = prayerTime.date.gregorian.date; // "DD-MM-YYYY"
+		const baseDateComponents = baseDateString.split("-"); // Split into [DD, MM, YYYY]
 		const dateFormatted = `${baseDateComponents[2]}-${baseDateComponents[1]}-${baseDateComponents[0]}`; // YYYY-MM-DD
 
-		return Object.entries(timings).map(([prayerName, prayerTime]) => {
+		return Object.entries(prayerTime.timings).map(([prayerName, prayerTime]) => {
 			const timeComponents = prayerTime.split(":"); // Split into [HH, MM]
 			const dateTime = new Date(`${dateFormatted}T${timeComponents[0]}:${timeComponents[1]}:00`);
 			return { prayer: prayerName, dateTime: dateTime };
 		});
-	}
-
-	protected getDay(prayerTimes: AladhanPrayerTime[], dayDate?: Date): AladhanPrayerTime | undefined {
-		if (!prayerTimes) return undefined;
-
-		const dayArray: AladhanPrayerTime[] = prayerTimes.filter(
-			({
-				date: {
-					gregorian: { date },
-				},
-			}) => {
-				const day = dayDate ? dayDate : new Date();
-				day.setHours(0, 0, 0, 0);
-				const parsedDate = this.stringToDate(date);
-				const isDay = day.toDateString() === parsedDate.toDateString();
-				return isDay;
-			},
-		);
-
-		if (dayArray[0]) {
-			const today: AladhanPrayerTime = dayArray[0];
-			return today;
-		}
 	}
 
 	protected addStatusToPrayerTimes(prayerTimings: WidgetPrayerTiming[]): WidgetPrayerTiming[] {
