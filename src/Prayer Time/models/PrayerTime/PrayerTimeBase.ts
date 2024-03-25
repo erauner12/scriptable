@@ -74,11 +74,11 @@ export class PrayerTimeBase {
 		}
 	}
 
-	protected stringToDate(dateString: string): Date {
+	protected parseDateString(dateString: string): Date {
 		const [day, month, year] = dateString.split("-");
-		const date = new Date(Number(year), Number(month) - 1, Number(day));
-		date.setHours(0, 0, 0, 0);
-		return date;
+		const parsedDate = new Date(Number(year), Number(month) - 1, Number(day));
+		parsedDate.setHours(0, 0, 0, 0);
+		return parsedDate;
 	}
 
 	protected calculateDistance(
