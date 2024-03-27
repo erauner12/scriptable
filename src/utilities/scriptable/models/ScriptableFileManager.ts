@@ -100,7 +100,7 @@ export class ScriptableFileManager {
 		return path;
 	}
 
-	private async createDirectory(directoryPath: string, createDirectoryRecursively: boolean): Promise<string> {
+	public async createDirectory(directoryPath: string, createDirectoryRecursively: boolean): Promise<string> {
 		try {
 			const path = this.fileManager.joinPath(this.documentsDirectory, directoryPath);
 
