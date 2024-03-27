@@ -1,4 +1,5 @@
 import { Button, Div, getTable, H1, P, Spacer, Table } from "scriptable-utils";
+import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
 type State = { toneOfVoice: "friendly" | "off-putting" };
 
@@ -49,7 +50,12 @@ const StateTable = connect(({ state: { toneOfVoice } }) =>
 	}),
 );
 
-present({
-	defaultState: { toneOfVoice: "friendly" },
-	render: () => [Title(), ToggleToneOfVoice(), Spacer(), StateTable(), LoremIpsum()],
-});
+(async () => {
+	const fileSystem = new ScriptableFileManager();
+	await fileSystem.createDirectory("store/img/sfsymbols", true);
+
+	present({
+		defaultState: { toneOfVoice: "friendly" },
+		render: () => [Title(), ToggleToneOfVoice(), Spacer(), StateTable(), LoremIpsum()],
+	});
+})();
