@@ -22,14 +22,15 @@
 	},
 	"homepage": "https://github.com/Elliott-Liu/scriptable#readme",
 	"devDependencies": {
-		"@rollup/plugin-node-resolve": "^15.0.1",
-		"@rollup/plugin-terser": "^0.4.0",
-		"@rollup/plugin-typescript": "^11.0.0",
-		"@types/node": "^18.14.6",
-		"@types/scriptable-ios": "^1.7.0",
-		"rollup": "^3.18.0",
-		"scriptable-utils": "^2.1.1",
-		"tslib": "^2.5.0",
-		"typescript": "^5.3.3"
-	}
+		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@rollup/plugin-typescript": "^11.1.6",
+		"@types/node": "^18.19.26",
+		"@types/scriptable-ios": "^1.7.7",
+		"rollup": "^3.29.4",
+		"scriptable-utils": "^2.1.6",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.3"
+	},
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589"
 }
