@@ -100,15 +100,20 @@ export class ScriptableFileManager {
 		return path;
 	}
 
-	private async createDirectory(directoryName: string, createDirectoryRecursively: boolean): Promise<string> {
+	private async createDirectory(directoryPath: string, createDirectoryRecursively: boolean): Promise<string> {
 		try {
-			const directoryPath = this.fileManager.joinPath(this.documentsDirectory, directoryName);
+			const path = this.fileManager.joinPath(this.documentsDirectory, directoryPath);
 
-			if (!(await this.ensureExists(directoryPath))) {
-				this.fileManager.createDirectory(directoryPath, createDirectoryRecursively);
+			if (await this.ensureExists(path)) {
+				if (this.fileManager.isDirectory(path)) {
+					return path;
+				} else {
+					throw new Error("A file with the same name already exists.");
+				}
+			} else {
+				this.fileManager.createDirectory(path, createDirectoryRecursively);
+				return path;
 			}
-
-			return directoryPath;
 		} catch (error) {
 			throw this.handleError(error);
 		}
