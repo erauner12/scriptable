@@ -1,6 +1,3 @@
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: pink; icon-glyph: book-open;
 import { Button, Div, getTable, H1, P, Spacer, Table } from "scriptable-utils";
 
 type State = { toneOfVoice: "friendly" | "off-putting" };
