@@ -1,4 +1,5 @@
 import { storybook } from "scriptable-utils";
+
 import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
 (async () => {

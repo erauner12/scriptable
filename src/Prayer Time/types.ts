@@ -35,7 +35,7 @@ export type UserPrayerTime = {
 	abbreviation: string;
 };
 
-export interface AladhanPrayerTime extends Object {
+export interface AladhanPrayerTime {
 	timings: Timings;
 	date: DateClass;
 	meta: Meta;
@@ -80,7 +80,7 @@ interface Hijri {
 	month: HijriMonth;
 	year: string;
 	designation: Designation;
-	holidays: any[];
+	holidays: unknown[];
 }
 
 interface HijriMonth {

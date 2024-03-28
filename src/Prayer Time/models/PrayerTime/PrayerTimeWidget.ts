@@ -71,7 +71,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 			case "small":
 			case "medium":
 			case "large":
-			case "extraLarge":
+			case "extraLarge": {
 				const updatedStack = listWidget.addStack();
 				updatedStack.layoutVertically();
 
@@ -85,6 +85,7 @@ export class PrayerTimeWidget extends PrayerTimeData {
 				timeElement.font = new Font("AvenirNext-Regular", 10);
 				timeElement.textColor = new Color(textColourHex, textOpacitySubtle);
 				break;
+			}
 			default:
 				break;
 		}

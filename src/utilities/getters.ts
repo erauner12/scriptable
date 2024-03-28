@@ -11,7 +11,7 @@
  * console.log(getValue('name')); // Outputs: 'Alice'
  * console.log(getValue('nonexistentKey')); // Outputs: undefined
  */
-export function createValueGetter<TObject extends Object>(
+export function createValueGetter<TObject extends object>(
 	obj: TObject,
 ): <TKey extends keyof TObject>(key: TKey | string | undefined) => TObject[keyof TObject] | undefined {
 	return <TKey extends keyof TObject>(key: TKey | string | undefined): TObject[keyof TObject] | undefined => {

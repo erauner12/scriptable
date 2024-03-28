@@ -7,7 +7,7 @@ export class ScriptableFileManager {
 		this.documentsDirectory = this.fileManager.documentsDirectory();
 	}
 
-	public async readJSON(path: string): Promise<any> {
+	public async readJSON(path: string): Promise<unknown> {
 		try {
 			if (await this.ensureExists(path)) {
 				const fileContents = this.fileManager.readString(path);
@@ -16,9 +16,11 @@ export class ScriptableFileManager {
 		} catch (error) {
 			this.handleError(error);
 		}
+
+		return undefined;
 	}
 
-	public async saveJSON<TObject extends Object>(
+	public async saveJSON<TObject extends object>(
 		path: string,
 		data: TObject,
 		onOverwrite?: (existingFileNameWithoutExtension: string) => string,

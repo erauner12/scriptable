@@ -1,4 +1,5 @@
-import { Button, Div, getTable, H1, P, Spacer, Table } from "scriptable-utils";
+import { Button, Div, H1, P, Spacer, Table, getTable } from "scriptable-utils";
+
 import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
 
 type State = { toneOfVoice: "friendly" | "off-putting" };

@@ -1,10 +1,10 @@
 import { PrayerTimeAPI } from "src/Prayer Time/models/PrayerTime/PrayerTimeAPI";
 import type {
 	AladhanPrayerTime,
-	WidgetPrayerTiming,
-	UserPrayerTime,
-	WidgetPreferences,
 	RelativeDateTimeState,
+	UserPrayerTime,
+	WidgetPrayerTiming,
+	WidgetPreferences,
 } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
 
