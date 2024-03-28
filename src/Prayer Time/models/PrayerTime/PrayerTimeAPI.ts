@@ -9,12 +9,11 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 		super(userPreferences);
 	}
 
-	protected async isOnline(): Promise<boolean> {
-		const waitTimeMs = 15;
+	protected async isOnline(timeoutIntervalMs: number = 15): Promise<boolean> {
 		const url = "https://www.google.com";
 		const request = new Request(url);
 		request.method = "HEAD";
-		request.timeoutInterval = waitTimeMs / 60;
+		request.timeoutInterval = timeoutIntervalMs / 1000;
 
 		try {
 			const response = await request.load();
