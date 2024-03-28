@@ -1,7 +1,7 @@
 import { PrayerTimeBase } from "src/Prayer Time/models/PrayerTime/PrayerTimeBase";
 import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
-import { ScriptableFileManager, mergeDeep } from "src/utilities";
+import { ScriptableFileManager, handleError, mergeDeep } from "src/utilities";
 
 export class PrayerTimeFileSystem extends PrayerTimeBase {
 	protected fileManager: ScriptableFileManager;
@@ -25,11 +25,11 @@ export class PrayerTimeFileSystem extends PrayerTimeBase {
 
 	protected async loadPreferences(): Promise<WidgetPreferences> {
 		try {
-			return await this.fileManager.readJSON(this.filePath);
-		} catch (e) {
-			console.error("Error reading preferences from file. Creating new preferences file.");
-			await this.savePreferences(this.preferences);
-			return await this.fileManager.readJSON(this.filePath);
+			const preferences = await this.fileManager.readJSON<WidgetPreferences>(this.filePath);
+			if (!preferences) await this.savePreferences(this.preferences);
+			return preferences || this.preferences;
+		} catch (error) {
+			throw handleError(error);
 		}
 	}
 }

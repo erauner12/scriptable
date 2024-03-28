@@ -7,14 +7,17 @@ export class ScriptableFileManager {
 		this.documentsDirectory = this.fileManager.documentsDirectory();
 	}
 
-	public async readJSON(path: string): Promise<unknown> {
+	public async readJSON<T>(path: string): Promise<T | undefined> {
 		try {
 			if (await this.ensureExists(path)) {
 				const fileContents = this.fileManager.readString(path);
-				return JSON.parse(fileContents);
+				const parsedData: T | undefined = JSON.parse(fileContents);
+
+				if (parsedData === undefined) return undefined;
+				return parsedData;
 			}
 		} catch (error) {
-			this.handleError(error);
+			throw this.handleError(error);
 		}
 
 		return undefined;
