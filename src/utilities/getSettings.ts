@@ -1,6 +1,5 @@
 import type { DeepPartial } from "src/types/helpers";
-
-import { mergeDeep } from "./mergeDeep";
+import { mergeDeep } from "src/utilities";
 
 export function getSettings<T>(
 	defaultSettings: T,
