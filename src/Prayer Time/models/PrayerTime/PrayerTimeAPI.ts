@@ -39,7 +39,7 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 				const date = new Date();
 				date.setDate(date.getDate() + day);
 
-				const aladhanPrayerTimeData = await aladhanTimings.getPrayerTimes(date);
+				const aladhanPrayerTimeData = await aladhanTimings.getPrayerTime(date);
 				newPrayerTimes.push(aladhanPrayerTimeData);
 			}
 

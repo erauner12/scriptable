@@ -11,7 +11,7 @@ export class AladhanTimings {
 		this.parameters = parameters;
 	}
 
-	async getPrayerTimes(date?: Date): Promise<AladhanPrayerTime> {
+	async getPrayerTime(date: Date = new Date()): Promise<AladhanPrayerTime> {
 		try {
 			const dateString = dateToString(date);
 			const baseUrl = `${this.baseUrl}/${dateString}`;
