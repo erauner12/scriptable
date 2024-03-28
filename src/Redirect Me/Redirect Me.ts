@@ -1,5 +1,5 @@
 interface Redirections {
-	origin: Array<String>;
+	origin: Array<string>;
 	redirect: string;
 }
 
@@ -32,7 +32,7 @@ async function getUrl() {
 		alert.addTextField("URL", Pasteboard.paste());
 		alert.addAction("Go");
 		alert.addCancelAction("Cancel");
-		let alertPressed = await alert.present();
+		const alertPressed = await alert.present();
 
 		if (alertPressed === 0) {
 			url = alert.textFieldValue(0);
@@ -91,10 +91,4 @@ function runScript(url: string | undefined) {
 	}
 
 	Script.complete();
-}
-
-function logAlert(message: string) {
-	let alert = new Alert();
-	alert.message = message;
-	alert.present();
 }
