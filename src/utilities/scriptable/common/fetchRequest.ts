@@ -6,7 +6,7 @@ export async function fetchRequest(
 	onRequest: (request: Request) => Promise<string | Image | Data | any>,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	onError: (response: { [key: string]: any }) => void,
-	queryParameters?: Record<string, string | number | boolean>,
+	queryParameters?: object,
 	options?: Partial<RequestProperties>,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<string | Image | Data | any> {
@@ -39,17 +39,17 @@ export async function fetchRequest(
 	}
 }
 
-function appendQueryParameter(baseUrl: string, parameters?: Record<string, string | number | boolean>): string {
+function appendQueryParameter(baseUrl: string, parameters?: object): string {
 	if (!parameters) return baseUrl;
 
 	let hasQuery: boolean = baseUrl.includes("?");
 
 	for (const key in parameters) {
 		if (Object.prototype.hasOwnProperty.call(parameters, key)) {
-			const value = parameters[key];
+			const value = parameters[key as keyof typeof parameters];
 
 			if (value !== null && value !== undefined) {
-				baseUrl += (hasQuery ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(value.toString());
+				baseUrl += (hasQuery ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(value);
 				hasQuery = true;
 			}
 		}
