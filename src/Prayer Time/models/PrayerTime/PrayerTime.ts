@@ -1,6 +1,7 @@
 import { PrayerTimeWidget } from "src/Prayer Time/models/PrayerTime/PrayerTimeWidget";
 import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
+import { isOnline } from "src/utilities";
 
 export class PrayerTime extends PrayerTimeWidget {
 	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
@@ -10,7 +11,7 @@ export class PrayerTime extends PrayerTimeWidget {
 	public async initialise(onLocation: (PrayerTime: PrayerTime) => Promise<void>): Promise<void> {
 		this.preferences = await this.loadPreferences();
 
-		this.online = await this.isOnline();
+		this.online = await isOnline();
 
 		Location.current().then(async (location) => {
 			this.preferences.data.location = location;
@@ -32,7 +33,7 @@ export class PrayerTime extends PrayerTimeWidget {
 			}
 		}
 
-		if (!this.isOnline) {
+		if (!this.online) {
 			console.error("Script requires an internet connection to fetch prayer times for the first time.");
 			return Script.complete();
 		}

@@ -2,12 +2,14 @@ import type { RequestProperties } from "src/types/scriptable";
 
 export async function fetchRequest(
 	baseUrl: string,
+	queryParameters: object,
+	options: Partial<RequestProperties>,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	onRequest: (request: Request) => Promise<string | Image | Data | any>,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	onError: (response: { [key: string]: any }) => void,
-	queryParameters?: object,
-	options?: Partial<RequestProperties>,
+	onError: (response: { [key: string]: any }) => void = (response) => {
+		throw new Error(response.data);
+	},
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<string | Image | Data | any> {
 	try {

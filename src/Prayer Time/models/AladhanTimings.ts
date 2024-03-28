@@ -18,11 +18,12 @@ export class AladhanTimings {
 
 			const response = await fetchRequest(
 				baseUrl,
+				this.parameters,
+				{},
 				async (request) => await request.loadJSON(),
 				(response) => {
 					throw new Error(response.data);
 				},
-				this.parameters,
 			);
 
 			const data: AladhanPrayerTime = response.data;

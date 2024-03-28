@@ -9,21 +9,6 @@ export class PrayerTimeAPI extends PrayerTimeFileSystem {
 		super(userPreferences);
 	}
 
-	protected async isOnline(timeoutIntervalMs: number = 15): Promise<boolean> {
-		const url = "https://www.google.com";
-		const request = new Request(url);
-		request.method = "HEAD";
-		request.timeoutInterval = timeoutIntervalMs / 1000;
-
-		try {
-			const response = await request.load();
-			if (response) return true;
-			return false;
-		} catch (error) {
-			return false;
-		}
-	}
-
 	protected async fetchPrayerTimes(location: { latitude: number; longitude: number }): Promise<AladhanPrayerTime[]> {
 		try {
 			const { latitude, longitude } = location;
