@@ -11,7 +11,7 @@
  */
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
-} & {};
+} & NonNullable<unknown>;
 
 /**
  * Represents an array type that is guaranteed to have at least one item of type `T`.
@@ -84,5 +84,5 @@ export type KeyByValue<T, V> = {
  * type ExampleProperties = PropertiesOf<Example>; // "prop1" | "prop2"
  */
 export type PropertiesOf<T> = {
-	[K in keyof T]: T[K] extends Function ? never : K;
+	[K in keyof T]: T[K] extends (...args: unknown[]) => unknown ? never : K;
 }[keyof T];
