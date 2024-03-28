@@ -3,8 +3,8 @@ import { type CantoneseRomanisationSystems } from "src/Cantonese Romanisation/ty
 export const LocalisationName = ["en", "zhs", "zht"] as const;
 export type LocalisationName = (typeof LocalisationName)[number];
 
-export function isLocalisationName(value: LocalisationName): value is LocalisationName {
-	return LocalisationName.includes(value);
+export function isLocalisationName(value: unknown): value is LocalisationName {
+	return LocalisationName.includes(value as LocalisationName);
 }
 
 export type Localisations = {
