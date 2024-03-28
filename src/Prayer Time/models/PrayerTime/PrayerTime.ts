@@ -22,23 +22,27 @@ export class PrayerTime extends PrayerTimeWidget {
 	}
 
 	public async setup(): Promise<void> {
-		if (!this.online) {
-			console.error("Script requires an internet connection to fetch prayer times for the first time.");
-			return Script.complete();
-		}
-
 		if (this.preferences.data.prayerTimes) {
 			const todayData = this.getPrayerTimeForDay(this.preferences.data.prayerTimes);
 			const numberOfPrayerTimes = this.getFilteredPrayerTimes(this.preferences.data.prayerTimes).length;
-
 			this.distanceFromOfflineData = this.calculateDistanceFromDeviceLocation(todayData?.meta);
 
-			if (numberOfPrayerTimes <= this.displayItems || this.distanceFromOfflineData > this.preferences.user.distanceToleranceMetres) {
+			if (this.online) {
+				const shouldFetchPrayerTimes =
+					numberOfPrayerTimes <= this.displayItems || this.distanceFromOfflineData > this.preferences.user.distanceToleranceMetres;
+				if (shouldFetchPrayerTimes) {
+					await this.fetchAndSavePrayerTimes(this.preferences.data.location);
+				}
+			}
+		} else {
+			if (!this.online) {
+				console.warn("Script requires an internet connection to fetch prayer times for the first time.");
+				return Script.complete();
+			} else {
+				// Online and initial fetch, or no data
 				await this.fetchAndSavePrayerTimes(this.preferences.data.location);
 			}
 		}
-
-		await this.fetchAndSavePrayerTimes(this.preferences.data.location);
 	}
 
 	public async displayWidget(): Promise<void> {
