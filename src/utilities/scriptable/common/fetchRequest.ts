@@ -2,11 +2,14 @@ import type { RequestProperties } from "src/types/scriptable";
 
 export async function fetchRequest(
 	baseUrl: string,
-	onRequest: (request: Request) => Promise<String | Image | Data | any>,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	onRequest: (request: Request) => Promise<string | Image | Data | any>,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	onError: (response: { [key: string]: any }) => void,
-	queryParameters?: Record<string, any>,
+	queryParameters?: Record<string, string | number | boolean>,
 	options?: Partial<RequestProperties>,
-): Promise<String | Image | Data | any> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<string | Image | Data | any> {
 	try {
 		const url = appendQueryParameter(baseUrl, queryParameters);
 		const request = new Request(url);
@@ -36,7 +39,7 @@ export async function fetchRequest(
 	}
 }
 
-function appendQueryParameter(baseUrl: string, parameters?: Record<string, any>): string {
+function appendQueryParameter(baseUrl: string, parameters?: Record<string, string | number | boolean>): string {
 	if (!parameters) return baseUrl;
 
 	let hasQuery: boolean = baseUrl.includes("?");
