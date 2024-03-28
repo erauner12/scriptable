@@ -6,9 +6,9 @@ import {
 import { isLocalisationName, type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
 import type { Settings } from "src/Cantonese Romanisation/types/Settings";
 import { getSettings } from "src/utilities/getSettings";
-import { getRunLocation } from "src/utilities/scriptable/getRunLocation";
-import { getWidgetParameters } from "src/utilities/scriptable/getWidgetParameters";
-import { presentAlertActions, type PresentAlertActions } from "src/utilities/scriptable/presentAlertActions";
+import { getRunLocation } from "src/utilities/scriptable/common";
+import { getWidgetParameters } from "src/utilities/scriptable/common";
+import { presentAlertActions, type PresentAlertActions } from "src/utilities/scriptable/common";
 
 const userSettings = getWidgetParameters<Settings>(args.widgetParameter, ",", (parsedParameters) => {
 	const userSettings: Partial<Settings> = {};

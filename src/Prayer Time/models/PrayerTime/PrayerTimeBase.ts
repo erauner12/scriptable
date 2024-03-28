@@ -2,7 +2,7 @@ import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
 import type { WidgetSize } from "src/types/scriptable";
 import { getSettings } from "src/utilities/getSettings";
-import { getWidgetSize } from "src/utilities/scriptable/getWidgetSize";
+import { getWidgetSize } from "src/utilities/scriptable/common";
 
 export class PrayerTimeBase {
 	protected online: boolean;
