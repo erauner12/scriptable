@@ -9,7 +9,7 @@ import type {
 import type { DeepPartial } from "src/types/helpers";
 
 export class PrayerTimeData extends PrayerTimeAPI {
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}
 

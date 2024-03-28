@@ -10,7 +10,7 @@ export class PrayerTimeBase {
 	protected preferences: WidgetPreferences;
 	protected distanceFromOfflineData: number;
 
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		this.online = false;
 		this.widgetSize = getWidgetSize("large");
 		this.displayItems = this.calculateDisplayItems(this.widgetSize);
@@ -38,8 +38,7 @@ export class PrayerTimeBase {
 				},
 				data: { location: undefined, prayerTimes: undefined },
 			},
-			userPreferences,
-			{
+			userPreferences || {
 				user: {
 					displayPrayerTimes: [
 						{ name: "fajr", display: "🌄", abbreviation: "FAJ" }, // Dawn

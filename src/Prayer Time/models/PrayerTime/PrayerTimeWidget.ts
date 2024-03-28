@@ -3,7 +3,7 @@ import type { AladhanPrayerTime, WidgetPrayerTiming, WidgetPreferences } from "s
 import type { DeepPartial } from "src/types/helpers";
 
 export class PrayerTimeWidget extends PrayerTimeData {
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}
 

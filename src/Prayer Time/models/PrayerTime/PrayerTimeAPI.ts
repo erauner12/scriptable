@@ -5,7 +5,7 @@ import type { DeepPartial } from "src/types/helpers";
 import { handleError } from "src/utilities";
 
 export class PrayerTimeAPI extends PrayerTimeFileSystem {
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}
 

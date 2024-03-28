@@ -7,7 +7,7 @@ export class PrayerTimeFileSystem extends PrayerTimeBase {
 	protected fileManager: ScriptableFileManager;
 	protected filePath: string;
 
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 		this.fileManager = new ScriptableFileManager();
 		this.filePath = this.fileManager.joinDocumentPaths([Script.name(), Script.name()], ".json");

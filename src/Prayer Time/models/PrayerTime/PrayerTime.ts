@@ -3,7 +3,7 @@ import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
 
 export class PrayerTime extends PrayerTimeWidget {
-	constructor(userPreferences: DeepPartial<WidgetPreferences>) {
+	constructor(userPreferences?: DeepPartial<WidgetPreferences>) {
 		super(userPreferences);
 	}
 
