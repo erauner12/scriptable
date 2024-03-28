@@ -1,8 +1,7 @@
 import { PrayerTimeBase } from "src/Prayer Time/models/PrayerTime/PrayerTimeBase";
 import type { WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
-import { mergeDeep } from "src/utilities/mergeDeep";
-import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
+import { ScriptableFileManager, mergeDeep } from "src/utilities";
 
 export class PrayerTimeFileSystem extends PrayerTimeBase {
 	protected fileManager: ScriptableFileManager;

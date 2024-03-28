@@ -2,7 +2,7 @@ import { AladhanTimings } from "src/Prayer Time/models/AladhanTimings";
 import { PrayerTimeFileSystem } from "src/Prayer Time/models/PrayerTime/PrayerTimeFileSystem";
 import type { AladhanPrayerTime, WidgetPreferences } from "src/Prayer Time/types";
 import type { DeepPartial } from "src/types/helpers";
-import { handleError } from "src/utilities/handleError";
+import { handleError } from "src/utilities";
 
 export class PrayerTimeAPI extends PrayerTimeFileSystem {
 	constructor(userPreferences: DeepPartial<WidgetPreferences>) {

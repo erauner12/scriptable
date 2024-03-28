@@ -1,6 +1,6 @@
 import { storybook } from "scriptable-utils";
 
-import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
+import { ScriptableFileManager } from "src/utilities";
 
 (async () => {
 	const fileSystem = new ScriptableFileManager();

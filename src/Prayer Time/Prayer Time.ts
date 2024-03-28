@@ -1,6 +1,5 @@
 import PrayerTime from "src/Prayer Time/models/PrayerTime";
-import { handleError } from "src/utilities/handleError";
-import { ScriptableFileManager } from "src/utilities/scriptable/models/ScriptableFileManager";
+import { ScriptableFileManager, handleError } from "src/utilities";
 
 (async () => {
 	await runScript();

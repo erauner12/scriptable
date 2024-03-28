@@ -1,5 +1,5 @@
 import type { ValueOf } from "src/types/helpers";
-import { createKeyGetter, createValueGetter } from "src/utilities/getters";
+import { createKeyGetter, createValueGetter } from "src/utilities";
 
 export interface AladhanTimingsRequestQueryLocation {
 	date?: string;

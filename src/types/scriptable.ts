@@ -1,5 +1,5 @@
 import type { PropertiesOf } from "src/types/helpers";
-import { getRunLocation } from "src/utilities/scriptable/common";
+import { getRunLocation } from "src/utilities";
 
 export type WidgetSize = NonNullable<typeof config.widgetFamily>;
 
