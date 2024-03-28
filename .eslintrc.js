@@ -18,8 +18,9 @@ module.exports = {
 	],
 	rules: {
 		"prettier/prettier": "warn",
+		"no-duplicate-imports": "warn",
 		"sort-imports": [
-			"error",
+			"warn",
 			{
 				ignoreCase: false,
 				ignoreDeclarationSort: true,
