@@ -2,7 +2,7 @@ import { type CantoJpMin, cantoJpMin } from "src/Cantonese Romanisation/data/can
 import { localisations } from "src/Cantonese Romanisation/data/localisations";
 import { type Pingyam, pingyam } from "src/Cantonese Romanisation/data/pingyam";
 import { type CantoneseRomanisationSystemName } from "src/Cantonese Romanisation/types/CantoneseRomanisationSystems";
-import { type Localisations, type Localisation, type LocalisationName } from "src/Cantonese Romanisation/types/Localisations";
+import { type Localisation, type LocalisationName, type Localisations } from "src/Cantonese Romanisation/types/Localisations";
 
 export class CantoneseConverter {
 	protected cantoJpMin: CantoJpMin;
@@ -136,7 +136,7 @@ export class CantoneseConverter {
 		inputRomanisationSystem: CantoneseRomanisationSystemName = this.inputRomanisationSystem,
 		outputRomanisationSystem: CantoneseRomanisationSystemName = this.outputRomanisationSystem,
 	): string {
-		const transformationMapping = Object.entries(this.pingyam).reduce<Record<string, string>>((accumulator, [_, value]) => {
+		const transformationMapping = Object.entries(this.pingyam).reduce<Record<string, string>>((accumulator, [, value]) => {
 			const source = value[inputRomanisationSystem].toLowerCase();
 			const target = value[outputRomanisationSystem];
 			if (source && target) accumulator[source] = target;
