@@ -1,12 +1,9 @@
-/**
- * @type {import('eslint').Linter.Config}
- */
+/** @type {import('eslint').Linter.Config} */
 
 module.exports = {
 	parser: "@typescript-eslint/parser",
 	parserOptions: {
-		ecmaVersion: 2018,
-		sourceType: "module",
+		project: "./tsconfig.json",
 	},
 	env: {
 		node: true,
@@ -58,5 +55,5 @@ module.exports = {
 			},
 		},
 	},
-	ignorePatterns: ["dist/*"],
+	ignorePatterns: ["node_modules/*", "dist/*"],
 };

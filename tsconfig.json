@@ -23,6 +23,6 @@
 		"incremental": true,
 		"verbatimModuleSyntax": true
 	},
-	"include": ["src/**/*.ts", "./**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["src/**/*.ts", "./**/*.ts", "./.eslintrc.js"],
+	"exclude": ["node_modules", "dist"]
 }
