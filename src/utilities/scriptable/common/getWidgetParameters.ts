@@ -1,5 +1,5 @@
 export function getWidgetParameters<T>(
-	widgetParameters: any,
+	widgetParameters: string,
 	delimiter: string,
 	userSettingsCallback: (parsedWidgetParameters: string[]) => Partial<T>,
 ): Partial<T> {
