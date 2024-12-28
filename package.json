@@ -1,47 +1,58 @@
 {
-	"name": "scriptable",
-	"version": "1.0.0",
-	"description": "Scriptable Development Environment for VSCode",
-	"scripts": {
-		"init": "./scripts/scriptable.sh init",
-		"export": "./scripts/scriptable.sh export",
-		"export_module": "./scripts/scriptable.sh export_module",
-		"build": "./scripts/build.sh build",
-		"build-watch": "./scripts/build.sh build_and_watch",
-		"open": "./scripts/build.sh open_in_scriptable",
-		"format": "prettier --write \"src/**/*.ts\"",
-		"lint": "eslint --ext .ts ./src",
-		"lint:fix": "pnpm run lint -- --fix"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Elliott-Liu/scriptable.git"
-	},
-	"author": "Elliott Liu",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/Elliott-Liu/scriptable/issues"
-	},
-	"homepage": "https://github.com/Elliott-Liu/scriptable#readme",
-	"devDependencies": {
-		"@rollup/plugin-node-resolve": "^15.3.1",
-		"@rollup/plugin-terser": "^0.4.4",
-		"@rollup/plugin-typescript": "^11.1.6",
-		"@types/node": "^18.19.68",
-		"@types/scriptable-ios": "^1.7.7",
-		"@typescript-eslint/eslint-plugin": "^7.4.0",
-		"@typescript-eslint/parser": "^7.4.0",
-		"eslint": "^8.57.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-import-resolver-typescript": "^3.6.1",
-		"eslint-plugin-import": "^2.29.1",
-		"eslint-plugin-prettier": "^5.1.3",
-		"prettier": "^3.2.5",
-		"rollup": "^3.29.5",
-		"rollup-plugin-eslint": "^7.0.0",
-		"scriptable-utils": "^2.1.6",
-		"tslib": "^2.6.2",
-		"typescript": "^5.7.2"
-	},
-	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589"
+  "name": "scriptable",
+  "version": "1.0.0",
+  "description": "Collection of Scriptable scripts and widgets for iOS and MacOS",
+  "main": "index.js",
+  "scripts": {
+    "init": "./scripts/scriptable.sh init",
+    "export": "./scripts/scriptable.sh export",
+    "export_module": "./scripts/scriptable.sh export_module",
+    "build": "./scripts/build.sh build",
+    "build-watch": "./scripts/build.sh build_and_watch",
+    "open": "./scripts/build.sh open_in_scriptable",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "clean": "rm -rf dist/*",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elliott-Liu/scriptable.git"
+  },
+  "keywords": [
+    "scriptable",
+    "ios",
+    "widgets",
+    "automation"
+  ],
+  "author": "Elliott Liu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Elliott-Liu/scriptable/issues"
+  },
+  "homepage": "https://github.com/Elliott-Liu/scriptable#readme",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^18.19.68",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-import-resolver-typescript": "^3.0.0",
+    "eslint-plugin-import": "^2.0.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.0.0",
+    "rollup": "^3.29.5",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "scriptable-utils": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

@@ -16,9 +16,7 @@ const config = {
 		plugins: [terser(), addFileIconSettings(DECODED_FILE_PATH)],
 	},
 	plugins: [
-		typescript({
-			tsconfig: "./tsconfig.json", // Make sure to point to your tsconfig file
-		}),
+		typescript(),
 		nodeResolve(),
 	],
 	watch: {

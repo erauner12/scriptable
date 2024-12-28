@@ -4,7 +4,7 @@
 		"module": "ESNext",
 		"lib": ["ES6"],
 		"moduleResolution": "node",
-		"noEmit": true,
+		 "noEmit": true,
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -20,8 +20,7 @@
 		"removeComments": false,
 		"baseUrl": ".",
 		"outDir": "./dist",
-		"incremental": true,
-		"verbatimModuleSyntax": true
+		"incremental": true
 	},
 	"include": ["src/**/*.ts", "./**/*.ts", "./.eslintrc.js"],
 	"exclude": ["node_modules", "dist"]
