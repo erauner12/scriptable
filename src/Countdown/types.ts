@@ -1,4 +1,4 @@
-import { WidgetSize } from "../../types/scriptable";
+import { WidgetSize } from "src/types/scriptable";
 
 export type WidgetDisplayLayout = {
 	maxCountdownsToShow: number;
