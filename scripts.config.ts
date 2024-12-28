@@ -27,8 +27,12 @@ export const SETTINGS: ScriptSettings = {
 		iconGlyph: "calendar-alt",
 	},
 	"Cantonese Romanisation": {
-		iconColor: "red",
-		iconGlyph: "language",
-		shareSheetInputs: ["plain-text"],
+			iconColor: "red",
+			iconGlyph: "language",
+			shareSheetInputs: ["plain-text"],
+	},
+	"TodoistFocus": {
+			iconColor: "red",
+			iconGlyph: "book-open",
 	},
 };
