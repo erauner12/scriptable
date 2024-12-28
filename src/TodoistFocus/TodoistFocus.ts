@@ -60,26 +60,35 @@ async function getTask(): Promise<TodoistTask | { content: string; id?: number }
   const taskSections = await Promise.all(taskRequests);
   console.log("taskSections: " + JSON.stringify(taskSections));
 
-  // Get random task from first section that has a task
+  // Prompt user to select a task from the first section that has tasks
   for (const tasks of taskSections) {
     if (tasks.length > 0) {
-      let index = Math.floor(Math.random() * tasks.length * 0.999);
+      const alert = new Alert();
+      alert.title = "Select a Task";
 
-      // Check if any of the tasks was shown in previous round, then use that one
-      if (lastShownTaskId != null) {
-        for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === lastShownTaskId) {
-            index = i;
-            break;
-          }
-        }
+      // Add tasks to the alert as options
+      for (const t of tasks) {
+        // We'll truncate content to prevent overly long labels
+        const shortenedTitle = t.content.length > 60 ? (t.content.slice(0, 60) + "...") : t.content;
+        alert.addAction(shortenedTitle);
       }
 
-      const task = tasks[index];
+      // Optionally handle lastShownTaskId in a more sophisticated way, if needed.
+      // But for now, we simply let the user pick from the alert each time.
+
+      // Add a cancel action
+      alert.addCancelAction("Cancel");
+
+      const responseIndex = await alert.presentAlert();
+      if (responseIndex === -1) {
+        throw new Error("User canceled task selection");
+      }
+
+      const task = tasks[responseIndex];
       // Store
       await setLastShownTaskId(task.id);
 
-      // Return here
+      // Return the chosen task
       return task;
     } else {
       // Continue
@@ -218,9 +227,9 @@ async function run(): Promise<void> {
   try {
     const task = await getTask();
 
-    const startColor = Color.dynamic(new Color("gray"), new Color("gray"));
-    const endColor = Color.dynamic(new Color("lightGray"), new Color("lightGray"));
-    const textColor = Color.dynamic(new Color("black"), new Color("black"));
+    const startColor = Color.dynamic(new Color("999999"), new Color("222222"));
+    const endColor = Color.dynamic(new Color("dddddd"), new Color("333333"));
+    const textColor = Color.dynamic(new Color("000000"), new Color("ffffff"));
 
     // BACKGROUND
 
