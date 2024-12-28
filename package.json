@@ -24,10 +24,10 @@
 	},
 	"homepage": "https://github.com/Elliott-Liu/scriptable#readme",
 	"devDependencies": {
-		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@rollup/plugin-node-resolve": "^15.3.1",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@rollup/plugin-typescript": "^11.1.6",
-		"@types/node": "^18.19.26",
+		"@types/node": "^18.19.68",
 		"@types/scriptable-ios": "^1.7.7",
 		"@typescript-eslint/eslint-plugin": "^7.4.0",
 		"@typescript-eslint/parser": "^7.4.0",
@@ -37,11 +37,11 @@
 		"eslint-plugin-import": "^2.29.1",
 		"eslint-plugin-prettier": "^5.1.3",
 		"prettier": "^3.2.5",
-		"rollup": "^3.29.4",
+		"rollup": "^3.29.5",
 		"rollup-plugin-eslint": "^7.0.0",
 		"scriptable-utils": "^2.1.6",
 		"tslib": "^2.6.2",
-		"typescript": "^5.4.3"
+		"typescript": "^5.7.2"
 	},
 	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589"
 }
